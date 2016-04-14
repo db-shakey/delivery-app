@@ -1,0 +1,722 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
+
+$stable:                          #dcdcdc !default;			//Light grey -accent
+$stable-dark:					  					#646464 !default;			//Dark grey  -accent
+$positive:                        darken(#1ec4e8, 10%) !default;			//Main green -primary
+$positive-lite:                   #a7d3d9 !default;
+$calm:                            #11464e !default;			//Dark green -primary
+$balanced:                        #ff3366 !default;			//Mid Orange -primary
+$energized:                       #f5db8a !default;			//Mid Yellow -secondary
+$assertive:                       #d4271a !default;			//Mid Red    -secondary
+$assertive-light:									#e87d72 !default;
+$assertive-dark:									#6d2013 !default;
+$royal:                           #5b2e1d !default;			//Mid Brown  -secondary
+$dark:                            #5f666e !default;			//Dark Orange -primary
+$white:														#fff !default;
+
+$base-background-color:           #f3f3f4 !default;
+$base-color:                      #676a6c !default;
+$font-size-small:                 13px !default;
+$font-size-x-small:               12px !default;
+$tabs-text-font-size-side-icon:	  14px !default;
+
+
+$button-positive-border:		transparent !default;
+$button-calm-border:			transparent !default;
+$button-balanced-border:		transparent !default;
+$button-stable-border:			transparent !default;
+
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+@import "www/lib/inspinia/style";
+
+
+//font-bootstraping fix
+* {-webkit-text-size-adjust:100%;}
+
+
+
+ion-item.bg-positive.item, .bg-positive{
+	background-color : $positive;
+	color : $white;
+	p{
+		color : $white;
+	}
+}
+
+.bg-stable{
+	background-color: $stable;
+	.item, .item a.item-content{
+		background-color: $stable;
+	}
+}
+
+
+.detail-label{
+	text-align: right;
+	margin-top: 2px;
+}
+ion-item i{
+	font-size : 24px !important;
+}
+.margin-bottom{
+	margin-bottom : 10px;
+}
+.text-center{
+	text-align: center;
+}
+
+.step i {
+  -webkit-transition: opacity .3s;
+  -moz-transition: opacity .3s;
+  -ms-transition: opacity .3s;
+  -o-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.step:hover i { opacity: .3; }
+
+.size-16 { font-size: 16px; }
+.size-96 { font-size: 96px; }
+
+.text-center{
+	text-align: center !important;
+}
+
+.header-button:before{
+	font-size: 20px !important;
+}
+
+.middle-box i{
+	font-size : 120px;
+}
+.control-label{
+	margin-right: 1em;
+	margin-top: 1px;
+	text-align : right;
+	font-weight : bold;
+	padding: 0;
+	font-size : $font-size-small;
+}
+.form-control-static{
+	font-size : $font-size-small;
+	padding: 0;
+}
+output-field .row{
+	padding: 0;
+	margin: 0;
+}
+.button-full{
+	border-right-width: 1px !important;
+	border-left-width: 1px !important;
+}
+.scroll {
+    height: 100%;
+}
+
+#direction-map, #delivery-map {
+    width: 100%;
+    height: 100%;
+}
+
+label.item-input-wrapper{
+	padding-right: 0;
+}
+.item{
+	overflow-x : hidden;
+}
+
+.tabs-secondary a.tab-item{
+	margin-top : 5px;
+}
+.tabs-secondary button>span{
+	margin-left: 1em;
+}
+.tabs-secondary button.button-small{
+	min-height: 30px;
+}
+.tabs-secondary{
+	padding-left: 2% !important;
+	padding-right: 2% !important;
+}
+
+
+input::-webkit-input-placeholder {
+   color: #808080;
+}
+
+input:-moz-placeholder { /* Firefox 18- */
+   color: #808080;
+}
+
+input::-moz-placeholder {  /* Firefox 19+ */
+   color: #808080;
+}
+
+input:-ms-input-placeholder {
+   color: #808080;
+}
+
+.item p{
+	font-size: $font-size-x-small !important;
+}
+.padding-none{
+	padding : 0;
+}
+i.icon.larger{
+	font-size : larger !important;
+}
+.push-down{
+	top : .3em !important;
+}
+.item.item-image{
+	max-height: 15rem;
+}
+.item-reveal{
+	position: absolute;
+    top: 0;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+}
+.item-reveal.ng-hide-remove{
+	animation: slideInUp .5s;
+}
+.item-reveal.ng-hide-add{
+	animation: slideOutDown .5s;
+}
+
+[data-mfb-label]:after{
+	background: rgba(0,0,0,.8) !important;
+}
+
+.item-thumbnail-left .item-content .item-image, .item-thumbnail-left .item-content>img:first-child, .item-thumbnail-left .item-image, .item-thumbnail-left>img:first-child{
+	border-radius: 0;
+}
+
+//---------Portrait View------------
+@media screen and (orientation:portrait){
+	.middle-box.push-down{
+		padding-top : 20% !important;
+	}
+}
+
+
+/********
+ * Utilities
+ ********/
+ .img-circle {
+   border-radius: 50%;
+ }
+ .pull-left{
+	 float: left;
+ }
+ .pull-right{
+	 float: right;
+ }
+ .text-muted{
+ 	color : #999999 !important;
+ }
+ .action-button, .mfb-component--br a, .action-button:active, .action-button:visited, .action-button:hover, .action-button:link, .action-button:focus{
+	 background-color: $balanced;
+	 border: 1px solid $balanced;
+	 color: $white;
+ }
+ .text-assertive{
+ 	color : $assertive !important;
+ }
+ .text-calm{
+	 color: $calm !important;
+ }
+ .text-positive{
+	 color: $positive !important;
+ }
+.popup-open .backdrop {
+	z-index: 11;
+}
+.image-loader-container {
+  margin: 9px;
+  max-width: 81px;
+  max-height: 81px;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: #e5e5e5;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: stretch;
+  align-items: center;
+}
+.platform-android ion-side-menu-content ion-header-bar:nth-child(1) {
+  border-top-width: 0;
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+select{
+	width: 100%;
+	padding: .5rem;
+}
+.bg-energized{
+	background-color : $energized;
+}
+.bg-assertive{
+	background-color: $assertive;
+}
+
+
+/******
+ *	Floating Labels
+ *******/
+
+.item-floating-label{
+	border-width: 0px;
+	border-bottom: 1px solid $stable;
+}
+
+/******
+ * Item Search
+ *****/
+.search-results{
+	.item-content h3{
+		white-space: normal;
+	}
+}
+label.header-input input::-webkit-input-placeholder {
+   color: $stable;
+}
+
+label.header-input input:-moz-placeholder { /* Firefox 18- */
+   color: $stable;
+}
+
+label.header-input input::-moz-placeholder {  /* Firefox 19+ */
+   color: $stable;
+}
+
+label.header-input input:-ms-input-placeholder {
+   color: $stable;
+}
+label.header-input input{
+	color : $light;
+}
+label.header-input{
+	border-bottom: 1px solid $stable;
+	padding-bottom: 0;
+	background: transparent;
+}
+label.header-input input[disabled]{
+	background: transparent;
+}
+
+.popup-buttons button{
+	box-shadow: none !important;
+}
+.bar .title+.buttons.buttons-right {
+	top: 4px;
+}
+.profile-thumbnail{
+	width : 75px;
+}
+
+
+/******
+ * Action Sheet
+ *****/
+.dorrbell_menu{
+	i.icon{
+		position : relative;
+		left: inherit;
+		margin-right : 1em;
+		margin-left : 1em;
+		&.ion-iphone{
+			margin-left : 1.3em;
+		}
+	}
+	button{
+		color : $calm !important;
+		text-align : left;
+		padding-left : 1em !important;
+		text-transform : inherit;
+		font-size : 14px !important;
+	}
+	.button .icon:before, .button.icon:before, .button.icon-left:before, .button.icon-right:before{
+		font-size : 20px !important;
+	}
+	.button{
+		box-shadow : none;
+		border : none;
+		padding-bottom: 0;
+		padding-top : 0;
+	}
+}
+
+/********
+ *	Side Menu
+ *******/
+ion-side-menu{
+	ion-item.item{
+		border-color: $item-stable-border;
+	}
+	ion-item.active a.item-content{
+		border-left: 4px solid $positive !important;
+	}
+	 h1 img{
+		 max-width:60%;
+		 margin-top:.3rem;
+	 }
+ }
+
+ /********
+  *	Login / Registration
+  *******/
+	.login{
+	  background: url('../img/login-back.png') no-repeat center center fixed;
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+
+
+	  h1, h2, h3, h4, p, div, form, span, input{
+	    color: $light;
+	  }
+	  h1{
+	    line-height:0px;
+	  }
+
+	  label, span{
+	    background-color: transparent;
+	    padding-left:0px;
+			text-align:left;
+	    &.item:first-child{
+	      border-top:none;
+	    }
+	  }
+		::-webkit-input-placeholder {
+		    color:    $light;
+		}
+		:-moz-placeholder {
+		    color:     $light;
+		}
+		::-moz-placeholder {
+		    color:    $light;
+		}
+		:-ms-input-placeholder {
+		    color:     $light;
+		}
+		img{
+			max-width: 100%;
+		}
+
+	  .btn-fb{
+	    background-color: #3b5998;
+	  }
+
+	  form{
+	    margin-bottom: 10vh;
+	  }
+
+	  .register-link{
+	    width: 100%;
+	    display: block;
+	    text-align: center;
+	  }
+	}
+
+/********
+ *	Search Results
+ *******/
+ .search-results.list .item{
+
+}
+
+/********
+ * Order List
+ *******/
+.order-list, .delivery-list{
+	/*
+	.item-button-left > .button, .item-button-left .item-content > .button{
+		top : .7em;
+		min-height: 47px;
+	}
+	.tabs{
+		.tab-item{
+			.badge{
+				position:relative;
+				top:0 !important;
+				right:0;
+				margin-left:5px;
+			}
+		}
+	}
+	.row{
+		padding: 0;
+		.content{
+			border-left: 1px solid #e7eaec;
+			padding-left: 15px;
+		}
+		.date i.ion{
+			left: initial;
+		}
+	}*/
+	div.calendar{
+		.fc-time-grid .fc-slats td {
+			height: 3rem;
+		}
+		.fc-toolbar{
+			padding: 0 .5rem;
+		}
+		.filled{
+			background-color: $energized;
+			color: black;
+		}
+		.complete{
+			background-color: $stable;
+			color: black;
+		}
+	}
+	button.img-circle{
+		min-height: 47px;
+		top: .7em;
+	}
+}
+
+/********
+ * Order Details
+ ********/
+ .order-details{
+	 #order-map{
+		 width: 100%;
+		 height: 100% !important;
+		 address{
+			 margin-bottom: 0;
+		 }
+	 }
+	 .swiper-container{
+		 height: calc(100% - 78px);
+		 width: 100%;
+		 position:absolute;
+		 overflow: visible;
+		 top:0;
+		 pointer-events:none;
+		 z-index: 6;
+	 }
+	 .interact{
+		 pointer-events:all !important;
+	 }
+	 .mfb-component--br{
+		 z-index: 5;
+		 bottom: 10vh;
+		 &.higher{
+			 bottom: 100px;
+			 margin: 0;
+			 right: 1.2rem;
+		 }
+		 &.red-color li>a{
+			 background-color: $balanced;
+			 border-color: $balanced;
+			 color: white;
+		 }
+	 }
+	 .ion-drawer-vertical-handle{
+		left: 0;
+		color: $white;
+		background-color : $positive !important;
+		width: 100%;
+		background-image: none;
+		padding: 1em;
+		height: 6em;
+		clear: both;
+		position: relative;
+		div:nth-child(1){
+			line-height: 2;
+		}
+		address{
+			max-width:70%;
+		}
+	 }
+	 .order-content{
+		 height: 1000px;
+		 background-color: $white;
+		 .list{
+			 a.item, div.item{
+				 font-size: 15px;
+				i.icon{
+					 font-size: $font-size-large;
+	 			}
+				button{
+					top: .3rem;
+				}
+			}
+			.note{
+				white-space: normal;
+			}
+		 }
+	 }
+	 .swiper-slide{
+		 &.swiper-slide-active{
+			 .drawer-action{
+				 display: none;
+			 }
+		 }
+		 .drawer-action{
+			 position: absolute;
+			 right: 0;
+			 width: 6rem;
+			 z-index: 8;
+			 top: -1.3rem;
+			 button{
+				 border-radius: 50%;
+				 padding: .3rem;
+				 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			 }
+		 }
+		 label{
+			 display: block;
+			 font-size: $font-size-x-small;
+			 margin-top: .5em;
+		 }
+	 }
+
+ }
+
+/********
+ * Product Details
+ ********/
+.product-details .box img{
+	max-height: 20em;
+}
+
+/********
+ * Bar Subheader
+ ********/
+ ion-view{
+ 	&.bar-subheader-slide-away {
+ 	 .bar-subheader {
+		 	 z-index: 0;
+ 			 top: 0;
+ 	 }
+ 	 .has-subheader {
+ 			 top: 44px;
+ 	 }
+  }
+ 	.bar-positive {
+ 		 z-index: 2;
+  }
+
+  .bar-subheader {
+ 		 z-index: 1;
+ 		 transition: top 0.25s ease;
+ 		 .title{
+ 				 font-size : $font-size-x-small !important;
+ 				 font-weight: normal;
+				 text-align: center !important;
+ 		 }
+  }
+}
+/********
+ * Delivery Details
+ ********/
+ .delivery-detail{
+	 [data-mfb-label]:after{
+		 opacity: 100 !important;
+	 }
+	.list-inset{
+		.item-image img[data-loaded='false']{
+			height: 15em;
+			width: 90%;
+		}
+	}
+	.product-detail{
+		img{
+			width: 100%;
+		}
+		dt,dd{
+			font-size: $font-size-x-small;
+		}
+		dt{
+			margin-top: .2rem;
+		}
+		h2{
+			white-space: normal;
+			max-width: 90%;
+		}
+		.item-icon-right>i{
+			font-size: initial !important;
+			height: 50% !important;
+		}
+		.submenu{
+			position:absolute;
+			top:.2rem;
+			right:.4rem;
+		}
+	}
+	.item.bg-positive{
+		.action-button{
+			position: absolute;
+			right: 1.3rem;
+			z-index: 8;
+			top:.8rem;
+			min-width: .3rem;
+	   	min-height: .3rem;
+			padding:0 12px;
+		}
+	}
+	.item.item-actions{
+		padding: .2rem;
+		.button{
+			border-radius: 0;
+			margin: 0;
+		}
+		a.button{
+			top: 3px;
+		}
+		.right{
+			float: right;
+		}
+		.left{
+			float: left;
+		}
+	}
+	.list:last-child{
+		margin-bottom: 7vh !important;
+	}
+ }
+ /********
+  * Item Search
+  ********/
+.item-search{
+
+}
+
+/********
+ * FAB
+ ********/
+ .ab-margin{
+ 	margin-bottom: 50px !important;
+ }

@@ -1,0 +1,78 @@
+
+<ion-view class="login" animation="no-animation">
+	<ion-content has-bouncing="false">
+
+	<div class="middle-box text-center loginscreen push-down">
+		<div>
+			<div>
+          <h1 class="logo-name">
+            <img src="img/receipt-header-logo-hi-res.png"/>
+          </h1>
+      </div>
+			<h3 class="m-t-lg">The On-Demand Fitting Room</h3>
+      <p>Try on clothing and accessories at home before you buy. Delivered to your house in as little as an hour.
+      </p>
+      <p>Login To see it in action.</p>
+
+			<!--
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="Username" ng-model="user.username">
+				</label>
+				<label class="item item-input m-t-sm">
+					<input type="password" placeholder="Password" ng-model="user.password">
+				</label>
+			</div>
+			-->
+
+			<div class="m-t m-b-m">
+				<div class="list">
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Username</span>
+						<input type="email" placeholder="Username" ng-model="user.username"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Password</span>
+						<input type="password" placeholder="Password" ng-model="user.password"/>
+					</label>
+				</div>
+				<button class="button button-positive button-block m-t-xl icon-left" style="padding-top:3px;" ng-click="login()">
+					<i class="icon ion-ios-cloud-outline"></i>
+					Login
+				</button>
+
+	    </div>
+			<a class="register-link" style="padding-top:3px; margin-top:20px;" ng-click="showBeta()">
+				I have a beta key.
+			</a>
+
+			<!--
+			<div class="list">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Username</span>
+					<input type="email" placeholder="Username" ng-model="user.username"/>
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Password</span>
+					<input type="password" placeholder="Password" ng-model="user.password"/>
+				</label>
+			</div>
+
+			<button class="button button-positive button-block m-t-xl icon-left" style="padding-top:3px;" ng-click="login()">
+				<i class="icon ion-ios-cloud-outline"></i>
+				Login
+			</button>
+			<button class="button button-positive button-block button-clear button-small icon-left" style="padding-top:3px; margin-top:20px;" ng-click="showBeta()">
+				<i class="icon ion-key"></i>
+				I have a beta key.
+			</button>
+			<p class="m-t">
+				<small>Dorrbell © 2015</small>
+			</p>
+		-->
+		</div>
+
+	</div>
+
+	</ion-content>
+</ion-view>

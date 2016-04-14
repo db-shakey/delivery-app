@@ -1,0 +1,72 @@
+
+<ion-view>
+	<form name="contactForm" novalidate ng-submit="submit()">
+		<ion-content has-bouncing="false" class="login">
+
+		<div class="middle-box text-center loginscreen">
+			<div>
+
+				<div class="list">
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Email Address</span>
+						<input
+							type="email"
+							name="Email Address"
+							placeholder="Email Address"
+							ng-model="contact.Email"
+							ng-required="true"
+							ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">First Name</span>
+						<input type="text"
+								name="First Name"
+								placeholder="First Name"
+								ng-model="contact.FirstName"
+								ng-required="true"
+								ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Last Name</span>
+						<input type="text" name="Last Name" placeholder="Last Name" ng-model="contact.LastName" ng-required="true" ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Phone #</span>
+						<input type="tel" placeholder="Phone #" name="Phone Number" ng-model="contact.MobilePhone" ui-us-phone-number required/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Password</span>
+						<input type="password"
+								placeholder="Password"
+								name="Password"
+								ng-model="contact.Password__c"
+								ng-required="true"
+								ng-minlength="6"
+								ng-maxlength="20"
+								ng-trim="true"
+								ng-pattern="/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Confirm Your Password</span>
+						<input type="password" name="Password Confirmation" placeholder="Confirm Your Password" ng-model="contact.password_confirm" ng-required="true" ng-trim="true"/>
+					</label>
+				</div>
+
+				<button type="submit" class="button button-positive button-block m-t-xl icon-left" style="padding-top:3px;">
+					<i class="icon ion-ios-cloud-upload-outline"></i>
+					Submit
+				</button>
+				<button class="button button-positive button-block button-clear button-small icon-left" style="padding-top:3px; margin-top:20px;" ui-sref="login">
+					<i class="icon ion-chevron-left"></i>
+					Back to Login
+				</button>
+				<p class="m-t">
+					<small>Dorrbell © 2015</small>
+				</p>
+
+			</div>
+		</div>
+
+		</ion-content>
+	</form>
+</ion-view>

@@ -1,0 +1,41 @@
+
+<ion-view class="delivery-detail" ng-class="{'bar-subheader-slide-away': slideHeader}">
+
+  <ion-nav-title>
+      Order #{{order.Name}}
+  </ion-nav-title>
+  
+  <ion-content has-bouncing="false" ng-cloak>
+
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getOrder(true)"></ion-refresher>
+
+      <div class="list list-inset" ng-repeat="item in order.OrderItems.records" ng-if="order">
+        <div class="item row product-detail">
+          <div class="col padding-horizontal">
+            <img ng-click="showImageModal(item)" fallback-src="{{item.PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c}}" ng-src="{{item.PricebookEntry.Product2.Image__r.Image_Source__c}}"/>
+          </div>
+
+          <div class="col-67">
+            <h2 class="font-bold">{{item.PricebookEntry.Product2.Root_Product_Name__c}}</h2>
+
+            <div class="m-b-sm">
+                <h2 class="product-main-price">{{item.UnitPrice | currency}} </h2>
+            </div>
+            <dl class="small">
+                <output-field object-name="Product2" field-name="Name" field-label="Variant" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="SKU__c" field-label="SKU" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Family" field-label="Family" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Brand__c" field-label="Brand" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Barcode__c" field-label="Barcode" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+            </dl>
+          </div>
+        </div>
+
+        <item-status delivery="delivery" item="item"></item-status>
+      </div>
+      <div class="m-t-xl">&nbsp;</div>
+  </ion-content>
+
+
+
+</ion-view>
