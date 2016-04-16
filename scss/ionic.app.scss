@@ -14,8 +14,6 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 
 $stable:                          #dcdcdc !default;			//Light grey -accent
 $stable-dark:					  					#646464 !default;			//Dark grey  -accent
@@ -288,6 +286,14 @@ select{
 	background-color: $assertive;
 }
 
+/*******
+ * Calendar overrides
+ ********/
+.ionic_datepicker_modal{
+	.header, .footer, .selected_date, .prev_btn_section, .next_btn_section{
+			background-color: $positive !important;
+	}
+}
 
 /******
  *	Floating Labels
@@ -459,31 +465,7 @@ ion-side-menu{
  * Order List
  *******/
 .order-list, .delivery-list{
-	/*
-	.item-button-left > .button, .item-button-left .item-content > .button{
-		top : .7em;
-		min-height: 47px;
-	}
-	.tabs{
-		.tab-item{
-			.badge{
-				position:relative;
-				top:0 !important;
-				right:0;
-				margin-left:5px;
-			}
-		}
-	}
-	.row{
-		padding: 0;
-		.content{
-			border-left: 1px solid #e7eaec;
-			padding-left: 15px;
-		}
-		.date i.ion{
-			left: initial;
-		}
-	}*/
+
 	div.calendar{
 		.fc-time-grid .fc-slats td {
 			height: 3rem;

@@ -40,7 +40,6 @@ gulp.task('install', ['git-check'], function() {
 
 gulp.task('compress', function(){
   gulp.src(["./www/extras/jquery-2.1.4.min.js",
-            "./www/lib/ionic/js/ionic.bundle.js",
 
             "./www/extras/angular-ios9-uiwebview.patch.js",
             "./www/extras/socket.io.js",

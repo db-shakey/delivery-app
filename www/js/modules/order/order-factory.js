@@ -115,6 +115,7 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 								PricebookEntry.Product2.Root_Product_Name__c, \
 								PricebookEntry.Product2.SKU__c, \
 								PricebookEntry.Product2.Parent_Product__c, \
+								PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c, \
 								Order_Store__r.Store__c, \
 								Order_Store__r.Store__r.Name, \
 								Order_Store__c, \

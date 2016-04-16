@@ -1,0 +1,81 @@
+
+<ion-view class="delivery-detail" ng-class="{'bar-subheader-slide-away': slideHeader}">
+
+  <ion-nav-title>
+      {{delivery.Store__r.Name}} {{delivery.Name}}
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-android-more-vertical m-r-sm" ng-click="openSubmenu()" ng-if="v.canAddItem(delivery)"></button>
+  </ion-nav-buttons>
+  <ion-header-bar class="bar-subheader bar-stable">
+    <h1 class="title">
+      <span>
+        <b>Status:</b> {{delivery.Status__c}}
+      </span>
+      <span class="m-l-md">
+        <b>Suggest Items:</b> {{(delivery.Order__r.Request_Additional_Items__c) ? 'Yes' : 'No'}}
+      </span>
+    </h1>
+  </ion-header-bar>
+  <ion-content has-bouncing="false" ng-cloak>
+
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getDelivery(true)"></ion-refresher>
+
+      <div class="list list-inset" ng-repeat="item in delivery.Order_Products__r.records" ng-if="delivery">
+        <div class="item row product-detail">
+          <div class="col padding-horizontal">
+            <img ng-click="showImageModal(item)" fallback-src="{{item.PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c}}" ng-src="{{item.PricebookEntry.Product2.Image__r.Image_Source__c}}"/>
+          </div>
+
+          <div class="col-67">
+            <h2 class="font-bold">{{item.PricebookEntry.Product2.Root_Product_Name__c}}</h2>
+            <!--
+              <small>{{item.Status__c}}<i class="icon ion-checkmark-circled m-l-sm" ng-if="item.Status__c == 'Checked Out'"></i></small>
+            -->
+            <div class="m-b-sm">
+                <h2 class="product-main-price">{{item.UnitPrice | currency}} </h2>
+            </div>
+            <dl class="small">
+                <output-field object-name="Product2" field-name="Name" field-label="Variant" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="SKU__c" field-label="SKU" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Family" field-label="Family" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Brand__c" field-label="Brand" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+                <output-field object-name="Product2" field-name="Barcode__c" field-label="Barcode" record="item.PricebookEntry.Product2" layout="vertical"></output-field>
+            </dl>
+          </div>
+        </div>
+
+        <div class="item item-actions" ng-if="v.saHasOptions(item, delivery)">
+          <button class="button icon-right ion-qr-scanner button-positive padding-horizontal button-full button-small" ng-if="v.canCheckout(item, delivery)" ng-click="checkoutItem(item)">Check Out&nbsp;</button>
+        </div>
+        <item-status delivery="delivery" item="item" ng-if="!v.saHasOptions(item, delivery)"></item-status>
+        <!--
+        <div class="item item-actions item-icon-left item-icon-right" ng-if="v.showSubmenu(item, delivery)">
+            <i class="icon ion-android-more-vertical" ng-click="openItemSubmenu(item, $event)"></i>
+            <i class="icon ion-ios-pricetag-outline" ng-click="confirmPrice(item)" ng-if="v.canConfirmPrice(item, delivery)">
+              Confirm Price
+            </i>
+            <i class="icon ion-qr-scanner" ng-if="v.canCheckout(item, delivery)" ng-click="scanItem(item, false)">
+              Check Out
+            </i>
+            <i class="icon ion-qr-scanner" ng-if="v.canCheckIn(item, delivery)" ng-click="scanItem(item, true)">
+              Check In
+            </i>
+        </div>
+        -->
+      </div>
+      <div class="m-t-xl">&nbsp;</div>
+  </ion-content>
+
+    <nav mfb-menu position="br"
+        active-icon="{{b.icon}}"
+        resting-icon="{{b.icon}}"
+        ng-if="delivery && b.condition(delivery)"
+        label="{{b.label}}"
+        menu-state="'open'"
+        ng-repeat="b in dv.buttons"
+        ng-click="b.action(delivery)">
+    </nav>
+
+
+</ion-view>

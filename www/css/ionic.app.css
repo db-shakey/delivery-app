@@ -15,8 +15,6 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -28,7 +26,7 @@ $dark:                            #444 !default;
   used under CC BY http://creativecommons.org/licenses/by/4.0/
   Modified icons to fit ionicon’s grid from original.
 */
-@import url("//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @font-face {
   font-family: "Ionicons";
@@ -7250,7 +7248,6 @@ button.swiper-pagination-bullet {
 
 ion-slides {
   width: 100%;
-  height: 100%;
   display: block; }
 
 .slide-zoom {
@@ -18804,6 +18801,12 @@ select {
 .bg-assertive {
   background-color: #d4271a; }
 
+/*******
+ * Calendar overrides
+ ********/
+.ionic_datepicker_modal .header, .ionic_datepicker_modal .footer, .ionic_datepicker_modal .selected_date, .ionic_datepicker_modal .prev_btn_section, .ionic_datepicker_modal .next_btn_section {
+  background-color: #14a1bf !important; }
+
 /******
  *	Floating Labels
  *******/
@@ -18935,45 +18938,23 @@ ion-side-menu h1 img {
 /********
  * Order List
  *******/
-.order-list, .delivery-list {
-  /*
-	.item-button-left > .button, .item-button-left .item-content > .button{
-		top : .7em;
-		min-height: 47px;
-	}
-	.tabs{
-		.tab-item{
-			.badge{
-				position:relative;
-				top:0 !important;
-				right:0;
-				margin-left:5px;
-			}
-		}
-	}
-	.row{
-		padding: 0;
-		.content{
-			border-left: 1px solid #e7eaec;
-			padding-left: 15px;
-		}
-		.date i.ion{
-			left: initial;
-		}
-	}*/ }
-  .order-list div.calendar .fc-time-grid .fc-slats td, .delivery-list div.calendar .fc-time-grid .fc-slats td {
-    height: 3rem; }
-  .order-list div.calendar .fc-toolbar, .delivery-list div.calendar .fc-toolbar {
-    padding: 0 .5rem; }
-  .order-list div.calendar .filled, .delivery-list div.calendar .filled {
-    background-color: #f5db8a;
-    color: black; }
-  .order-list div.calendar .complete, .delivery-list div.calendar .complete {
-    background-color: #dcdcdc;
-    color: black; }
-  .order-list button.img-circle, .delivery-list button.img-circle {
-    min-height: 47px;
-    top: .7em; }
+.order-list div.calendar .fc-time-grid .fc-slats td, .delivery-list div.calendar .fc-time-grid .fc-slats td {
+  height: 3rem; }
+
+.order-list div.calendar .fc-toolbar, .delivery-list div.calendar .fc-toolbar {
+  padding: 0 .5rem; }
+
+.order-list div.calendar .filled, .delivery-list div.calendar .filled {
+  background-color: #f5db8a;
+  color: black; }
+
+.order-list div.calendar .complete, .delivery-list div.calendar .complete {
+  background-color: #dcdcdc;
+  color: black; }
+
+.order-list button.img-circle, .delivery-list button.img-circle {
+  min-height: 47px;
+  top: .7em; }
 
 /********
  * Order Details

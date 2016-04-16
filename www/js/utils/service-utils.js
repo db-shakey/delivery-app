@@ -155,7 +155,7 @@ angular.module('dorrbell').service("ItemValidator", function($rootScope){
 	}
 });
 
-angular.module('dorrbell').service("DeliveryValidator", function($rootScope, DeliveryFactory, Log, $ionicPopup, $state){
+angular.module('dorrbell').service("DeliveryValidator", function($rootScope, DeliveryFactory, Log, $ionicPopup, $state, $ionicHistory){
 	this.buttons = [
 		{
 			condition : function(delivery){
@@ -186,7 +186,9 @@ angular.module('dorrbell').service("DeliveryValidator", function($rootScope, Del
 			  });
 			  confirmPopup.then(function(res) {
 			    if(res) {
-			      DeliveryFactory.setStatus(delivery.Id, 'Checked Out');
+			      DeliveryFactory.setStatus(delivery.Id, 'Checked Out', function(){
+							$ionicHistory.goBack();
+						});
 			    }
 			  });
 			},

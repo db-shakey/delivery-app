@@ -145,3 +145,148 @@ angular.module('dorrbell').controller("RegisterController", function($scope, $st
         }
     }
 });
+
+angular.module('dorrbell').controller("AccountController", function($scope, $ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $ionicPopup, $rootScope, $timeout, $state, ImageService, AccountFactory, Log, RegistrationValidator, force) {
+    $scope.contact = {
+        FirstName : $scope.currentUser.FirstName,
+        Email : $scope.currentUser.Email,
+        LastName : $scope.currentUser.LastName,
+        MobilePhone : $scope.currentUser.MobilePhone,
+        Id : $scope.currentUser.Id
+    };
+    $scope.getPicture = function(e) {
+        $scope.popup.close();
+        try{
+            var options = {
+                quality: 50,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourcType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+                targetWidth: 300,
+                targetHeight: 300,
+                encodingType: Camera.EncodingType.JPEG
+            };
+            $cordovaCamera.getPicture(options).then(function(imageURI) {
+                ImageService.convertUrlToBase64(imageURI, function(data) {
+                    AccountFactory.uploadProfilePhoto($scope.currentUser.Id, data, function(updatedUser) {
+                        $rootScope.currentUser = updatedUser;
+                    });
+                }, "image/jpeg");
+            });
+        }catch(err){
+            $timeout(function(){
+                Log.message("Cannot access camera", true, "Error");
+            });
+        }
+    }
+    $scope.getPictureFromGallery = function(e) {
+        $scope.popup.close();
+        var options = {
+            maximumImagesCount: 1,
+            width: 300,
+            height: 300,
+            quality: 50
+        };
+
+        try {
+             $cordovaImagePicker.getPictures(options)
+                .then(function(results) {
+                    if (results[0]) {
+                        ImageService.convertUrlToBase64(results[0], function(data) {
+                            console.log(data);
+                            AccountFactory.uploadProfilePhoto($scope.currentUser.Id, data, function(updatedUser) {
+                                $rootScope.currentUser = updatedUser;
+                            });
+                        }, "image/jpeg");
+                    }
+                }, function(error) {
+                    Log.message("Error loading photo", true, "Error");
+                });
+        } catch(err){
+            $timeout(function(){
+                Log.message("Cannot access gallery", true, "Error");
+            });
+        }
+    }
+
+    $scope.openSubmenu = function($event) {
+        var sheet = $ionicActionSheet.show({
+            buttons: [{
+                text: '<i class="icon ion-image"></i> Change Profile Photo'
+            }, {
+                text: '<i class="icon ion-unlocked"></i> Change Password'
+            }],
+            buttonClicked: function(index) {
+                sheet();
+                if (index == 0) {
+                    $scope.popup = $ionicPopup.show({
+                        template: " <button class='button button-full button-positive' ng-click='getPicture()'>Camera</button>\
+                                    <button class='button button-full button-positive' ng-click='getPictureFromGallery()'>Gallery</button>\
+                                    <button class='button button-full button-stable' ng-click='popup.close()'>Cancel</button>",
+                        title: "Choose Image Source",
+                        subTitle: "Select a location to upload your profile photo from.",
+                        scope: $scope
+                    })
+                }else if(index == 1){
+                    if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact'){
+                        $state.go("app.password");
+                    }else{
+                        $state.go("ret.password");
+                    }
+                }
+            },
+            cssClass: "dorrbell_menu"
+        })
+    }
+
+     $scope.submit = function() {
+        if (RegistrationValidator.validateContact($scope.contactForm)) {
+            $.extend(true, $rootScope.currentUser, $scope.contact);
+            force.update("Contact", $scope.contact, function(){
+                Log.message("Your account information has been updated", true, "Account Update");
+            })
+        }
+    }
+});
+
+angular.module('dorrbell').controller("ChangePasswordController", function($scope, RegistrationValidator, Log, force, HerokuService, $ionicLoading){
+    $scope.password = {};
+
+    $scope.submit = function(){
+        console.log($scope);
+        if(RegistrationValidator.validateContact($scope.passwordForm)){
+            if($scope.password.newPassword != $scope.password.confirm){
+                Log.message("Your passwords do not match", true, "Invalid Password");
+            }else{
+              $ionicLoading.show({
+                  template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
+              });
+                force.post(
+                    "/api/changePassword",
+                    {
+                        password : $scope.password,
+                        contact : $scope.currentUser
+                    },
+                    false,
+                    null,
+                    function(res){
+                        HerokuService.login({
+                            username : $scope.currentUser.Email,
+                            password : $scope.password.newPassword
+                        }, function(result){
+                            $ionicLoading.hide();
+                            Log.message("Your password has been updated", true, "Success");
+                        }, function(error){
+                            $ionicLoading.hide();
+                            Log.message(error, true, "Error");
+                        });
+                    },
+                    function(error){
+                        $ionicLoading.hide();
+                        Log.message(error.data, true, "Error");
+                    }
+                )
+            }
+        }
+    }
+
+})

@@ -1,0 +1,54 @@
+<ion-view>
+  	<ion-nav-title>
+  		{{product.Product2.Root_Product_Name__c}}
+  	</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-android-more-vertical m-r-sm" ng-click="openSubmenu()"></button>
+    </ion-nav-buttons>
+  	<ion-content class="product-details padding" lazy-scroll ng-cloak>
+
+
+
+      <ion-slides option="options" slider="data.slider">
+        <ion-slide-page ng-repeat="variant in variants">
+            <div class="box text-center m-b-lg">
+              <img fallback-src="{{product.Product2.Parent_Product__r.Image__r.Image_Source__c}}" ng-src="{{product.Product2.Image__r.Image_Source__c}}"></img>
+            </div>
+            <h2 class="font-bold m-b-xs">
+              {{variant.Product2.Name}}
+            </h2>
+            <small>{{variant.Product2.SKU__c}}</small>
+            <div class="m-t-md m-b-xl">
+              <h2 class="product-main-price">{{variant.UnitPrice | currency}} <small class="text-muted">Excludes Tax</small> </h2>
+            </div>
+        </ion-slide-page>
+      </ion-slides>
+
+
+
+
+      <hr>
+
+      <h4 ng-if="product.Dorrbell_Product__r.Description__c">Product description</h4>
+
+      <div class="small text-muted" ng-bind-html="product.Product2.Body_Html__c"></div>
+      <dl class="small m-t-md">
+        <dt class="m-t-sm">Store</dt>
+        <dd>
+          {{product.Product2.Store__r.Name}}
+          <b>
+            <span class="m-l-md" haversine lat-from="{{coords.latitude}}" lon-from="{{coords.longitude}}" lat-to="{{product.Product2.Store__r.Coordinates__Latitude__s}}" lon-to="{{product.Product2.Store__r.Coordinates__Longitude__s}}" ng-if="coords">
+            </span>
+          </b>
+        </dd>
+        <dt class="m-t-sm">Barcode</dt>
+        <dd>{{product.Product2.Barcode__c}}<dd>
+        <dt class="m-t-sm">Product Type</dt>
+        <dd>{{product.Product2.Family}}</dd>
+        <dt class="m-t-sm">Brand</dt>
+        <dd>{{product.Product2.Parent_Product__r.Brand__c}}</dd>
+      </dl>
+      <hr>
+  	</ion-content>
+    <nav mfb-menu position="br" resting-icon="ion-plus-round" active-icon="ion-plus-round" ng-click="addToOrder()" ng-if="delivery"></nav>
+</ion-view>

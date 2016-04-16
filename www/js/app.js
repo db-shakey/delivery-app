@@ -58,8 +58,7 @@ ionic.Platform.ready(function(){
          *  Load the css
          */
         $ocLazyLoad.load([
-          'css/ionic.app.css'
-          ,'css/animate.css'
+          'css/animate.css'
           ,'lib/ng-material-floating-button/mfb/dist/mfb.min.css'
           ,'lib/fullcalendar/dist/fullcalendar.min.css'
           ,'lib/swiper/dist/css/swiper.min.css'
@@ -76,8 +75,8 @@ ionic.Platform.ready(function(){
 
     _app.config(function($ocLazyLoadProvider){
       $ocLazyLoadProvider.config({
-        debug : true,
-        events : true
+        debug : false,
+        events : false
       });
     })
 

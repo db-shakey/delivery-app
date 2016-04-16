@@ -46,11 +46,11 @@
 -->
 
   <div class="tabs-background-positive tabs-color-light">
-      <ionic-datepicker input-obj="datepickerObject" class="tabs tabs-icon-top">
-        <a class="tab-item active">
+      <div class="tabs tabs-icon-top">
+        <a class="tab-item active" ng-click="openDatePicker()">
           <i class="icon ion-ios-calendar-outline"></i>
            {{selectedDate | date:datepickerObject.dateFormat}}
         </a>
-      </ionic-datepicker>
+      </div>
   </div>
 </ion-view>

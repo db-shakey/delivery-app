@@ -1,6 +1,7 @@
 angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $locationProvider) {
 
   $ionicConfigProvider.backButton.previousTitleText(false).text('');
+  $ionicConfigProvider.scrolling.jsScrolling(false);
 
    $urlRouterProvider.otherwise( function($injector, $location) {
         var $state = $injector.get("$state");
@@ -99,7 +100,7 @@ angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $
       url : '/deliverydetail/:deliveryId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/delivery/templates/delivery-detail.html',
+          templateUrl : 'js/modules/delivery/templates/sa-delivery-detail.html',
           controller : 'DeliveryDetail'
         }
       },
@@ -116,6 +117,72 @@ angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $
       }
     })
 
+    .state('app.returns', {
+      url : '/returns/:orderId',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/return/templates/returns.html',
+          controller : 'ReturnController'
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : true,
+            files : [ 'js/modules/delivery/delivery-factory.js',
+                      'js/modules/order/order-factory.js',
+                      'js/modules/return/return-controller.js'
+                    ]
+          });
+        }
+      }
+    })
+
+    .state('app.productdetails', {
+      url : '/productdetails/:productId/:deliveryId',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/product/templates/product-detail.html',
+          controller : 'ProductDetail'
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : true,
+            files : [
+              'js/modules/delivery/delivery-factory.js',
+              'js/modules/product/product-factory.js',
+              'js/modules/product/product-controller.js'
+            ]
+          })
+        }
+      }
+    })
+
+    .state('app.itemsearch', {
+      url : '/itemsearch/:deliveryId',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/product/templates/product-search.html',
+          controller : 'ProductSearch',
+          cache: false
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : true,
+            files : [
+              'js/modules/delivery/delivery-factory.js',
+              'js/modules/product/product-factory.js',
+              'js/modules/product/product-controller.js'
+            ]
+          });
+        }
+      }
+    })
+
     .state("login", {
       url : '/login',
       templateUrl : 'js/modules/application/templates/login.html',
@@ -126,6 +193,47 @@ angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $
       resolve : {
         loadController : function($ocLazyLoad){
           return $ocLazyLoad.load(['js/modules/application/app-controller.js']);
+        }
+      }
+    })
+
+    .state('app.account', {
+      url : '/account',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/application/templates/account.html',
+          controller : 'AccountController'
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : true,
+            files : [
+              'js/modules/application/app-factory.js',
+              'js/modules/application/app-controller.js'
+            ]
+          });
+        }
+      }
+    })
+    .state('app.password', {
+      url : '/password',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/application/templates/change-password.html',
+          controller : 'ChangePasswordController'
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : true,
+            files : [
+              'js/modules/application/app-factory.js',
+              'js/modules/application/app-controller.js'
+            ]
+          });
         }
       }
     })

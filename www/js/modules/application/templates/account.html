@@ -1,0 +1,92 @@
+
+<ion-view>
+	<ion-nav-title>
+  		My Account
+  	</ion-nav-title>
+  	<ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-android-more-vertical m-r-sm" ng-click="openSubmenu()"></button>
+    </ion-nav-buttons>
+	<form name="contactForm" novalidate ng-submit="submit()">
+		<ion-content has-bouncing="false">
+
+		<div class="middle-box text-center p-lg">
+			<div>
+				<!--
+				<div>
+					<img src="img/logo_beta_salesforce_email_letterhead.png"/>
+				</div>
+				-->
+				<div class="m-b-lg skin-1">
+              		<img alt="image" class="img-circle profile-thumbnail" src="{{(currentUser.thumbnail) ? currentUser.thumbnail : 'img/default_profile.jpg'}}"/>
+            		<span class="clear">
+			              <span>
+			                ({{currentUser.RecordType.Name}})
+			              </span>
+		            </span>
+            	</div>
+
+
+				<div class="list">
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Email Address</span>
+						<input
+							type="email"
+							name="Email Address"
+							placeholder="Email Address"
+							ng-model="contact.Email"
+							ng-required="true"
+							ng-minlength="2"
+							ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">First Name</span>
+						<input type="text"
+								name="First Name"
+								placeholder="First Name"
+								ng-model="contact.FirstName"
+								ng-required="true"
+								ng-minlength="2"
+								ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Last Name</span>
+						<input type="text" name="Last Name" placeholder="Last Name" ng-model="contact.LastName" ng-required="true" ng-trim="true"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Phone #</span>
+						<input type="text" placeholder="Phone #" name="Phone Number" ng-model="contact.MobilePhone" ui-us-phone-number required/>
+					</label>
+					<!--
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Password</span>
+						<input type="password"
+								placeholder="Password"
+								name="Password"
+								ng-model="contact.Password__c"
+								ng-required="true"
+								ng-minlength="6"
+								ng-maxlength="20"
+								ng-trim="true"
+								ng-pattern="/^(?=.*\d)(?=.*[a-zA-Z]).{6,20}$/"/>
+					</label>
+					<label class="item item-input item-floating-label">
+						<span class="input-label">Confirm Your Password</span>
+						<input type="password" name="Password Confirmation" placeholder="Confirm Your Password" ng-model="contact.password_confirm" ng-required="true" ng-trim="true"/>
+					</label>
+					-->
+				</div>
+
+				<div class="m-t-xl">
+					<button type="submit" class="button button-positive button-block icon-left" style="padding-top:3px;">
+						<i class="icon ion-ios-cloud-upload-outline"></i>
+						Save
+					</button>
+				</div>
+
+
+			</div>
+		</div>
+
+		</ion-content>
+	</form>
+</ion-view>

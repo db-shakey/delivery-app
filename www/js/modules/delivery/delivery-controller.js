@@ -224,24 +224,28 @@ angular.module('dorrbell').controller('DeliveryDetail', function($scope, $state,
  *  DeliveryListController
  *  @description: Controller to display list of deliverys based on type
  */
-angular.module('dorrbell').controller('DeliveryListController', function($scope, $state, DeliveryFactory, RecordTypeFactory, $ionicPopup, $filter, $ionicHistory){
+angular.module('dorrbell').controller('DeliveryListController', function($scope, $state, DeliveryFactory, RecordTypeFactory, $ionicPopup, $filter, $ionicHistory, ionicDatePicker){
   $ionicHistory.clearHistory();
   $scope.sort = 'Name';
 
-  $scope.datepickerObject = {
-    closeOnSelect: false, //Optional
-    setLabel: 'Select',
-    setButtonType: 'button-positive',
-    templateType: 'modal', //Optional
-    callback: function (val) {  //Mandatory
-      if(val){
-        $scope.selectedDate = val;
-        $scope.getDeliveries(false);
-      }
-    },
-    dateFormat: 'MM/dd/yyyy', //Optional
-    inputDate: new Date()  //Optional
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker({
+      setLabel: 'Select',
+      templateType: 'modal', //Optional
+      callback: function (val) {  //Mandatory
+        if(val){
+          $scope.selectedDate = new Date(val);
+          $scope.getDeliveries(false);
+        }
+      },
+      closeOnSelect : true,
+      showTodayButton: true,
+      dateFormat: 'MM/dd/yyyy', //Optional
+      inputDate: (!$scope.selectedDate) ? new Date() : $scope.selectedDate //Optional
+    });
   };
+
+
 
   $scope.selectedDate = new Date();
   $scope.getDeliveries = function(noCache){

@@ -3,7 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="">
+    <meta name="format-detection" content="telephone=no">
     <title></title>
+    <link href="css/ionic.app.css" rel="stylesheet">
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="cordova.js"></script>
 
     <script src="all.js"></script>
 
@@ -15,12 +21,27 @@
     <script src="js/utils/directive-utils.js"></script>
     <script src="js/utils/factory-utils.js"></script>
     <script src="js/utils/service-utils.js"></script>
-
+    <script>
+            window.onerror = function(message, url, lineNumber) {
+                $.ajax({
+                    url : "https://shrouded-hollows-1707.herokuapp.com/api/error",
+                    type : "POST",
+                    data : JSON.stringify({
+                        Message__c : message,
+                        Url__c : url,
+                        Line_Number__c : lineNumber
+                    }),
+                    dataType : "json",
+                    contentType : "application/json"
+                });
+            };
+        </script>
   </head>
   <body class="skin-3 mobile">
       <!--
       <div ng-include="&apos;templates/sa/directivetemplates.html&apos;"></div>
     -->
+
       <div id="wrapper">
         <ion-nav-view></ion-nav-view>
       </div>
