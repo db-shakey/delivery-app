@@ -1,0 +1,60 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-positive" align-title="center">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left" drag-content="false">
+    <ion-header-bar class="bar-positive" align-title="center">
+      <h1 class="title">
+        Menu
+      </h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list class="skin-1">
+
+        <ion-item class="bg-positive">
+          <div class="profile-element">
+            <span>
+              <img alt="image" class="img-circle profile-thumbnail" src="{{(currentUser.thumbnail) ? currentUser.thumbnail : 'img/default_profile.jpg'}}"/>
+            </span>
+            <span class="clear">
+              <span class="block m-t-xs">
+                {{currentUser.Name}}
+              </span>
+              <span>
+                ({{currentUser.RecordType.Name}})
+              </span>
+            </span>
+
+          </div>
+        </ion-item>
+
+        <ion-item menu-close ui-sref="db.storeList" class="item-icon-left">
+          <i class="icon ion-ios-list"></i>
+          Manage Stores
+        </ion-item>
+        <ion-item menu-close class="item-icon-left" ui-sref="db.account">
+          <i class="icon ion-person"></i>
+          My Account
+        </ion-item>
+        <ion-item menu-close class="item-icon-left" ng-click="callSupport()">
+          <i class="icon ion-iphone"></i>
+          Call Dorrbell Support
+        </ion-item>
+        <ion-item menu-close class="item-icon-left" ng-click="signOut()">
+          <i class="icon ion-log-out"></i>
+          Sign Out
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

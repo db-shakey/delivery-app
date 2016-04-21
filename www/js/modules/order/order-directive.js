@@ -1,4 +1,4 @@
-_app.directive("orderStatus", function(){
+angular.module('dorrbell').directive("orderStatus", function(){
 	return {
 		restrict : 'EA',
 		templateUrl : "order-status.htm",
@@ -33,7 +33,7 @@ _app.directive("orderStatus", function(){
 	}
 });
 
-_app.directive("deliveryStatus", function(){
+angular.module('dorrbell').directive("deliveryStatus", function(){
 	return {
 		restrict : 'A',
 		link : function($scope, element, attributes){
@@ -58,7 +58,7 @@ _app.directive("deliveryStatus", function(){
 	}
 });
 
-_app.directive("itemStatus", function(){
+angular.module('dorrbell').directive("itemStatus", function(){
 	return {
 		restrict : 'E',
 		templateUrl : 'delivery-item-status.htm',
@@ -106,7 +106,7 @@ _app.directive("itemStatus", function(){
 	}
 });
 
-_app.directive("deliveryItemImage", function(){
+angular.module('dorrbell').directive("deliveryItemImage", function(){
 	return {
 		restrict : 'A',
 		link : function($scope, element, attributes){

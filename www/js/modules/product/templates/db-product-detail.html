@@ -1,0 +1,63 @@
+<ion-view>
+  	<ion-nav-title>
+  		{{product.Store__r.Name}}
+  	</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-android-more-vertical m-r-sm" ng-click="openSubmenu()"></button>
+    </ion-nav-buttons>
+  	<ion-content class="product-details" ng-cloak>
+      <ion-refresher pulling-text="Pull to refresh..." on-refresh="getProduct(true)"></ion-refresher>
+      <div class="product-detail">
+        <div class="row">
+
+          <div class="col col-33">
+            <img ng-src="{{product.Image__r.Image_Source__c}}" fallback-src></img>
+          </div>
+
+          <div class="col col-67">
+            <h2 class="font-bold m-b-xs">
+              {{product.Name}}
+            </h2>
+            <small>{{product.Family}}</small>
+            <dl class="small m-t-md">
+              <dt>Tags</dt>
+              <dd>{{product.Tags__c}}</dd>
+            </dl>
+            <hr>
+            <ul class="list">
+              <!--
+              <li class="item item-toggle">
+                 Enabled
+                 <label class="toggle toggle-positive">
+                   <input type="checkbox" ng-model="shProduct.published">
+                   <div class="track">
+                     <div class="handle"></div>
+                   </div>
+                 </label>
+              </li>
+            -->
+            <ion-toggle ng-model="shProduct.published" toggle-class="toggle-postive" ng-change="togglePublish()">Enabled</ion-toggle>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h2 class="font-bold m-b-xs p-sm">
+        Variants
+      </h2>
+      <div>
+        <ion-list canSwipe="product.Variants__r.records.length > 1">
+          <ion-item class="item-thumbnail-left" ng-repeat="variant in product.Variants__r.records" ui-sref="db.variantEdit({productId : variant.Id})">
+            <img ng-src="{{variant.Image__r.Image_Source__c}}" fallback-src></img>
+            <h2>{{variant.Name}}</h2>
+            <p>SKU: {{variant.SKU__c}}</p>
+            <p>Barcode: {{variant.Barcode__c}}</p>
+            <span ng-if="product.Variants__r.records.length > 1">
+              <ion-option-button class="button-assertive" ng-click="delete(variant)">
+                Delete
+              </ion-option-button>
+            </span>
+          </ion-item>
+        </ion-list>
+      </div>
+  	</ion-content>
+</ion-view>

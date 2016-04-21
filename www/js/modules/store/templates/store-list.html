@@ -1,0 +1,41 @@
+<ion-view>
+  <ion-nav-title>
+      All Stores
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-ios-search-strong m-r-sm" ng-click="showFilterBar()"></button>
+  </ion-nav-buttons>
+
+  <ion-content class="store-list">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="searchStores(searchString, currentLimit)"></ion-refresher>
+
+
+      <ion-list class="m-b-xl">
+        <ion-item auto-list-divider auto-list-divider-value="{{store.Name}}" ng-repeat="store in storeList" ng-click="goToStore(store)" class="item-thumbnail-left" ng-if="!searchString">
+          <button class="button button-positive img-circle">{{store.Name | limitTo : 2}}</button>
+          <h2>
+            {{store.Name}}
+            <p class="pull-right m-t-xs">{{store.Shopping_District__c}}</p>
+          </h2>
+
+          <p class="text-muted m-t-xs">
+            {{store.Address__c}}
+          </p>
+        </ion-item>
+        <ion-item ng-repeat="store in storeList" class="item-thumbnail-left" ng-if="searchString" ng-click="goToStore(store)">
+          <button class="button button-positive img-circle">{{store.Name | limitTo : 2}}</button>
+          <h2>
+            {{store.Name}}
+            <p class="pull-right m-t-xs">{{store.Shopping_District__c}}</p>
+          </h2>
+
+          <p class="text-muted m-t-xs">
+            {{store.Address__c}}
+          </p>
+        </ion-item>
+      </ion-list>
+      <ion-infinite-scroll on-infinite="searchStores(searchString, currentLimit + 10)" ng-if="storeList && hasMore" distance="1%"></ion-infinite-scroll>
+
+
+  </ion-content>
+</ion-view>

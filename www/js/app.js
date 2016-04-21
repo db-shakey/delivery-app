@@ -7,7 +7,9 @@
 var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngIOS9UIWebViewPatch',
                                         'ui.utils.masks', 'ngAnimate', 'ng-mfb', 'angular.filter',
                                         'timer', 'ksSwiper', 'ionic-datepicker',
-                                        'ionicLazyLoad', 'ngMap', 'ui.calendar']);
+                                        'ionicLazyLoad', 'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
+                                        'ion-autocomplete']);
+angular.module('templates', []);
 
 ionic.Platform.ready(function(){
 
@@ -26,7 +28,6 @@ ionic.Platform.ready(function(){
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
-
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
 
           var requireLogin = toState.data.requireLogin;
@@ -62,7 +63,9 @@ ionic.Platform.ready(function(){
           ,'lib/ng-material-floating-button/mfb/dist/mfb.min.css'
           ,'lib/fullcalendar/dist/fullcalendar.min.css'
           ,'lib/swiper/dist/css/swiper.min.css'
+          ,'lib/ionic-filter-bar/dist/ionic.filter.bar.css'
           ,'js/utils/template-utils.html'
+          ,'lib/ion-autocomplete/dist/ion-autocomplete.min.css'
         ]);
 
         /**

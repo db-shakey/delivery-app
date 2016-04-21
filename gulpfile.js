@@ -7,9 +7,11 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var minify = require('gulp-minify');
+var angularTemplateCache = require('gulp-angular-templatecache');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./scss/**/*.scss'],
+  templates : ['./www/js/modules/application/**/templates/*.html']
 };
 
 gulp.task('default', ['sass']);
@@ -31,6 +33,13 @@ gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
 });
 
+gulp.task('templates', function(){
+  return gulp.src(paths.templates)
+            .pipe(angularTemplateCache())
+            .pipe(concat('templates.js'))
+            .pipe(gulp.dest('./www/lib/'));
+})
+
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
     .on('log', function(data) {
@@ -50,6 +59,8 @@ gulp.task('compress', function(){
 
             "./www/lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js",
             "./www/lib/ionic-image-lazy-load/ionic-image-lazy-load.js",
+            "./www/lib/ionic-filter-bar/dist/ionic.filter.bar.js",
+            "./www/lib/ion-autocomplete/dist/ion-autocomplete.min.js",
 
             "./www/lib/humanize-duration/humanize-duration.js",
             "./www/lib/angular-timer/dist/angular-timer.min.js",

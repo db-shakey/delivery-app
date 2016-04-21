@@ -88,6 +88,7 @@ angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $
         resolve : {
           loadController : function($ocLazyLoad){
             return $ocLazyLoad.load({
+              serie : true,
               files : [ 'js/modules/order/order-directive.js'
                         ,'js/modules/order/order-factory.js'
                         ,'js/modules/order/order-controller.js']

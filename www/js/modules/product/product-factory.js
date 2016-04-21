@@ -1,4 +1,4 @@
-angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope, $localCache){
+angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope, $localCache, $q, HerokuService, force){
 	return {
 		getProductById : function(productId, noCache){
 			var query = "SELECT Id, \
@@ -26,6 +26,75 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 			return function(){
 				return $localCache.fromCache(query);
 			}
+		},
+		getProductByExternalId : function(externalId, noCache){
+			return $q(function(resolve, reject){
+				force.query("SELECT Id, \
+														SKU__c, \
+														Name, \
+														Shopify_Id__c, \
+														Image__r.Image_Source__c, \
+														Barcode__c, \
+														Store__r.Name, \
+														Store__r.External_Id__c, \
+														Store__c, \
+														Body_Html__c, \
+														Family, \
+														Tags__c, \
+														(SELECT Id, Name, SKU__c, Barcode__c, Image__r.Image_Source__c FROM Variants__r), \
+														(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
+											FROM Product2 \
+											WHERE Shopify_Id__c = '" + externalId + "'", resolve);
+			});
+		},
+		getProductDetailsById : function(productId, noCache){
+			var query = "SELECT Id, \
+													SKU__c, \
+													Name, \
+													Shopify_Id__c, \
+													Image__r.Image_Source__c, \
+													Barcode__c, \
+													Store__r.Name, \
+													Published_At__c, \
+													Store__r.External_Id__c, \
+													Store__c, \
+													Body_Html__c, \
+													Family, \
+													Tags__c, \
+													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE), \
+													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
+										FROM Product2 \
+										WHERE Id = '" + productId + "'";
+				$localCache.getRecords(query, noCache);
+				return function(){
+					return $localCache.fromCache(query);
+				}
+		},
+		getVariantById : function(productId, noCache){
+			var query = "SELECT Id, \
+													SKU__c, \
+													Root_Product_Name__c, \
+													Name, \
+													Shopify_Id__c, \
+													Image__r.Image_Source__c, \
+													Barcode__c, \
+													Store__r.Name, \
+													Store__r.External_Id__c, \
+													Store__c, \
+													Body_Html__c, \
+													Family, \
+													Tags__c, \
+													Parent_Product__c, \
+													Inventory_Quantity__c, \
+													Parent_Product__r.Shopify_Id__c, \
+													(SELECT Id, UnitPrice FROM PricebookEntries), \
+													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
+										FROM Product2 \
+										WHERE Id = '" + productId + "'";
+				$localCache.getRecords(query, noCache);
+				return function(){
+					return $localCache.fromCache(query);
+				}
 		},
 		getProductsByOrderId : function(orderId, noCache){
 			var query = "SELECT Id, \
@@ -57,8 +126,34 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 				return $localCache.fromCache(query);
 			}
 		},
+		createProduct : function(product, storeId, callback, error){
+			force.post('/api/shopify/createProduct', product, 'Store__c', storeId, callback, error);
+		},
+		updateProduct : function(product, storeId, callback, error){
+			HerokuService.post('/api/shopify/updateProduct', product, callback, error);
+		},
+		updateVariant : function(product, callback){
+			force.post('/api/shopify/updateVariant', product, 'Product2', product.Id, callback);
+		},
+		createVariant : function(productId, variant, callback, error){
+			force.post('/api/shopify/createVariant', {
+				productId : productId,
+				variant : variant
+			}, 'Product2', productId, callback, error);
+		},
+		deleteVariant : function(productExternalId, variantExternalId, callback){
+			HerokuService.post('/api/shopify/deleteVariant', {
+				productId : productExternalId,
+				variantId : variantExternalId
+			}, callback);
+		},
 		setBarcode : function(productId, barcodeData, callback){
 			force.update("Product2", {"Id" : productId, "Barcode__c" : barcodeData.text, "Barcode_Type__c" : barcodeData.format}, callback);
+		},
+		getProductTypes : function(){
+			return $q(function(resolve, reject){
+				HerokuService.get('/api/shopify/productTypes', resolve, reject);
+			});
 		}
 	}
 });
@@ -66,15 +161,20 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 angular.module('dorrbell').factory("SearchFactory", function(force, $rootScope, HerokuService){
 	return {
 		searchItems : function(searchText, store, limit, coords, callback){
-				searchText = (typeof searchText != "undefined" && searchText.trim().length <= 0) ? 'undefined' : searchText;
+			searchText = (!searchText || searchText.trim().length == 0) ? ' ' : searchText;
 				if(store){
-					HerokuService.get("/api/searchStoreItems/" + store + "/" + encodeURIComponent(searchText) + "/" + limit, callback);
+					return this.searchStoreItems(store, searchText, limit, callback);
 				}else{
 					HerokuService.get("/api/searchAllItems/" + encodeURIComponent(searchText) + "/" + coords.latitude + "/" + coords.longitude + "/" + limit, callback);
 				}
 		},
 		searchByBarcode : function(barcode, store, callback){
 			HerokuService.get("/api/searchProductByBarcode/" + barcode + "/" + store, callback);
+		},
+		searchStoreItems : function(store, searchText, limit, callback){
+			searchText = (!searchText || searchText.trim().length == 0) ? ' ' : searchText;
+			limit = (limit == 0 || !limit) ? 10 : limit;
+			HerokuService.get('/api/searchStoreItems/' + store + '/' + encodeURIComponent(searchText) + '/' + limit, callback);
 		}
 	}
 });

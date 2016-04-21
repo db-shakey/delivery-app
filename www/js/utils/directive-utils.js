@@ -89,6 +89,24 @@ _app.directive('fallbackSrc', function () {
    };
 });
 
+_app.directive("sfPicklist", function(MetadataFactory){
+	return {
+		restrict : 'A',
+		template : '<option ng-repeat="option in sfOptions" value="{{option.value}}" ng-selected="{{$index == 0}}">{{option.label}}</option>',
+		require : 'ngModel',
+		link : function($scope, element, attr, ngModel){
+			MetadataFactory.describe(attr.sfObject, function(res){
+				angular.forEach(res, function(obj, index){
+					if(obj.name.toUpperCase() == attr.sfPicklist.toUpperCase()){
+						$scope.sfOptions = obj.picklistValues;
+					}
+
+				})
+			});
+		}
+	}
+});
+
 _app.filter("initials", function(){
 	return function(input){
 		if(input){

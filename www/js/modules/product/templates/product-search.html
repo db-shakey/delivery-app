@@ -1,44 +1,37 @@
-<ion-view class="item-search">
-  	<ion-nav-title>
-    	<label class="item item-input header-input">
-    		<i class="icon ion-search placeholder-icon"></i>
-    		<input type="search" placeholder="Search" id="search" ng-model="searchText" ng-change="searchChange(searchText)" ng-trim="true" ng-model-options="{ debounce: 500 }" ng-disabled="disableSearch()" ng-focus="searchFocus" autofocus>
-  		</label>
-   	</ion-nav-title>
-    <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-android-more-vertical m-r-sm" ng-click="openSubmenu()"></button>
-    </ion-nav-buttons>
-   	<ion-content overflow-scroll="true" lazy-scroll>
-      <ion-list class="search-results">
-        <div class="list search-results">
-          <div ng-repeat="(key, value) in results | groupBy: 'Name' | orderBy:'Name':true">
-            <div class="item item-divider">
-              {{key}}
-            </div>
-            <ion-item class="item item-thumbnail-left" href="" ng-repeat="item in value" ng-click="goToProductDetails(item.Id)">
-              <img image-lazy-src="{{item.Image_Source__c}}" image-lazy-loader="android" image-lazy-distance-from-bottom-to-load="200"/>
-              <h3>{{item.ProductName}}</h3>
-              <p>{{item.Family}}</p>
-              <p>{{item.Brand__c}}</p>
-            </ion-item>
-        </div>
+<ion-view>
+  <ion-nav-title >
+    {{productList[0].Store__r.Name}} Products
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-ios-search-strong m-r-sm" ng-click="showFilterBar()" ng-if="productList && productList.length > 0"></button>
+  </ion-nav-buttons>
 
-        <div class="text-center" ng-if="!hasMore && results">
-          End of list
-        </div>
-      </ion-list>
+  <ion-content class="product-list">
+    <ion-list ng-repeat="(key, value) in productList | groupBy: 'Family'" class="m-b-xl" ng-if="productList && productList.length > 0">
+        <ion-item class="item-divider">
+          {{key}}
+        </ion-item>
+        <ion-item ng-repeat="product in value" class="item-thumbnail-left" ng-click="goToProductDetails(product.Id)">
+          <img image-lazy-src="{{product.Image__r.Image_Source__c}}" fallback-src image-lazy-loader="android" image-lazy-distance-from-bottom-to-load="200">
+          <h2>
+            {{product.Name}}
 
-      <div class="middle-box text-center" ng-if="(!results || results.length == 0) && !disableSearch()">
-            <i class="ion-ios-information-empty"></i>
-            <h3 class="font-bold" ng-if="searchText">Search returned no results.</h3>
-            <h3 class="font-bold" ng-if="!searchText">Use the search input at the top to find results.</h3>
-      </div>
-      <div class="middle-box text-center" ng-if="disableSearch()">
-            <i class="ion-search"></i>
-            <h3 class="font-bold">Loading Search...</h3>
-      </div>
+          </h2>
+          <p class="m-t-xs">{{product.Brand__c}}</p>
+          <p class="text-muted m-t-xs" ng-if="product.Variants__r">
+            {{product.Variants__r.totalSize}} variants
+          </p>
+        </ion-item>
+    </ion-list>
+    <div class="middle-box text-center" ng-if="productList.length == 0">
+      <i class="icon ion-ios-paper-outline"></i>
+      <h3 class="font-bold">No products to display.</h3>
+    </div>
 
-      <ion-infinite-scroll icon="ion-loading-c" on-infinite="loadMore()" ng-if="hasMore && results && results.length > 0"></ion-infinite-scroll>
-   	</ion-content>
-
+  </ion-content>
+  <nav mfb-menu position="br" effect="zoomin"
+     active-icon="ion-close-round" resting-icon="ion-plus-round"
+     toggling-method="click">
+  <button mfb-button icon="ion-qr-scanner" label="Scan Barcode" ng-click="scanBarcode()"></button>
+</nav>
 </ion-view>

@@ -16,8 +16,10 @@ angular.module('dorrbell').controller("BaseController", function($scope, $rootSc
     $ionicLoading.hide();
     if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
       $state.go("app.orders", {type : "Unassigned_Order"});
-    else
+    else if($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
       $state.go("ret.deliveryList", {type : "New"});
+    else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
+      $state.go("db.storeList");
   }, function(err){
     $ionicLoading.hide();
     $ionicHistory.nextViewOptions({
@@ -66,11 +68,13 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
 
     HerokuService.login($scope.user, function(res){
       if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
-        $state.go("app.orders", {type : "Unassigned_Order"});
-      else
-        $state.go("ret.deliveryList", {type : "Pre_Checked_Out_Delivery"});
+        $state.go("app.orders");
+      else if($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
+        $state.go("ret.deliveryList");
+      else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
+        $state.go("db.storeList");
 
-        $ionicLoading.hide();
+      $ionicLoading.hide();
     }, function(err){
         $ionicLoading.hide();
         Log.message((err && err.data) ? err.data.message : 'There was a problem logging in', true, 'Login Failed');
@@ -229,8 +233,10 @@ angular.module('dorrbell').controller("AccountController", function($scope, $ion
                 }else if(index == 1){
                     if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact'){
                         $state.go("app.password");
+                    }else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact'){
+                        $state.go('db.password');
                     }else{
-                        $state.go("ret.password");
+                      $state.go("ret.password");
                     }
                 }
             },

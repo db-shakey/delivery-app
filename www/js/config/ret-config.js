@@ -1,4 +1,7 @@
 angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $locationProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
+  $ionicConfigProvider.scrolling.jsScrolling(false);
+
   $stateProvider
     .state('ret', {
       url: '/ret',
@@ -15,7 +18,7 @@ angular.module('dorrbell').config(function($stateProvider, $urlRouterProvider, $
       }
     })
     .state('ret.deliveryList', {
-      url : '/deliverylist/:type',
+      url : '/deliverylist',
       views : {
         'menuContent' : {
           templateUrl : 'js/modules/delivery/templates/delivery-list.html',
