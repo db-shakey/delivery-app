@@ -32,14 +32,16 @@ angular.module('dorrbell').controller('OrdersController', function(OrderFactory,
           });
           var pickUpStart = moment(obj.In_Home_Try_On_Start__c).subtract(45, 'minutes').toDate();
 
-          events.push({
-            id : obj.Id,
-            status : obj.Status__c,
-            title : 'Order #' + obj.Name + '\nPick Up' + '\n' + obj.Order_Stores__r.totalSize + ' stores',
-            start : pickUpStart,
-            end : moment(obj.In_Home_Try_On_Start__c).subtract(1, 'minutes').toDate(),
-            className : (obj.Status__c == 'Assigned' || obj.Status__c == 'Accepted' || obj.Status__c == 'En Route to Customer' || obj.Status__c == 'Pick Up In Progress') ? 'filled' : 'complete'
-          });
+          if(obj.Order_Stores__r){
+            events.push({
+              id : obj.Id,
+              status : obj.Status__c,
+              title : 'Order #' + obj.Name + '\nPick Up' + '\n' + obj.Order_Stores__r.totalSize + ' stores',
+              start : pickUpStart,
+              end : moment(obj.In_Home_Try_On_Start__c).subtract(1, 'minutes').toDate(),
+              className : (obj.Status__c == 'Assigned' || obj.Status__c == 'Accepted' || obj.Status__c == 'En Route to Customer' || obj.Status__c == 'Pick Up In Progress') ? 'filled' : 'complete'
+            });
+          }
         }
         //for return
         if(obj.Return_Shopping_Assistant__c == $scope.currentUser.Id){
@@ -150,9 +152,11 @@ angular.module('dorrbell').controller('OrderDetail', function(OrderFactory, $sco
 
     $scope.renderMap = function(){
       if($scope.v.pickupView($scope.order) || $scope.v.returnView($scope.order)){
-        angular.forEach($scope.order.Order_Stores__r.records, function(value, key) {
-          value.pos = [value.Store__r.Coordinates__Latitude__s, value.Store__r.Coordinates__Longitude__s];
-        });
+        if($scope.order.Order_Stores__r){
+          angular.forEach($scope.order.Order_Stores__r.records, function(value, key) {
+            value.pos = [value.Store__r.Coordinates__Latitude__s, value.Store__r.Coordinates__Longitude__s];
+          });
+        }
       }
     }
 

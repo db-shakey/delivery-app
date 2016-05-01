@@ -58,7 +58,7 @@ gulp.task('compress', function(){
             "./www/lib/ngCordova/dist/ng-cordova.min.js",
 
             "./www/lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js",
-            "./www/lib/ionic-image-lazy-load/ionic-image-lazy-load.js",
+            "./www/lib/angular-lazy-img/release/angular-lazy-img.min.js",
             "./www/lib/ionic-filter-bar/dist/ionic.filter.bar.js",
             "./www/lib/ion-autocomplete/dist/ion-autocomplete.min.js",
 

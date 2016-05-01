@@ -14,8 +14,8 @@
     "ionic-datepicker": "^1.1.0",
     "angular-input-masks": "^2.2.0",
     "angular-moment": "^0.10.3",
-    "ionic-image-lazy-load": "ion-image-lazy-load#*",
     "ionic-filter-bar": "^1.1.1",
-    "ion-autocomplete": "^0.3.2"
+    "ion-autocomplete": "^0.3.2",
+    "angular-lazy-img": "^1.2.2"
   }
 }

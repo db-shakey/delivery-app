@@ -160,21 +160,14 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 
 angular.module('dorrbell').factory("SearchFactory", function(force, $rootScope, HerokuService){
 	return {
-		searchItems : function(searchText, store, limit, coords, callback){
+		searchItems : function(searchText, store, limit, callback){
 			searchText = (!searchText || searchText.trim().length == 0) ? ' ' : searchText;
-				if(store){
-					return this.searchStoreItems(store, searchText, limit, callback);
-				}else{
-					HerokuService.get("/api/searchAllItems/" + encodeURIComponent(searchText) + "/" + coords.latitude + "/" + coords.longitude + "/" + limit, callback);
-				}
+			store = (!store || store.trim().length == 0) ? ' ' : store;
+			HerokuService.get("/api/searchAllItems/" + encodeURIComponent(searchText) + "/" + store + "/"  + limit, callback);
+
 		},
 		searchByBarcode : function(barcode, store, callback){
 			HerokuService.get("/api/searchProductByBarcode/" + barcode + "/" + store, callback);
-		},
-		searchStoreItems : function(store, searchText, limit, callback){
-			searchText = (!searchText || searchText.trim().length == 0) ? ' ' : searchText;
-			limit = (limit == 0 || !limit) ? 10 : limit;
-			HerokuService.get('/api/searchStoreItems/' + store + '/' + encodeURIComponent(searchText) + '/' + limit, callback);
 		}
 	}
 });

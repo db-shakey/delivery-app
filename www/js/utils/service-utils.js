@@ -369,10 +369,12 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 	this.returnsComplete = function(order){
 		var isReady = function(order){
 			var ready = true;
-			angular.forEach(order.Order_Stores__r.records, function(obj, key){
-				if(obj.Status__c != 'With Customer' && obj.Status__c != 'Checked In' && obj.Status__c != 'Complete')
-					ready = false;
-			});
+			if(order.Order_Stores__r){
+				angular.forEach(order.Order_Stores__r.records, function(obj, key){
+					if(obj.Status__c != 'With Customer' && obj.Status__c != 'Checked In' && obj.Status__c != 'Complete')
+						ready = false;
+				});
+			}
 			return ready;
 		}
 		return isReady(order);

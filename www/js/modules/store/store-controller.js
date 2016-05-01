@@ -5,8 +5,8 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
     $scope.searchString = str;
     $scope.currentLimit = lim;
     StoreFactory.searchStores(str, lim, function(results){
-      $scope.hasMore = (results.length != $scope.storeList.length);
-      $scope.storeList = results;
+      $scope.hasMore = results.hasMore;
+      $scope.storeList = results.records;
       $scope.$broadcast('scroll.refreshComplete');
       $scope.$broadcast('scroll.infiniteScrollComplete');
       $ionicLoading.hide();

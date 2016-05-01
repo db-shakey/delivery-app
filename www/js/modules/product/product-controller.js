@@ -1,7 +1,6 @@
-angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout, $state, SearchFactory, DeliveryFactory, $cordovaGeolocation, $ionicScrollDelegate, $ionicFilterBar, $ionicHistory, $ionicLoading, $ionicActionSheet, $cordovaBarcodeScanner, $ionicPopup, Log){
+angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout, $state, $rootScope, SearchFactory, DeliveryFactory, $cordovaGeolocation, $ionicScrollDelegate, $ionicFilterBar, $ionicHistory, $ionicLoading, $ionicActionSheet, $cordovaBarcodeScanner, $ionicPopup, Log){
 	$scope.deliveryId = $state.params.deliveryId;
 	$scope.store;
-	$scope.offset = 0;
 
 	$scope.showFilterBar = function () {
     filterBarInstance = $ionicFilterBar.show({
@@ -16,30 +15,27 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
       },
 			cancel : function(){
 				if($scope.canLoad)
-					$scope.search('', 20);
+					$scope.search('');
 			}
     });
   };
 
 	$scope.search = function(text, limit){
-		SearchFactory.searchItems(text, $scope.store, limit, $scope.coords, function(data){
-			$scope.productList = data;
+		$scope.limit = limit;
+		$scope.searchText = text;
+		SearchFactory.searchItems(text, $scope.store, $scope.limit, function(data){
+			$scope.productList = data.records;
+			$scope.hasMore = data.hasMore;
 			$ionicLoading.hide();
+			$scope.$broadcast('scroll.infiniteScrollComplete');
+			$timeout(function(){
+				$rootScope.$emit('lazyImg:refresh');
+			}, 100);
 		}, function(){
 			$ionicLoading.hide();
 		});
 	}
 
-	$scope.loadMore = function(){
-		$scope.offset += $scope.limit;
-		SearchFactory.searchItems($scope.searchText, $scope.store, $scope.limit, $scope.coords, function(data){
-			if(!data.records || data.totalSize == 0)
-				$scope.hasMore = false;
-
-			$scope.results = $scope.results.concat(data);
-			$scope.$broadcast('scroll.infiniteScrollComplete');
-		});
-	}
 	$scope.goToProductDetails = function(productId){
 		if($scope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
 			$state.go("app.productdetails", {"productId" : productId, "deliveryId" : $scope.deliveryId})
@@ -74,6 +70,7 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 
 	$scope.$on('$ionicView.beforeEnter', function(){
     $scope.canLoad = true;
+
 		if(!$scope.deliveryId)
 			$ionicHistory.clearHistory();
 
@@ -83,20 +80,12 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 				if(delivery){
 					$scope.delivery = delivery[0];
 					$scope.store = delivery[0].Store__c;
-					$scope.coords = true;
 					$scope.search(' ', 20);
 				}
 			});
 		}else if($scope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact'){
-			$cordovaGeolocation.getCurrentPosition({
-				enableHighAccuracy : false,
-				timeout : 10000
-			}).then(function(position){
-				$scope.coords = position.coords;
-				$scope.search(' ', 20);
-			})
+			$scope.search(' ', 20);
 		}else{
-			$scope.coords = true;
 			$scope.store = $scope.currentUser.Store__c;
 			$scope.search(' ', 20);
 		}
@@ -224,8 +213,11 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 	$scope.storeId = $state.params.storeId;
 
 	$scope.searchProducts = function(searchText, limit){
-		SearchFactory.searchStoreItems($state.params.storeId, searchText, limit, function(records){
-			$scope.productList = records;
+		$scope.limit = limit;
+		$scope.searchString = searchText;
+		SearchFactory.searchItems(searchText, $state.params.storeId, limit, function(result){
+			$scope.productList = result.records;
+			$scope.hasMore = result.hasMore;
 			$ionicLoading.hide();
 		});
 
@@ -347,7 +339,10 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		$scope.product.variants = [
 			{
 				"option1" : "Small",
-				"option2" : "Blue"
+				"option2" : "Blue",
+				"inventory_management" : "shopify",
+				"inventory_policy" : "deny",
+				"sku" : $scope.product.sku
 			}
 		];
 		$scope.product.metafields.push({
@@ -369,6 +364,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 					if(results && results.length > 0){
 						$ionicLoading.hide();
 						$interval.cancel(checkProduct);
+						$ionicHistory.currentView($ionicHistory.backView());
 						$state.go("db.productDetail", {productId : results[0].Id});
 					}else if(tries >= 6){
 						$ionicLoading.hide();
@@ -446,11 +442,13 @@ angular.module('dorrbell').controller('DbProductDetailController', function($sco
   });
 })
 
-angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicHistory, ProductFactory, MetadataFactory, Log){
+angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicHistory, $cordovaBarcodeScanner, ProductFactory, MetadataFactory, Log){
 	$scope.getProduct = function(noCache){
 		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
 				$scope.parentProduct = newValue[0];
+				if(newValue != oldValue)
+					$scope.variant.sku = $scope.parentProduct.SKU__c;
 			}
 
 			$scope.$broadcast('scroll.refreshComplete');
@@ -481,6 +479,8 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 			"value_type" : "integer",
 			"namespace" : "price"
 		});
+		$scope.variant.inventory_policy = "deny";
+		$scope.variant.inventory_management = "shopify";
 		ProductFactory.createVariant($scope.parentProduct.Shopify_Id__c, $scope.variant, function(res){
 			$ionicLoading.hide();
 
@@ -499,6 +499,17 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 		});
 	}
 
+	$scope.scanBarcode = function(){
+		$cordovaBarcodeScanner.scan()
+		.then(function(barcodeData) {
+			if(!barcodeData.cancelled){
+				$scope.variant.barcode = barcodeData.text;
+			}
+		}, function(error) {
+			Log.message("Oops...something went wrong", true, "Error");
+		});
+	}
+
 	$scope.$on('$ionicView.beforeEnter', function(){
 		$scope.variant = {};
 		$scope.metaprice = {};
@@ -507,7 +518,7 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 
 })
 
-angular.module('dorrbell').controller('VariantEditController', function($scope, $ionicLoading, $state, $timeout, $ionicHistory, ProductFactory, Log){
+angular.module('dorrbell').controller('VariantEditController', function($scope, $ionicLoading, $state, $timeout, $ionicHistory, $cordovaBarcodeScanner, ProductFactory, Log){
 	$scope.getProduct = function(noCache){
 		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
@@ -532,11 +543,22 @@ angular.module('dorrbell').controller('VariantEditController', function($scope, 
 					Name : optionName
 				}
 			};
-			if($scope.product)
+			if($scope.product && $scope.product.Product_Options__r)
 				$scope.product.Product_Options__r.records.push(newOption);
 
 			return newOption;
 		}
+	}
+
+	$scope.scanBarcode = function(){
+		$cordovaBarcodeScanner.scan()
+		.then(function(barcodeData) {
+			if(!barcodeData.cancelled){
+				$scope.product.Barcode__c = barcodeData.text;
+			}
+		}, function(error) {
+			Log.message("Oops...something went wrong", true, "Error");
+		});
 	}
 
 	$scope.saveVariant = function(goToNew){

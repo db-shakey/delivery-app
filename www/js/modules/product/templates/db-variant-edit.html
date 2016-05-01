@@ -10,21 +10,23 @@
         <div class="item item-divider">
           Variant Details
         </div>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Size</span>
-          <input type="text" placeholder="Medium" ng-model="findOption(product.Product_Options__r.records, 'Size').Value__c">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Size
+          </div>
+          <select ng-model="findOption(product.Product_Options__r.records, 'Size').Value__c" sf-picklist="Product_Sizes__c" sf-object="Product2"> </select>
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">Color</span>
           <input type="text" placeholder="Blue" ng-model="findOption(product.Product_Options__r.records, 'Color').Value__c">
         </label>
-        <label class="item item-input item-stacked-label item-button-right">
+        <div class="item item-input item-stacked-label item-button-right">
           <span class="input-label">Barcode</span>
           <input type="text" placeholder="1234" ng-model="product.Barcode__c">
-          <button class="button button-positive">
+          <button class="button button-positive" ng-click="scanBarcode()" ion-stop-event="click">
             <i class="icon ion-qr-scanner"></i>
           </button>
-        </label>
+        </div>
 
         <label class="item item-input item-stacked-label">
           <span class="input-label">Price</span>

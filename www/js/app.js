@@ -6,8 +6,8 @@
 
 var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngIOS9UIWebViewPatch',
                                         'ui.utils.masks', 'ngAnimate', 'ng-mfb', 'angular.filter',
-                                        'timer', 'ksSwiper', 'ionic-datepicker',
-                                        'ionicLazyLoad', 'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
+                                        'timer', 'ksSwiper', 'ionic-datepicker', 'angularLazyImg',
+                                        'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
                                         'ion-autocomplete']);
 angular.module('templates', []);
 
