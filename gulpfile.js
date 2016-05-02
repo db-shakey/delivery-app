@@ -56,20 +56,20 @@ gulp.task('compress', function(){
             "./www/lib/angular-input-masks/angular-input-masks-standalone.min.js",
             "./www/lib/angular-filter/dist/angular-filter.min.js",
             "./www/lib/ngCordova/dist/ng-cordova.min.js",
-
+            "./www/lib/ng-cordova-oauth/dist/ng-cordova-oauth.min.js",
+            "./www/lib/ionic-native-transitions/dist/ionic-native-transitions.min.js",
             "./www/lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js",
             "./www/lib/angular-lazy-img/release/angular-lazy-img.min.js",
             "./www/lib/ionic-filter-bar/dist/ionic.filter.bar.js",
             "./www/lib/ion-autocomplete/dist/ion-autocomplete.min.js",
-
             "./www/lib/humanize-duration/humanize-duration.js",
             "./www/lib/angular-timer/dist/angular-timer.min.js",
-
             "./www/lib/swiper/dist/js/swiper.min.js",
             "./www/lib/angular-swiper/dist/angular-swiper.js",
             "./www/lib/ngmap/build/scripts/ng-map.min.js",
             "./www/lib/moment/min/moment.min.js",
             "./www/lib/angular-moment/angular-moment.min.js",
+
             //Calendar stuff
             "./www/lib/angular-ui-calendar/src/calendar.js",
             "./www/lib/fullcalendar/dist/fullcalendar.min.js",

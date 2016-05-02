@@ -8,7 +8,7 @@ var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngI
                                         'ui.utils.masks', 'ngAnimate', 'ng-mfb', 'angular.filter',
                                         'timer', 'ksSwiper', 'ionic-datepicker', 'angularLazyImg',
                                         'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
-                                        'ion-autocomplete']);
+                                        'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions']);
 angular.module('templates', []);
 
 ionic.Platform.ready(function(){

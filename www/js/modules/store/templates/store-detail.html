@@ -6,31 +6,35 @@
 
   </ion-nav-buttons>
 
-  <ion-content class="store-detail">
+  <ion-content class="store-detail" ng-cloak>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getStore(true)"></ion-refresher>
-    <div style="background-image: url('{{store.Store_Images__r.records[0].Image_Url__c}}')" class="banner"></div>
-    <img src="{{store.Google_Icon__c}}" class="store-icon"></img>
+    <div lazy-img="{{store.Store_Images__r.records[0].Image_Url__c}}" class="banner"></div>
 
-    <h2>{{store.Name}}</h2>
-    <p class="text-muted">{{store.Address__c}}</p>
+    <div class="animated fadeInUp" ng-if="store">
+      <img class="store-icon" ng-src="{{store.Google_Icon__c}}" fallback-src></img>
 
-    <div class="list">
-      <a class="item item-icon-left" href="#" ng-if="store.Google_Phone_Number__c">
-        <i class="icon ion-ios-telephone"></i>
-        {{store.Google_Phone_Number__c}}
-      </a>
-      <a class="item item-icon-left" href="#" ng-if="store.currentHour">
-        <i class="icon ion-ios-clock"></i>
-        {{store.currentHour}}
-      </a>
-      <a class="item item-icon-left" href="#" ui-sref="db.productlist({storeId : store.Id})">
-        <i class="icon ion-ios-list"></i>
-        {{(store.Products__r.totalSize) ? store.Products__r.totalSize : '0'}} products
-      </a>
-      <a class="item item-icon-left" href="#" ng-if="store.Google_Website__c">
-        <i class="icon ion-android-globe"></i>
-        {{store.Google_Website__c}}
-      </a>
+      <h2>{{store.Name}}</h2>
+      <p class="text-muted">{{store.Address__c}}</p>
+
+      <div class="list">
+        <a class="item item-icon-left" href="#" ng-if="store.Google_Phone_Number__c">
+          <i class="icon ion-ios-telephone"></i>
+          {{store.Google_Phone_Number__c}}
+        </a>
+        <a class="item item-icon-left" href="#" ng-if="store.currentHour">
+          <i class="icon ion-ios-clock"></i>
+          {{store.currentHour}}
+        </a>
+        <a class="item item-icon-left" href="#" ui-sref="db.productlist({storeId : store.Id})">
+          <i class="icon ion-ios-list"></i>
+          {{(store.Products__r.totalSize) ? store.Products__r.totalSize : '0'}} products
+        </a>
+        <a class="item item-icon-left" href="#" ng-if="store.Google_Website__c">
+          <i class="icon ion-android-globe"></i>
+          {{store.Google_Website__c}}
+        </a>
+    </div>
+
     </div>
   </ion-content>
 </ion-view>

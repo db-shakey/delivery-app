@@ -44,7 +44,7 @@
       <h2 class="font-bold m-b-xs p-sm">
         Variants
       </h2>
-      <div>
+      <div class="animated fadeInUp">
         <ion-list canSwipe="product.Variants__r.records.length > 1">
           <ion-item class="item-thumbnail-left" ng-repeat="variant in product.Variants__r.records" ui-sref="db.variantEdit({productId : variant.Id})">
             <img ng-src="{{variant.Image__r.Image_Source__c}}" fallback-src></img>

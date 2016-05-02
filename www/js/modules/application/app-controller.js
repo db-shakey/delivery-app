@@ -1,7 +1,5 @@
 angular.module('dorrbell').controller("BaseController", function($scope, $rootScope, $state, $ionicHistory, $ionicLoading, HerokuService, MetadataFactory){
-  $ionicLoading.show({
-      template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
-  });
+
 
   HerokuService.refreshToken(function(){
     //Cache Metadata
@@ -21,7 +19,6 @@ angular.module('dorrbell').controller("BaseController", function($scope, $rootSc
     else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
       $state.go("db.storeList");
   }, function(err){
-    $ionicLoading.hide();
     $ionicHistory.nextViewOptions({
       disableBack: true,
       historyRoot: true
@@ -58,8 +55,8 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
  *  LoginController
  *  @description: Handles login screen when not authenticated with Salesforce
  */
-angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicPopup, $ionicViewSwitcher, $rootScope, $ionicLoading){
-  $scope.user = {};
+angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth){
+
 
   $scope.login = function(){
     $ionicLoading.show({
@@ -81,6 +78,24 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
     });
   }
 
+  $scope.facebookAuthenticate = function(){
+    $cordovaOauth.facebook("1687129318228339", ["email"]).then(function(result) {
+        console.log(result);
+    }, function(error) {
+        // error
+    });
+  }
+
+  $scope.twitterAuthentication = function(){
+    $cordovaOauth.twitter("07nSJGnNhAQ9wbYrA10hTof9A", "alIG7T1qyHRtGlnvFO8mrhWPaTHCCfIRFSkovHn3oSnlY67u5v").then(function(result) {
+        console.log(result);
+    }, function(error) {
+        // error
+    });
+  }
+
+
+  /*
   $scope.showBeta = function(){
     $scope.checkBeta = false;
     try{
@@ -120,6 +135,40 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
       }
     });
   }
+  */
+  $scope.checkBeta = function(){
+    HerokuService.get('/api/beta/' + $scope.user.beta_key, function(res){
+      $ionicViewSwitcher.nextDirection('forward');
+      $state.go("register", {contact : res});
+    }, function(err){
+      $scope.modal.remove();
+      Log.message(err.data.message, true, 'Invalid Key');
+    })
+  }
+
+  $scope.getStarted = function(){
+    $ionicModal.fromTemplateUrl('register-modal.htm', {
+      scope : $scope,
+      animation : 'slide-in-up'
+    }).then(function(modal){
+      $scope.modal = modal;
+      modal.show();
+    });
+  }
+
+  $scope.closeModal = function(){
+    if($scope.modal)
+      $scope.modal.hide();
+  }
+
+
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.user = {};
+    // Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+  });
 });
 
 angular.module('dorrbell').controller("RegisterController", function($scope, $state, RegistrationValidator, HerokuService, Log) {

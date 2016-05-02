@@ -159,22 +159,10 @@ label.item-input-wrapper{
 	padding-right: 2% !important;
 }
 
-
-input::-webkit-input-placeholder {
-   color: $stable;
+input::-webkit-input-placeholder{
+	 color: $stable;
 }
 
-input:-moz-placeholder { /* Firefox 18- */
-   color: $stable;
-}
-
-input::-moz-placeholder {  /* Firefox 19+ */
-   color: $stable;
-}
-
-input:-ms-input-placeholder {
-   color: $stable;
-}
 
 .item p{
 	font-size: $font-size-x-small !important;
@@ -316,21 +304,7 @@ select{
 		white-space: normal;
 	}
 }
-label.header-input input::-webkit-input-placeholder {
-   color: $stable;
-}
 
-label.header-input input:-moz-placeholder { /* Firefox 18- */
-   color: $stable;
-}
-
-label.header-input input::-moz-placeholder {  /* Firefox 19+ */
-   color: $stable;
-}
-
-label.header-input input:-ms-input-placeholder {
-   color: $stable;
-}
 label.header-input input{
 	color : $light;
 }
@@ -401,17 +375,24 @@ ion-side-menu{
 	 }
  }
 
+ .mobile{
+ 	background: url('../img/login-back.png') no-repeat center center fixed;
+ 	-webkit-background-size: cover;
+ 	-moz-background-size: cover;
+ 	-o-background-size: cover;
+ 	background-size: cover;
+	ion-view{
+		background-color: transparent;
+	}
+ }
+
  /********
   *	Login / Registration
   *******/
 	.login{
-	  background: url('../img/login-back.png') no-repeat center center fixed;
-	  -webkit-background-size: cover;
-	  -moz-background-size: cover;
-	  -o-background-size: cover;
-	  background-size: cover;
-
-
+		input::-webkit-input-placeholder {
+		   color: $light;
+		}
 	  h1, h2, h3, h4, p, div, form, span, input{
 	    color: $light;
 	  }
@@ -427,35 +408,37 @@ ion-side-menu{
 	      border-top:none;
 	    }
 	  }
-		::-webkit-input-placeholder {
-		    color:    $light;
-		}
-		:-moz-placeholder {
-		    color:     $light;
-		}
-		::-moz-placeholder {
-		    color:    $light;
-		}
-		:-ms-input-placeholder {
-		    color:     $light;
-		}
+
 		img{
 			max-width: 100%;
 		}
 
-	  .btn-fb{
-	    background-color: #3b5998;
-	  }
-
 	  form{
 	    margin-bottom: 10vh;
 	  }
+	}
 
-	  .register-link{
-	    width: 100%;
-	    display: block;
-	    text-align: center;
-	  }
+	.register-modal{
+		.btn-fb{
+			color: $white;
+			background-color: #3b5998;
+		}
+		.btn-tw{
+			color: $white;
+			background-color: #55acee
+		}
+		.item i{
+			font-size: initial;
+		}
+
+		input::-webkit-input-placeholder {
+		   color: $light;
+		}
+	}
+	.change-password{
+		input::-webkit-input-placeholder {
+		   color: $stable-dark;
+		}
 	}
 
 /********
@@ -743,6 +726,7 @@ ion-side-menu{
 		margin-top:-1.5rem;
 		border: 1px solid $stable;
 		background-color:$stable;
+		max-width: 75px;
 	}
 	div.list{
 		text-align:left;

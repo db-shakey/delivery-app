@@ -18926,17 +18926,6 @@ label.item-input-wrapper {
 input::-webkit-input-placeholder {
   color: #dcdcdc; }
 
-input:-moz-placeholder {
-  /* Firefox 18- */
-  color: #dcdcdc; }
-
-input::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #dcdcdc; }
-
-input:-ms-input-placeholder {
-  color: #dcdcdc; }
-
 .item p {
   font-size: 12px !important; }
 
@@ -19054,20 +19043,6 @@ select {
 .search-results .item-content h3 {
   white-space: normal; }
 
-label.header-input input::-webkit-input-placeholder {
-  color: #dcdcdc; }
-
-label.header-input input:-moz-placeholder {
-  /* Firefox 18- */
-  color: #dcdcdc; }
-
-label.header-input input::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #dcdcdc; }
-
-label.header-input input:-ms-input-placeholder {
-  color: #dcdcdc; }
-
 label.header-input input {
   color: #fff; }
 
@@ -19128,43 +19103,56 @@ ion-side-menu h1 img {
   max-width: 60%;
   margin-top: .3rem; }
 
-/********
-  *	Login / Registration
-  *******/
-.login {
+.mobile {
   background: url("../img/login-back.png") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
-  .login h1, .login h2, .login h3, .login h4, .login p, .login div, .login form, .login span, .login input {
-    color: #fff; }
-  .login h1 {
-    line-height: 0px; }
-  .login label, .login span {
-    background-color: transparent;
-    padding-left: 0px;
-    text-align: left; }
-    .login label.item:first-child, .login span.item:first-child {
-      border-top: none; }
-  .login ::-webkit-input-placeholder {
-    color: #fff; }
-  .login :-moz-placeholder {
-    color: #fff; }
-  .login ::-moz-placeholder {
-    color: #fff; }
-  .login :-ms-input-placeholder {
-    color: #fff; }
-  .login img {
-    max-width: 100%; }
-  .login .btn-fb {
-    background-color: #3b5998; }
-  .login form {
-    margin-bottom: 10vh; }
-  .login .register-link {
-    width: 100%;
-    display: block;
-    text-align: center; }
+  .mobile ion-view {
+    background-color: transparent; }
+
+/********
+  *	Login / Registration
+  *******/
+.login input::-webkit-input-placeholder {
+  color: #fff; }
+
+.login h1, .login h2, .login h3, .login h4, .login p, .login div, .login form, .login span, .login input {
+  color: #fff; }
+
+.login h1 {
+  line-height: 0px; }
+
+.login label, .login span {
+  background-color: transparent;
+  padding-left: 0px;
+  text-align: left; }
+  .login label.item:first-child, .login span.item:first-child {
+    border-top: none; }
+
+.login img {
+  max-width: 100%; }
+
+.login form {
+  margin-bottom: 10vh; }
+
+.register-modal .btn-fb {
+  color: #fff;
+  background-color: #3b5998; }
+
+.register-modal .btn-tw {
+  color: #fff;
+  background-color: #55acee; }
+
+.register-modal .item i {
+  font-size: initial; }
+
+.register-modal input::-webkit-input-placeholder {
+  color: #fff; }
+
+.change-password input::-webkit-input-placeholder {
+  color: #646464; }
 
 /********
  *	Search Results
@@ -19389,7 +19377,8 @@ ion-view .bar-subheader {
   .store-detail .store-icon {
     margin-top: -1.5rem;
     border: 1px solid #dcdcdc;
-    background-color: #dcdcdc; }
+    background-color: #dcdcdc;
+    max-width: 75px; }
   .store-detail div.list {
     text-align: left; }
 
