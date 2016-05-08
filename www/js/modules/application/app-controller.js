@@ -55,7 +55,7 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
  *  LoginController
  *  @description: Handles login screen when not authenticated with Salesforce
  */
-angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth){
+angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicLoading, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth){
 
 
   $scope.login = function(){
@@ -137,11 +137,14 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   }
   */
   $scope.checkBeta = function(){
+    $scope.modal.remove();
+
+    $ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
     HerokuService.get('/api/beta/' + $scope.user.beta_key, function(res){
-      $ionicViewSwitcher.nextDirection('forward');
+      $ionicLoading.hide();
       $state.go("register", {contact : res});
     }, function(err){
-      $scope.modal.remove();
+      $ionicLoading.hide();
       Log.message(err.data.message, true, 'Invalid Key');
     })
   }
@@ -186,7 +189,7 @@ angular.module('dorrbell').controller("RegisterController", function($scope, $st
                             username: $scope.contact.Email,
                             password: $scope.contact.Password__c
                         }, function(res) {
-                            $state.go("app.orders");
+                            $state.go("home");
                         }, function(err) {
                             $state.go("login");
                         });
@@ -213,7 +216,7 @@ angular.module('dorrbell').controller("AccountController", function($scope, $ion
             var options = {
                 quality: 50,
                 destinationType: Camera.DestinationType.FILE_URI,
-                sourcType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+                sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
                 targetWidth: 300,
                 targetHeight: 300,
                 encodingType: Camera.EncodingType.JPEG

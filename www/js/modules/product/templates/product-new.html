@@ -1,72 +1,139 @@
-<ion-view>
-  	<ion-nav-title>
-  		New Product
-  	</ion-nav-title>
-    <ion-nav-buttons side="right">
-
+<ion-view class="product-new" title="{{(editProduct) ? editProduct.Name : 'New Product'}}">
+    <ion-nav-buttons side="left">
+      <!--
+      <button class="button button-clear button-light" ion-wizard-previous>
+          Back
+      </button>
+    -->
     </ion-nav-buttons>
-  	<ion-content class="product-new" lazy-scroll ng-cloak>
-      <div class="list">
-        <div class="item item-divider">
-          Product Details
-        </div>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Product Name</span>
-          <input type="text" ng-model="product.title" placeholder="Example Product">
-        </label>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Product SKU</span>
-          <input type="text" ng-model="product.sku" placeholder="1234">
-        </label>
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Brand</span>
-          <input type="text" ng-model="meta.brand" placeholder="Dorrbell">
-        </label>
-        <label class="item item-input item-stacked-label">
-          <div class="input-label">
-            Product Type
+    <ion-nav-buttons side="right">
+      <button class="button button-clear button-light" ion-wizard-next>
+          Next
+      </button>
+      <button class="button button-clear button-light" ion-wizard-start="saveProduct()">
+          Save
+      </button>
+    </ion-nav-buttons>
+      <ion-slides ion-wizard options="swiperOptions" slider="swiper" ng-cloak ng-if="product">
+        <ion-slide-page ion-wizard-step next-condition="validator.validateStep1(product)">
+          <div class="bar bar-subheader bar-stable">
+            <h2 class="title">Details</h2>
           </div>
-          <input ion-autocomplete
-                  type="text"
-                  placeholder="Tops"
-                  cancel-label="Go back"
-                  readonly="readonly"
-                  class="ion-autocomplete"
-                  autocomplete="off"
-                  max-selected-items="1"
-                  ng-model="product.product_type"
-                  items-method="getProductTypes(query)"/>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Shopping District
+          <ion-content class="m-t-xl">
+            <div class="list">
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Product Name</span>
+                <input type="text" ng-model="product.title" placeholder="Example Product">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Product SKU</span>
+                <input type="text" ng-model="product.sku" placeholder="1234">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Brand</span>
+                <input type="text" ng-model="meta.brand" placeholder="Dorrbell">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <div class="input-label">
+                  Product Type
+                </div>
+                <input ion-autocomplete
+                        type="text"
+                        placeholder="Tops"
+                        cancel-label="Go back"
+                        readonly="readonly"
+                        class="ion-autocomplete"
+                        autocomplete="off"
+                        max-selected-items="1"
+                        ng-model="product.product_type"
+                        items-method="getProductTypes(query)"/>
+              </label>
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Shopping District
+                </div>
+                <select ng-model="meta.district" sf-picklist="Shopping_District__c" sf-object="Store__c"> </select>
+              </label>
+            </div>
+          </ion-content>
+        </ion-slide-page>
+
+        <ion-slide-page ion-wizard-step next-condition="validator.validateStep2(tag)">
+          <div class="bar bar-subheader bar-stable">
+            <h2 class="title">Categories</h2>
           </div>
-          <select ng-model="meta.district" sf-picklist="Shopping_District__c" sf-object="Store__c"> </select>
-        </label>
-      </div>
+          <ion-content class="m-t-xl">
+            <ion-list>
+              <ion-item class="item-divider">
+                Gender
+              </ion-item>
+              <ion-radio ng-model="tag.gender" ng-value="gender" name="gender" ng-change="updateGender('{{tag.gender}}')" ng-repeat="gender in genders">{{gender}}</ion-radio>
+            </ion-list>
 
-      <ion-list>
-        <ion-item class="item-divider">
-          Gender
-        </ion-item>
-        <ion-radio ng-model="tag.gender" ng-value="'Women'" name="gender">Women</ion-radio>
-        <ion-radio ng-model="tag.gender" ng-value="'Men'" name="gender">Men</ion-radio>
-      </ion-list>
+            <ion-list>
+              <ion-item class="item-divider m-t-md">
+                Category
+              </ion-item>
+              <ion-radio ng-model="tag.category" ng-value="c" name="category" ng-change="updateCategory('{{tag.category}}')" ng-repeat="c in categories">{{c}}</ion-radio>
+            </ion-list>
+          </ion-content>
+        </ion-slide-page>
 
-      <ion-list>
-        <ion-item class="item-divider m-t-md">
-          Category
-        </ion-item>
-        <ion-radio ng-model="tag.category" ng-value="'Clothing'" name="category">Clothing</ion-radio>
-        <ion-radio ng-model="tag.category" ng-value="'Shoes'" name="category">Shoes</ion-radio>
-        <ion-radio ng-model="tag.category" ng-value="'Handbags'" name="category">Handbags</ion-radio>
-        <ion-radio ng-model="tag.category" ng-value="'Accessories'" name="category">Accessories</ion-radio>
-      </ion-list>
+        <ion-slide-page ion-wizard-step>
+          <div class="bar bar-subheader bar-stable">
+            <h2 class="title">Tags</h2>
+            <div class="buttons">
+              <button class="button button-calm icon ion-edit" ng-click="editTags()"></button>
+            </div>
+          </div>
+          <ion-content class="m-t-xl">
+            <div class="list">
+              <label class="item item-input item-stacked-label hide">
+                <div class="input-label">
+                  Product Tags
+                </div>
+                <input ion-autocomplete
+                        type="text"
+                        placeholder="Tags"
+                        cancel-label="Go back"
+                        readonly="readonly"
+                        class="ion-autocomplete tags"
+                        ng-if="ready"
+                        autocomplete="off"
+                        max-selected-items="20"
+                        manage-externally="true"
+                        ng-model="product.tags"
+                        external-model="tag.externalModel"
+                        model-to-item-method="modelToItemMethod(modelValue)"
+                        items-method="getProductTags(query, isInitializing)"/>
+              </label>
+              <div class="item" ng-repeat="tag in product.tags">
+                {{tag}}
+              </div>
+            </div>
+            <div class="middle-box text-center p-m" ng-if="!product.tags">
+              <i class="icon ion-ios-paper-outline"></i>
+              <h3 class="font-bold">Use the edit icon in the top to tag this product.</h3>
+            </div>
+          </ion-content>
+        </ion-slide-page>
+        <ion-slide-page ion-wizard-step class="p-md">
+          <div class="bar bar-subheader bar-stable">
+            <h2 class="title">Image</h2>
+          </div>
+          <ion-content class="m-t-xl p-sm text-center">
+            <img class="product-image" data-ng-src="{{(product.images[0].attachment) ? 'data:image/jpeg;base64,' + product.images[0].attachment : null}}" ng-if="!product.images[0].src" fallback-src/>
+            <img class="product-image" ng-src="{{product.images[0].src}}" ng-if="!product.images[0].attachment && product.images[0].src" fallback-src/>
 
-  	</ion-content>
-    <nav mfb-menu position="br" effect="zoomin"
-         active-icon="ion-close-round" resting-icon="ion-plus-round"
-         toggling-method="click" menu-state="menu">
-      <button mfb-button icon="ion-archive" label="Save Product" ng-click="saveProduct(false)"></button>
-    </nav>
+            <button class="button button-block button-positive icon-left ion-arrow-up-a" ng-click="getPictureFromGallery()">
+              Upload Image
+            </button>
+            <div class="m-t-md"></div>
+            <button class="button button-block button-positive icon-left ion-camera" ng-click="getPicture()">
+              Take Photo
+            </button>
+          </ion-content>
+        </ion-slide-page>
+      </ion-slides>
+
 </ion-view>

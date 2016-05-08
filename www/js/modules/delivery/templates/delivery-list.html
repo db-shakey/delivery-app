@@ -3,40 +3,40 @@
         My Deliveries
    </ion-nav-title>
 
-  <ion-content class="delivery-list">
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getDeliveries(true)"></ion-refresher>
+   <ion-content class="delivery-list" ng-cloak>
+     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getDeliveries(true)"></ion-refresher>
 
 
-      <div class="list m-b-xl">
-        <div ng-repeat="(key, value) in deliveryList | groupBy: 'Status__c' | orderBy:'Order__r.In_Home_Try_On_Start__c':true">
-          <div class="item item-divider">
-            {{key}}
-          </div>
-          <a class="item item-button-left" ng-repeat="delivery in value" ui-sref="ret.deliverydetail({deliveryId : delivery.Id})" ng-if="delivery.Status__c != 'New'">
-            <button class="button button-positive img-circle">{{delivery.Order__r.ShipToContact.FirstName | limitTo : 1}}{{delivery.Order__r.ShipToContact.LastName | limitTo : 1}}</button>
-            <h2>{{delivery.Order__r.ShipToContact.Name}}</h2>
-            <p>{{delivery.Status__c}}</p>
-            <p class="text-muted">
-              Drop-off: {{delivery.easyStart}} and {{delivery.easyEnd}}
-            </p>
-          </a>
-          <a class="item item-button-left" ng-repeat="delivery in value" ng-if="delivery.Status__c == 'New'" ng-click="acceptDelivery(delivery)">
-            <button class="button button-positive img-circle">{{delivery.Order__r.ShipToContact.FirstName | limitTo : 1}}{{delivery.Order__r.ShipToContact.LastName | limitTo : 1}}</button>
-            <h2>{{delivery.Order__r.ShipToContact.Name}}</h2>
-            <p>{{delivery.Status__c}}</p>
-            <p class="text-muted">
-              Drop-off: {{delivery.easyStart}} and {{delivery.easyEnd}}
-            </p>
-          </a>
-        </div>
-      </div>
+     <div class="list m-b-xl">
+       <div ng-repeat="(key, value) in deliveryList | groupBy: 'Status__c'">
+         <div class="item item-divider">
+           {{key}}
+         </div>
+         <a class="item item-button-left" ng-repeat="delivery in value | orderBy:'delivery.Order__r.In_Home_Try_On_Start__c':true" ui-sref="ret.deliverydetail({deliveryId : delivery.Id})" ng-if="delivery.Status__c != 'New'">
+           <button class="button button-positive img-circle">{{delivery.Order__r.ShipToContact.FirstName | limitTo : 1}}{{delivery.Order__r.ShipToContact.LastName | limitTo : 1}}</button>
+           <h2>{{delivery.Order__r.ShipToContact.Name}}</h2>
+           <p>{{delivery.Status__c}}</p>
+           <p class="text-muted">
+             Drop-off: {{delivery.easyStart}} and {{delivery.easyEnd}}
+           </p>
+         </a>
+         <a class="item item-button-left" ng-repeat="delivery in value" ng-if="delivery.Status__c == 'New'" ng-click="acceptDelivery(delivery)">
+           <button class="button button-positive img-circle">{{delivery.Order__r.ShipToContact.FirstName | limitTo : 1}}{{delivery.Order__r.ShipToContact.LastName | limitTo : 1}}</button>
+           <h2>{{delivery.Order__r.ShipToContact.Name}}</h2>
+           <p>{{delivery.Status__c}}</p>
+           <p class="text-muted">
+             Drop-off: {{delivery.easyStart}} and {{delivery.easyEnd}}
+           </p>
+         </a>
+       </div>
+     </div>
 
 
-    <div class="middle-box text-center" ng-if="deliveryList.length == 0">
-      <i class="icon ion-ios-paper-outline"></i>
-      <h3 class="font-bold">You have no deliveries for this date</h3>
-    </div>
-  </ion-content>
+     <div class="middle-box text-center" ng-if="deliveryList.length == 0">
+       <i class="icon ion-ios-paper-outline"></i>
+       <h3 class="font-bold">You have no deliveries for this date</h3>
+     </div>
+   </ion-content>
   <!--
   <nav mfb-menu position="br" effect="zoomin" label="Close" active-icon="ion-close" resting-icon="ion-funnel" toggling-method="click" class="ab-margin" menu-state="menuState" ng-show="deliveryList.length > 1">
       <button mfb-button icon="ion-information" label="Status" ng-click="orderBy('Status__c')"></button>

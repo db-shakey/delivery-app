@@ -8,9 +8,11 @@ var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngI
                                         'ui.utils.masks', 'ngAnimate', 'ng-mfb', 'angular.filter',
                                         'timer', 'ksSwiper', 'ionic-datepicker', 'angularLazyImg',
                                         'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
-                                        'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions']);
+                                        'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions',
+                                        'ionic.wizard']);
 angular.module('templates', []);
-
+if(ionic.Platform.isAndroid())
+  ionic.Platform.isFullScreen=true;
 ionic.Platform.ready(function(){
 
 

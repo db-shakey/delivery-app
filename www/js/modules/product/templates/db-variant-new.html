@@ -10,15 +10,33 @@
         <div class="item item-divider">
           {{parentProduct.Name}}
         </div>
-        <label class="item item-input item-select">
+        <label class="item item-input item-stacked-label">
           <div class="input-label">
             Size
           </div>
-          <select ng-model="variant.option1" sf-picklist="Product_Sizes__c" sf-object="Product2"> </select>
+          <input ion-autocomplete
+                  type="text"
+                  placeholder="Size"
+                  cancel-label="Go back"
+                  readonly="readonly"
+                  class="ion-autocomplete"
+                  autocomplete="off"
+                  max-selected-items="1"
+                  ng-model="variant.option1"
+                  items-method="getProductSizes(query)"/>
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">Color</span>
-          <input type="text" placeholder="Blue" ng-model="variant.option2">
+          <input ion-autocomplete
+                  type="text"
+                  placeholder="Size"
+                  cancel-label="Go back"
+                  readonly="readonly"
+                  class="ion-autocomplete"
+                  autocomplete="off"
+                  max-selected-items="1"
+                  ng-model="variant.option2"
+                  items-method="getProductColors(query)"/>
         </label>
         <div class="item item-input item-stacked-label item-button-right">
           <span class="input-label">Barcode</span>

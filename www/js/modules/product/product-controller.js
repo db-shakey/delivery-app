@@ -7,9 +7,7 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
       items: $scope.storeList,
       update: function (filteredItems, filterText) {
 				if(filterText && $scope.canLoad){
-					$ionicLoading.show({
-              template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
-          });
+					$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
           $scope.search(filterText, 20);
 				}
       },
@@ -281,7 +279,7 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
   });
 });
 
-angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $localCache, $interval, $q, StoreFactory, ProductFactory, Log){
+angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $interval, $q, StoreFactory, $cordovaImagePicker, $cordovaCamera, $timeout, ProductFactory, ImageService, ProductValidator, Log){
 
 	$scope.getStore = function(noCache){
 		$scope.$watch(StoreFactory.getStoreById($state.params.storeId, noCache), function(newValue, oldValue){
@@ -293,103 +291,234 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		});
 	}
 
+	$scope.getProduct = function(noCache){
+		$scope.$watch(ProductFactory.getProductDetailsById($state.params.productId, noCache), function(newValue, oldValue){
+			if(newValue){
+				$scope.editProduct = newValue[0];
+				var tags = newValue[0].Tags__c.split(",");
+				$scope.product = {
+					id : newValue[0].Shopify_Id__c,
+					title : newValue[0].Name,
+					tags : tags,
+					sku : newValue[0].SKU__c,
+					product_type : newValue[0].Family,
+					images : new Array()
+				};
+				if(newValue[0].Image__r){
+					$scope.product.images = [
+						{
+							"src" : newValue[0].Image__r.Image_Source__c
+						}
+					]
+				}
+				$scope.meta = {
+					brand : newValue[0].Brand__c,
+					district : newValue[0].Store__r.Shopping_District__c
+				};
+				$scope.tag = {
+					externalModel : tags
+				}
+				for(var i in tags){
+					if($scope.categories.indexOf(tags[i].trim()) != -1)
+						$scope.tag.category = tags[i].trim();
+					else if($scope.genders.indexOf(tags[i].trim()) != -1)
+						$scope.tag.gender = tags[i].trim();
+				}
+				$scope.ready = $scope.tag.category && $scope.tag.gender
+			}
+		})
+	}
+
 	$scope.getProductTypes = function(query){
 		return $q(function(resolve, reject){
 			ProductFactory.getProductTypes().then(function(res){
-				var values = new Array();
-				var customValue = true;
-				for(var i in res){
-					if(res[i].indexOf(query) != -1)
-						values.push(res[i]);
-					if(res[i] == query)
-						customValue = false;
-				}
-				if(customValue && query && query.trim().length > 0)
-					values.push(query);
-				resolve(values);
+				resolve($filter("listSorter")(res, query));
 		 	}, reject)
 		});
 
 	}
 
-	$scope.saveProduct = function(goToVariant){
-		$scope.menu = "closed";
+	$scope.getProductTags = function(query, isInitializing){
+		return $q(function(resolve, reject){
+			ProductFactory.getProductTags().then(function(res){
+				resolve($filter("listSorter")(res, query));
+			})
+		});
+	}
+	$scope.modelToItemMethod = function (modelValue) {
+		return modelValue;
+	}
+	$scope.updateCategory = function(oldValue){
+		if(oldValue && $scope.tag.externalModel.indexOf(oldValue) != -1)
+			$scope.tag.externalModel.splice($scope.tag.externalModel.indexOf(oldValue))
+
+		$scope.tag.externalModel.push($scope.tag.category);
+		$scope.ready = $scope.tag.category && $scope.tag.gender
+	}
+	$scope.updateGender = function(oldValue){
+		if(oldValue && $scope.tag.externalModel.indexOf(oldValue) != -1)
+			$scope.tag.externalModel.splice($scope.tag.externalModel.indexOf(oldValue))
+
+		$scope.tag.externalModel.push($scope.tag.gender);
+		$scope.ready = $scope.tag.category && $scope.tag.gender
+	}
+
+	$scope.saveProduct = function(){
 		$ionicLoading.show({
     	template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
   	});
-		$scope.product.metafields = new Array();
-		$scope.product.tags = $scope.tag.gender + ', ' + $scope.tag.category + ', New';
-		$scope.product.published = "false";
-		$scope.product.published_scope = "web";
-		$scope.product.body_html = '<span style="font-weight:700;">Description:</span> <br/>\
-												<span style="font-weight:700;">Fit:</span> <br/>\
-												<span style="font-weight:700;">Materials:</span> <br/>\
-												<span style="font-weight:700;">Condition:</span> <br/> Like New Very Good Good<br/>\
-												<span style="font-weight:700;">Notes:</span> <br/>\
-												<span style="font-weight:700;">Care:</span>';
-		$scope.product.vendor = $scope.store.External_Id__c;
-		$scope.product.options = [
-			{
-				name : "Size"
-			},
-			{
-				name : "Color"
-			}
-		];
-		$scope.product.variants = [
-			{
-				"option1" : "Small",
-				"option2" : "Blue",
-				"inventory_management" : "shopify",
-				"inventory_policy" : "deny",
-				"sku" : $scope.product.sku
-			}
-		];
-		$scope.product.metafields.push({
-			"key" : "brand",
-			"value" : $scope.meta.brand,
-			"value_type" : "string",
-			"namespace" : "product"
-		});
-		$scope.product.metafields.push({
-			"key" : "cluster",
-			"value" : $scope.meta.district,
-			"value_type" : "string",
-			"namespace" : "product"
-		});
-		ProductFactory.createProduct($scope.product, $scope.store.Id, function(res){
-			var tries = 0;
-			var checkProduct = $interval(function(){
-				ProductFactory.getProductByExternalId(res.product.id).then(function(results){
-					if(results && results.length > 0){
-						$ionicLoading.hide();
-						$interval.cancel(checkProduct);
-						$ionicHistory.currentView($ionicHistory.backView());
-						$state.go("db.productDetail", {productId : results[0].Id});
-					}else if(tries >= 6){
-						$ionicLoading.hide();
-						$interval.cancel(checkProduct);
-						$ionicHistory.goBack();
-					}
-					tries++;
-				});
-			}, 1000);
+		if($scope.editProduct){
+			ProductFactory.updateProduct($scope.product, $scope.store.Id, function(){
+				$timeout(function(){
+					$ionicLoading.hide();
+					$ionicHistory.currentView($ionicHistory.backView());
+					$state.go("db.productDetail", {productId : $scope.editProduct.Id});
+				}, 2000);
+			}, function(err){
+				$ionicLoading.hide();
+				Log.message(JSON.stringify(err.data), true, "Error");
+			})
+		}else{
+			$scope.product.metafields = new Array();
+			$scope.product.published = "false";
+			$scope.product.published_scope = "web";
+			$scope.product.body_html = '<span style="font-weight:700;">Description:</span> <br/>\
+													<span style="font-weight:700;">Fit:</span> <br/>\
+													<span style="font-weight:700;">Materials:</span> <br/>\
+													<span style="font-weight:700;">Condition:</span> <br/> Like New Very Good Good<br/>\
+													<span style="font-weight:700;">Notes:</span> <br/>\
+													<span style="font-weight:700;">Care:</span>';
+			$scope.product.vendor = $scope.store.External_Id__c;
+			$scope.product.options = [
+				{
+					name : "Size"
+				},
+				{
+					name : "Color"
+				}
+			];
+			$scope.product.variants = [
+				{
+					"option1" : "Small",
+					"option2" : "Blue",
+					"inventory_management" : "shopify",
+					"inventory_policy" : "deny",
+					"sku" : $scope.product.sku
+				}
+			];
+			$scope.product.metafields.push({
+				"key" : "brand",
+				"value" : $scope.meta.brand,
+				"value_type" : "string",
+				"namespace" : "product"
+			});
+			$scope.product.metafields.push({
+				"key" : "cluster",
+				"value" : $scope.meta.district,
+				"value_type" : "string",
+				"namespace" : "product"
+			});
+			ProductFactory.createProduct($scope.product, $scope.store.Id, function(res){
+				var tries = 0;
+				var checkProduct = $interval(function(){
+					ProductFactory.getProductByExternalId(res.product.id).then(function(results){
+						if(results && results.length > 0){
+							$ionicLoading.hide();
+							$interval.cancel(checkProduct);
+							$ionicHistory.currentView($ionicHistory.backView());
+							$state.go("db.productDetail", {productId : results[0].Id});
+						}else if(tries >= 6){
+							$ionicLoading.hide();
+							$interval.cancel(checkProduct);
+							$ionicHistory.goBack();
+						}
+						tries++;
+					});
+				}, 1000);
 
-		}, function(err){
-			$ionicLoading.hide();
-			Log.message(JSON.stringify(err.data), true, "Error");
-		})
+			}, function(err){
+				$ionicLoading.hide();
+				Log.message(JSON.stringify(err.data), true, "Error");
+			})
+		}
+	}
+
+	$scope.getPicture = function(e) {
+			try{
+					var options = {
+							quality: 100,
+							destinationType: Camera.DestinationType.DATA_URL,
+							sourceType: Camera.PictureSourceType.CAMERA,
+							allowEdit : true,
+							targetWidth: 600,
+							targetHeight: 900,
+							encodingType: Camera.EncodingType.JPEG
+					};
+					$cordovaCamera.getPicture(options).then(function(data) {
+						$scope.product.images[0] = {"attachment": data}
+						console.log($scope.product);
+					});
+			}catch(err){
+				Log.message("Cannot access camera", true, "Error");
+			}
+	}
+	$scope.getPictureFromGallery = function(e) {
+			var options = {
+					maximumImagesCount: 1,
+					width: 600,
+					height: 900,
+					quality: 100
+			};
+
+			try {
+				 $cordovaImagePicker.getPictures(options)
+						.then(function(results) {
+								if (results[0]) {
+										ImageService.convertUrlToBase64(results[0], function(data) {
+											if(data.indexOf('base64,') != -1)
+												data = data.substring(data.indexOf('base64,') + 7);
+											$timeout(function(){
+												console.log($scope.product);
+												$scope.product.images[0] = {"attachment": data};
+											})
+										}, "image/jpeg");
+								}
+						}, function(error) {
+								Log.message("Error loading photo", true, "Error");
+						});
+			} catch(err){
+				Log.message("Cannot access gallery", true, "Error");
+			}
+	}
+
+	$scope.editTags = function(){
+		var ionAutocompleteElement = document.getElementsByClassName("tags");
+    angular.element(ionAutocompleteElement).controller('ionAutocomplete').fetchSearchQuery("", true);
+    angular.element(ionAutocompleteElement).controller('ionAutocomplete').showModal();
 	}
 
 	$scope.$on('$ionicView.beforeEnter', function(){
     if(!$scope.store){
       $scope.getStore(false);
     }
-		$scope.tag = {};
-		$scope.meta = {district : "Pearl District"};
-		$scope.product = {};
+		if($state.params.productId){
+			$scope.getProduct(false);
+		}else{
+			$scope.product = {
+				images : [],
+				tags : ['New']
+			};
+			$scope.tag = {externalModel : ['New']};
+			$scope.meta = {district : "Pearl District"};
+		}
+		$scope.categories = ['Clothing', 'Shoes', 'Handbags', 'Accessories'];
+		$scope.genders = ['Men', 'Women'];
+		$scope.validator = ProductValidator;
   });
-
+	$scope.swiperOptions = {
+		loop : false,
+		pagination : false
+	}
 })
 
 angular.module('dorrbell').controller('DbProductDetailController', function($scope, $ionicActionSheet, $ionicLoading, $state, ProductFactory){
@@ -410,21 +539,24 @@ angular.module('dorrbell').controller('DbProductDetailController', function($sco
 			buttons : [
 				{
 					text : '<i class="icon ion-plus-round"></i> Add Variant'
+				},
+				{
+					text : '<i class="icon ion-edit"></i> Edit Product'
 				}
 			],
 			buttonClicked : function(index){
 				sheet();
 				if(index == 0){
 					$state.go('db.variantNew', {productId : $scope.product.Id});
+				}else{
+					$state.go('db.newProduct', {storeId : $scope.product.Store__c, productId : $scope.product.Id})
 				}
 			},
 			cssClass : "dorrbell_menu"
 		})
 	}
 	$scope.togglePublish = function(){
-		ProductFactory.updateProduct($scope.shProduct, $scope.product.Store__c, function(){
-			$scope.getProduct(true);
-		});
+		ProductFactory.updateProduct($scope.shProduct, $scope.product.Store__c, function(){});
 	}
 	$scope.delete = function(item){
 		$ionicLoading.show({
@@ -442,7 +574,7 @@ angular.module('dorrbell').controller('DbProductDetailController', function($sco
   });
 })
 
-angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicHistory, $cordovaBarcodeScanner, ProductFactory, MetadataFactory, Log){
+angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicHistory, $cordovaBarcodeScanner, $q, $filter, ProductFactory, MetadataFactory, Log){
 	$scope.getProduct = function(noCache){
 		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
@@ -481,6 +613,9 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 		});
 		$scope.variant.inventory_policy = "deny";
 		$scope.variant.inventory_management = "shopify";
+		if($scope.parentProduct.Image__r)
+			$scope.variant.image_id = $scope.parentProduct.Image__r.Shopify_Id__c;
+
 		ProductFactory.createVariant($scope.parentProduct.Shopify_Id__c, $scope.variant, function(res){
 			$ionicLoading.hide();
 
@@ -496,6 +631,22 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 				Log.message(err.data.base[0], true, "Error");
 			else
 				Log.message("Oops...something went wrong", true, "Error");
+		});
+	}
+
+	$scope.getProductSizes = function(query){
+		return $q(function(resolve, reject){
+			ProductFactory.getProductSizes().then(function(res){
+				resolve($filter("listSorter")(res, query));
+		 	}, reject)
+		});
+	}
+
+	$scope.getProductColors = function(query){
+		return $q(function(resolve, reject){
+			ProductFactory.getProductColors().then(function(res){
+				resolve($filter("listSorter")(res, query));
+		 	}, reject)
 		});
 	}
 
@@ -518,7 +669,7 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 
 })
 
-angular.module('dorrbell').controller('VariantEditController', function($scope, $ionicLoading, $state, $timeout, $ionicHistory, $cordovaBarcodeScanner, ProductFactory, Log){
+angular.module('dorrbell').controller('VariantEditController', function($scope, $ionicLoading, $state, $timeout, $ionicHistory, $cordovaBarcodeScanner, $q, $filter, ProductFactory, Log){
 	$scope.getProduct = function(noCache){
 		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
@@ -548,6 +699,21 @@ angular.module('dorrbell').controller('VariantEditController', function($scope, 
 
 			return newOption;
 		}
+	}
+	$scope.getProductSizes = function(query){
+		return $q(function(resolve, reject){
+			ProductFactory.getProductSizes().then(function(res){
+				resolve($filter("listSorter")(res, query));
+		 	}, reject)
+		});
+	}
+
+	$scope.getProductColors = function(query){
+		return $q(function(resolve, reject){
+			ProductFactory.getProductColors().then(function(res){
+				resolve($filter("listSorter")(res, query));
+		 	}, reject)
+		});
 	}
 
 	$scope.scanBarcode = function(){

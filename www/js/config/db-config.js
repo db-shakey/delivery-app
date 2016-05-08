@@ -64,7 +64,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     })
 
     .state('db.newProduct', {
-      url : '/newProduct/:storeId',
+      url : '/newProduct/:storeId/:productId',
       views : {
         'menuContent' : {
           templateUrl : 'js/modules/product/templates/product-new.html',
@@ -79,7 +79,8 @@ angular.module('dorrbell').config(function($stateProvider) {
               'js/modules/store/store-factory.js',
               'js/modules/product/product-directive.js',
               'js/modules/product/product-factory.js',
-              'js/modules/product/product-controller.js'
+              'js/modules/product/product-controller.js',
+              'js/modules/product/product-service.js'
             ]
           });
         }
@@ -123,7 +124,8 @@ angular.module('dorrbell').config(function($stateProvider) {
             files : [
               'js/modules/product/product-directive.js',
               'js/modules/product/product-factory.js',
-              'js/modules/product/product-controller.js'
+              'js/modules/product/product-controller.js',
+              'js/modules/product/product-service.js'
             ]
           })
         }
@@ -145,7 +147,8 @@ angular.module('dorrbell').config(function($stateProvider) {
             files : [
               'js/modules/product/product-directive.js',
               'js/modules/product/product-factory.js',
-              'js/modules/product/product-controller.js'
+              'js/modules/product/product-controller.js',
+              'js/modules/product/product-service.js'
             ]
           })
         }

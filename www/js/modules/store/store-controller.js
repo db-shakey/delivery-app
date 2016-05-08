@@ -54,7 +54,6 @@ angular.module('dorrbell').controller("StoreDetailController", function($scope, 
             }
           });
         }
-        console.log($scope.store);
       }
       $scope.$broadcast('scroll.refreshComplete');
     });

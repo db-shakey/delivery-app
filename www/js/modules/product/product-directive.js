@@ -21,4 +21,4 @@ angular.module('dorrbell').directive("productTypes", function(HerokuService){
       });
     }
   }
-})
+});

@@ -15,6 +15,16 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../extras/fonts/RobotoCondensed-Regular.ttf"); }
+
+@font-face {
+  font-family: "FontAwesome";
+  src: url("../extras/fonts/fontawesome-webfont.woff2"); }
+
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -26,12 +36,10 @@ $dark:                            #444 !default;
   used under CC BY http://creativecommons.org/licenses/by/4.0/
   Modified icons to fit ionicon’s grid from original.
 */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @font-face {
   font-family: "Ionicons";
-  src: url("../lib/ionic/fonts/ionicons.eot?v=2.0.1");
-  src: url("../lib/ionic/fonts/ionicons.eot?v=2.0.1#iefix") format("embedded-opentype"), url("../lib/ionic/fonts/ionicons.ttf?v=2.0.1") format("truetype"), url("../lib/ionic/fonts/ionicons.woff?v=2.0.1") format("woff"), url("../lib/ionic/fonts/ionicons.woff") format("woff"), url("../lib/ionic/fonts/ionicons.svg?v=2.0.1#Ionicons") format("svg");
+  src: url("../lib/ionic/release/fonts/ionicons.eot?v=2.0.1");
+  src: url("../lib/ionic/release/fonts/ionicons.eot?v=2.0.1#iefix") format("embedded-opentype"), url("../lib/ionic/release/fonts/ionicons.ttf?v=2.0.1") format("truetype"), url("../lib/ionic/release/fonts/ionicons.woff?v=2.0.1") format("woff"), url("../lib/ionic/release/fonts/ionicons.woff") format("woff"), url("../lib/ionic/release/fonts/ionicons.svg?v=2.0.1#Ionicons") format("svg");
   font-weight: normal;
   font-style: normal; }
 
@@ -3341,7 +3349,7 @@ body,
   word-wrap: break-word;
   font-size: 14px;
   font-family: -apple-system;
-  font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-family: "-apple-system", "FontAwesome", sans-serif;
   line-height: 20px;
   text-rendering: optimizeLegibility;
   -webkit-backface-visibility: hidden;
@@ -3506,8 +3514,6 @@ ion-infinite-scroll {
     position: static;
     height: 100%;
     -webkit-transform: translate3d(0, 0, 0); }
-  .overflow-scroll.keyboard-up:not(.keyboard-up-confirm) {
-    overflow: hidden; }
 
 /* If you change these, change platform.scss as well */
 .has-header {
@@ -3599,7 +3605,7 @@ h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   color: #676a6c;
   font-weight: 500;
-  font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-family: "-apple-system", "FontAwesome", sans-serif;
   line-height: 1.2; }
   h1 small, h2 small, h3 small, h4 small, h5 small, h6 small,
   .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small {
@@ -4967,45 +4973,81 @@ ion-tabs.tabs-color-active-light .tab-item {
   ion-tabs.tabs-color-active-light .tab-item.tab-item-active, ion-tabs.tabs-color-active-light .tab-item.active, ion-tabs.tabs-color-active-light .tab-item.activated {
     color: #fff; }
 
+ion-tabs.tabs-striped.tabs-color-active-light .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-light .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-light .tab-item.activated {
+  border-color: #fff;
+  color: #fff; }
+
 ion-tabs.tabs-color-active-stable .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-stable .tab-item.tab-item-active, ion-tabs.tabs-color-active-stable .tab-item.active, ion-tabs.tabs-color-active-stable .tab-item.activated {
     color: #dcdcdc; }
+
+ion-tabs.tabs-striped.tabs-color-active-stable .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-stable .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-stable .tab-item.activated {
+  border-color: #dcdcdc;
+  color: #dcdcdc; }
 
 ion-tabs.tabs-color-active-positive .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-color-active-positive .tab-item.activated {
     color: #14a1bf; }
 
+ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.activated {
+  border-color: #14a1bf;
+  color: #14a1bf; }
+
 ion-tabs.tabs-color-active-calm .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-calm .tab-item.tab-item-active, ion-tabs.tabs-color-active-calm .tab-item.active, ion-tabs.tabs-color-active-calm .tab-item.activated {
     color: #11464e; }
+
+ion-tabs.tabs-striped.tabs-color-active-calm .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-calm .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-calm .tab-item.activated {
+  border-color: #11464e;
+  color: #11464e; }
 
 ion-tabs.tabs-color-active-assertive .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-assertive .tab-item.tab-item-active, ion-tabs.tabs-color-active-assertive .tab-item.active, ion-tabs.tabs-color-active-assertive .tab-item.activated {
     color: #d4271a; }
 
+ion-tabs.tabs-striped.tabs-color-active-assertive .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-assertive .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-assertive .tab-item.activated {
+  border-color: #d4271a;
+  color: #d4271a; }
+
 ion-tabs.tabs-color-active-balanced .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-balanced .tab-item.tab-item-active, ion-tabs.tabs-color-active-balanced .tab-item.active, ion-tabs.tabs-color-active-balanced .tab-item.activated {
     color: #ff3366; }
+
+ion-tabs.tabs-striped.tabs-color-active-balanced .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-balanced .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-balanced .tab-item.activated {
+  border-color: #ff3366;
+  color: #ff3366; }
 
 ion-tabs.tabs-color-active-energized .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-energized .tab-item.tab-item-active, ion-tabs.tabs-color-active-energized .tab-item.active, ion-tabs.tabs-color-active-energized .tab-item.activated {
     color: #f5db8a; }
 
+ion-tabs.tabs-striped.tabs-color-active-energized .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-energized .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-energized .tab-item.activated {
+  border-color: #f5db8a;
+  color: #f5db8a; }
+
 ion-tabs.tabs-color-active-royal .tab-item {
   color: #5f666e; }
   ion-tabs.tabs-color-active-royal .tab-item.tab-item-active, ion-tabs.tabs-color-active-royal .tab-item.active, ion-tabs.tabs-color-active-royal .tab-item.activated {
     color: #5b2e1d; }
 
+ion-tabs.tabs-striped.tabs-color-active-royal .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-royal .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-royal .tab-item.activated {
+  border-color: #5b2e1d;
+  color: #5b2e1d; }
+
 ion-tabs.tabs-color-active-dark .tab-item {
   color: #fff; }
   ion-tabs.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs.tabs-color-active-dark .tab-item.active, ion-tabs.tabs-color-active-dark .tab-item.activated {
     color: #5f666e; }
+
+ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.activated {
+  border-color: #5f666e;
+  color: #5f666e; }
 
 .tabs-top.tabs-striped {
   padding-bottom: 0; }
@@ -5072,7 +5114,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   white-space: nowrap;
   font-weight: 400;
   font-size: 14px;
-  font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-family: "-apple-system", "FontAwesome", sans-serif;
   opacity: 0.7; }
   .tab-item:hover {
     cursor: pointer; }
@@ -6245,6 +6287,12 @@ button.item.item-button-right {
     font-size: 18px;
     line-height: 32px; }
 
+.item-button-left.item-button-right .button:first-child {
+  right: auto; }
+
+.item-button-left.item-button-right .button:last-child {
+  left: auto; }
+
 .item-avatar,
 .item-avatar .item-content,
 .item-avatar-left,
@@ -7248,6 +7296,7 @@ button.swiper-pagination-bullet {
 
 ion-slides {
   width: 100%;
+  height: 100%;
   display: block; }
 
 .slide-zoom {
@@ -7495,7 +7544,7 @@ input,
 button,
 select,
 textarea {
-  font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif; }
+  font-family: "-apple-system", "FontAwesome", sans-serif; }
 
 .item-input {
   display: -webkit-box;
@@ -8082,7 +8131,7 @@ input:checked + .checkbox-icon:after {
   pointer-events: none; }
 
 /* Fix to avoid background color bleeding */
-/* (occured on (at least) Android 4.2, Asus MeMO Pad HD7 ME173X) */
+/* (occurred on (at least) Android 4.2, Asus MeMO Pad HD7 ME173X) */
 .platform-android4_2 .toggle .track {
   -webkit-background-clip: padding-box; }
 
@@ -8933,6 +8982,24 @@ a.button {
       width: auto;
       display: inline-block;
       float: left; }
+  .button-bar.bar-light > .button {
+    border-color: #ddd; }
+  .button-bar.bar-stable > .button {
+    border-color: transparent; }
+  .button-bar.bar-positive > .button {
+    border-color: transparent; }
+  .button-bar.bar-calm > .button {
+    border-color: transparent; }
+  .button-bar.bar-assertive > .button {
+    border-color: #a71f14; }
+  .button-bar.bar-balanced > .button {
+    border-color: transparent; }
+  .button-bar.bar-energized > .button {
+    border-color: #f3d473; }
+  .button-bar.bar-royal > .button {
+    border-color: #3c1e13; }
+  .button-bar.bar-dark > .button {
+    border-color: #111; }
 
 .button-bar > .button {
   -webkit-box-flex: 1;
@@ -12625,7 +12692,6 @@ a.forum-item-title:hover {
 
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #2f4050;
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden; }
@@ -18979,6 +19045,9 @@ i.icon.larger {
 .text-muted {
   color: #999999 !important; }
 
+.hide {
+  display: none; }
+
 .action-button, .mfb-component--br a, .action-button:active, .action-button:visited, .action-button:hover, .action-button:link, .action-button:focus {
   background-color: #ff3366;
   border: 1px solid #ff3366;
@@ -19029,6 +19098,14 @@ select {
 .platform-android .filter-bar .filter-bar-positive .item-input-wrapper {
   border-bottom: #14a1bf !important;
   background: #14a1bf !important; }
+  .platform-android .filter-bar .filter-bar-positive .item-input-wrapper input {
+    border-bottom: 1px solid #fff; }
+
+/********
+ * Autocomplete Overrides
+ *******/
+.ion-autocomplete-container button.ion-autocomplete-cancel {
+  color: #14a1bf; }
 
 /******
  *	Floating Labels
@@ -19155,9 +19232,6 @@ ion-side-menu h1 img {
   color: #646464; }
 
 /********
- *	Search Results
- *******/
-/********
  * Order List
  *******/
 .order-list div.calendar .fc-time-grid .fc-slats td, .delivery-list div.calendar .fc-time-grid .fc-slats td, .store-list div.calendar .fc-time-grid .fc-slats td {
@@ -19274,6 +19348,9 @@ ion-side-menu h1 img {
   background-color: transparent;
   border-color: transparent; }
 
+.product-details ion-slides {
+  height: initial; }
+
 /********
  * Bar Subheader
  ********/
@@ -19287,10 +19364,10 @@ ion-view.bar-subheader-slide-away .has-subheader {
 ion-view .bar-positive {
   z-index: 2; }
 
-ion-view .bar-subheader {
+ion-view ion-header-bar.bar-subheader {
   z-index: 1;
   transition: top 0.25s ease; }
-  ion-view .bar-subheader .title {
+  ion-view ion-header-bar.bar-subheader .title {
     font-size: 12px !important;
     font-weight: normal;
     text-align: center !important; }
@@ -19397,6 +19474,13 @@ ion-view .bar-subheader {
 
 .product-new .item-select .input-label, .product-new .item-select select, .variant-edit .item-select .input-label, .variant-edit .item-select select {
   width: 50%; }
+
+.product-new .bar-subheader h2.title, .variant-edit .bar-subheader h2.title {
+  font-size: 18px; }
+
+.product-new .product-image, .variant-edit .product-image {
+  border: 1px solid black;
+  height: 45vh; }
 
 /********
  * FAB

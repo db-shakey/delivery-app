@@ -17,7 +17,7 @@ angular.module('dorrbell').factory("StoreFactory", function(HerokuService, $loca
                           Google_Rating__c, \
                           Google_Store_Hours__c, \
                           External_Id__c, \
-                          (SELECT Id, Name FROM Products__r WHERE RecordType.DeveloperName = 'Product'), \
+                          (SELECT Id, Name FROM Products__r WHERE RecordType.DeveloperName = 'Product' AND IsActive = TRUE), \
                           (SELECT Id, Image_Url__c FROM Store_Images__r LIMIT 1), \
                           (SELECT Id, Name FROM Contacts__r WHERE RecordType.DeveloperName = 'Retailer_Contact') \
                       FROM Store__c \

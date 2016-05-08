@@ -37,13 +37,22 @@ $tabs-text-font-size-side-icon:	  14px !default;
 
 
 $button-positive-border:		transparent !default;
-$button-calm-border:			transparent !default;
+$button-calm-border:				transparent !default;
 $button-balanced-border:		transparent !default;
 $button-stable-border:			transparent !default;
 
 
 // The path for our ionicons font files, relative to the built CSS in www/css
-$ionicons-font-path: "../lib/ionic/fonts" !default;
+$ionicons-font-path: "../lib/ionic/release/fonts" !default;
+
+@font-face {
+	font-family: "Roboto Condensed";
+	src : url('../extras/fonts/RobotoCondensed-Regular.ttf');
+}
+@font-face { 
+	font-family: "FontAwesome";
+	src : url('../extras/fonts/fontawesome-webfont.woff2');
+}
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
@@ -224,6 +233,9 @@ i.icon.larger{
  .text-muted{
  	color : #999999 !important;
  }
+ .hide{
+	 display: none;
+ }
  .action-button, .mfb-component--br a, .action-button:active, .action-button:visited, .action-button:hover, .action-button:link, .action-button:focus{
 	 background-color: $balanced;
 	 border: 1px solid $balanced;
@@ -285,12 +297,22 @@ select{
 .platform-android .filter-bar .filter-bar-positive .item-input-wrapper{
 	border-bottom: $positive !important;
 	background: $positive !important;
+	input{
+		border-bottom: 1px solid $white;
+	}
 }
 
+/********
+ * Autocomplete Overrides
+ *******/
+.ion-autocomplete-container{
+	button.ion-autocomplete-cancel{
+		color: $positive;
+	}
+}
 /******
  *	Floating Labels
  *******/
-
 .item-floating-label{
 	border-width: 0px;
 	border-bottom: 1px solid $stable;
@@ -442,13 +464,6 @@ ion-side-menu{
 	}
 
 /********
- *	Search Results
- *******/
- .search-results.list .item{
-
-}
-
-/********
  * Order List
  *******/
 .order-list, .delivery-list, .store-list{
@@ -595,6 +610,9 @@ ion-side-menu{
 			border-color: transparent;
 		}
 	}
+	ion-slides{
+		height: initial;
+	}
 }
 
 /********
@@ -614,7 +632,7 @@ ion-side-menu{
  		 z-index: 2;
   }
 
-  .bar-subheader {
+  ion-header-bar.bar-subheader {
  		 z-index: 1;
  		 transition: top 0.25s ease;
  		 .title{
@@ -755,6 +773,13 @@ ion-side-menu{
 		.input-label, select{
 			width: 50%;
 		}
+	}
+	.bar-subheader h2.title{
+		font-size: $font-size-large;
+	}
+	.product-image{
+		border: 1px solid black;
+		height: 45vh;
 	}
 }
 /********

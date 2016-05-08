@@ -54,6 +54,8 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Shopify_Id__c, \
 													Image__r.Image_Source__c, \
 													Barcode__c, \
+													Brand__c, \
+													Store__r.Shopping_District__c, \
 													Store__r.Name, \
 													Published_At__c, \
 													Store__r.External_Id__c, \
@@ -84,6 +86,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Body_Html__c, \
 													Family, \
 													Tags__c, \
+													Image__r.Shopify_Id__c, \
 													Parent_Product__c, \
 													Inventory_Quantity__c, \
 													Parent_Product__r.Shopify_Id__c, \
@@ -153,6 +156,21 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 		getProductTypes : function(){
 			return $q(function(resolve, reject){
 				HerokuService.get('/api/shopify/productTypes', resolve, reject);
+			});
+		},
+		getProductTags : function(){
+			return $q(function(resolve, reject){
+				HerokuService.get('/api/shopify/productTags', resolve, reject);
+			});
+		},
+		getProductSizes : function(){
+			return $q(function(resolve, reject){
+				HerokuService.get('/api/shopify/sizes', resolve, reject);
+			});
+		},
+		getProductColors : function(){
+			return $q(function(resolve, reject){
+				HerokuService.get('/api/shopify/colors', resolve, reject);
 			});
 		}
 	}
