@@ -1,10 +1,12 @@
 angular.module('dorrbell').service("ProductValidator", function(){
 
-  this.validateStep1 = function(product){
+  this.validateStep1 = function(product, meta){
     return product.title
         && product.title.trim().length > 1
+        /*
         && product.sku
         && product.sku.trim().length > 1
+        */
         && product.product_type;
   }
 
@@ -13,6 +15,10 @@ angular.module('dorrbell').service("ProductValidator", function(){
         && tag.gender.trim().length > 1
         && tag.category
         && tag.category.trim().length > 1;
+  }
+
+  this.validateSave = function(product, meta, tag){
+    return (this.validateStep1(product, meta) && this.validateStep2(tag));
   }
 
 });

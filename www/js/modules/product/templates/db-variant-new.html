@@ -1,11 +1,11 @@
-<ion-view>
+<ion-view class="variant-edit">
   	<ion-nav-title>
   		New Variant
   	</ion-nav-title>
     <ion-nav-buttons side="right">
 
     </ion-nav-buttons>
-  	<ion-content class="variant-edit" lazy-scroll ng-cloak>
+  	<ion-content lazy-scroll ng-cloak>
       <div class="list">
         <div class="item item-divider">
           {{parentProduct.Name}}
@@ -63,7 +63,7 @@
 
   	</ion-content>
     <nav mfb-menu position="br" effect="zoomin"
-         active-icon="ion-close-round" resting-icon="ion-plus-round"
+         active-icon="ion-close-round" resting-icon="ion-android-more-vertical"
          toggling-method="click" menu-state="menu">
       <button mfb-button icon="ion-archive" label="Save" ng-click="saveVariant(false)"></button>
       <button mfb-button icon="ion-plus-circled" label="Save &amp; New" ng-click="saveVariant(true)"></button>

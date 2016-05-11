@@ -1,6 +1,6 @@
 <ion-view>
   <ion-nav-title >
-    {{productList[0].Store__r.Name}} Products
+    {{($scope.store) ? productList[0].Store__r.Name : 'All'}} Products
   </ion-nav-title>
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-ios-search-strong m-r-sm" ng-click="showFilterBar()" ng-if="productList && productList.length > 0"></button>
@@ -25,8 +25,12 @@
         </ion-item>
     </ion-list>
     <div class="middle-box text-center" ng-if="productList.length == 0">
-      <i class="icon ion-ios-paper-outline"></i>
+      <i class="icon ion-android-cancel"></i>
       <h3 class="font-bold">No products to display.</h3>
+    </div>
+    <div class="middle-box text-center" ng-if="!productList">
+      <i class="icon ion-refresh"></i>
+      <h3 class="font-bold">Loading Products</h3>
     </div>
     <ion-infinite-scroll on-infinite="search(searchText, limit + 10)" distance="1%" ng-if="hasMore"></ion-infinite-scroll>
   </ion-content>

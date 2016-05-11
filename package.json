@@ -28,13 +28,14 @@
     {
       "locator": "https://github.com/crosswalk-project/cordova-plugin-crosswalk-webview.git#master",
       "id": "cordova-plugin-crosswalk-webview"
+    },
+    {
+      "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugins.git#master:local-webserver",
+      "id": "cordova-plugin-facebook4"
     }
   ],
   "cordovaPlatforms": [
-    {
-      "platform": "android",
-      "locator": "browser"
-    },
-    "ios"
+    "ios",
+    "android"
   ]
 }

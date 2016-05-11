@@ -47,49 +47,28 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 											WHERE Shopify_Id__c = '" + externalId + "'", resolve);
 			});
 		},
-		getProductDetailsById : function(productId, noCache){
+		getProductDetailsById : function(productId, noCache, callback){
 			var query = "SELECT Id, \
 													SKU__c, \
 													Name, \
 													Shopify_Id__c, \
-													Image__r.Image_Source__c, \
+													Body_Html__c, \
+													Family, \
+													Tags__c, \
 													Barcode__c, \
 													Brand__c, \
+													Inventory_Quantity__c, \
+													Root_Product_Name__c, \
+													Published_At__c, \
+													Image__r.Image_Source__c, \
+													Image__r.Shopify_Id__c, \
+													Store__r.External_Id__c, \
+													Store__c, \
 													Store__r.Shopping_District__c, \
 													Store__r.Name, \
-													Published_At__c, \
-													Store__r.External_Id__c, \
-													Store__c, \
-													Body_Html__c, \
-													Family, \
-													Tags__c, \
-													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE), \
-													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
-										FROM Product2 \
-										WHERE Id = '" + productId + "'";
-				$localCache.getRecords(query, noCache);
-				return function(){
-					return $localCache.fromCache(query);
-				}
-		},
-		getVariantById : function(productId, noCache){
-			var query = "SELECT Id, \
-													SKU__c, \
-													Root_Product_Name__c, \
-													Name, \
-													Shopify_Id__c, \
-													Image__r.Image_Source__c, \
-													Barcode__c, \
-													Store__r.Name, \
-													Store__r.External_Id__c, \
-													Store__c, \
-													Body_Html__c, \
-													Family, \
-													Tags__c, \
-													Image__r.Shopify_Id__c, \
 													Parent_Product__c, \
-													Inventory_Quantity__c, \
 													Parent_Product__r.Shopify_Id__c, \
+													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE), \
 													(SELECT Id, UnitPrice FROM PricebookEntries), \
 													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
 										FROM Product2 \
@@ -128,6 +107,12 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 			return function(){
 				return $localCache.fromCache(query);
 			}
+		},
+		getPriceForProduct : function(productId){
+			var query = "SELECT UnitPrice FROM PricebookEntry WHERE Product2Id = '" + productId + "'";
+			return $q(function(resolve, reject){
+				HerokuService.post("/api/query", {"query" : query}, resolve, reject);
+			})
 		},
 		createProduct : function(product, storeId, callback, error){
 			force.post('/api/shopify/createProduct', product, 'Store__c', storeId, callback, error);

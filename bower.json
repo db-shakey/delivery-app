@@ -19,6 +19,10 @@
     "angular-lazy-img": "^1.2.2",
     "ng-cordova-oauth": "^0.2.5",
     "ionic-native-transitions": "shprink/ionic-native-transitions#^1.0.0-rc9",
-    "ionic-wizard": "^2.0.1"
+    "ionic-wizard": "^2.0.1",
+    "ng-img-crop": "ngImgCrop#^0.3.2"
+  },
+  "dependencies": {
+    "robotodraft": "^1.1.0"
   }
 }

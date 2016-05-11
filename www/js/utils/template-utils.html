@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			<div class="middle-box text-center" ng-if="orderList.length == 0">
-        <i class="icon ion-ios-paper-outline"></i>
+        <i class="icon ion-android-cancel"></i>
         <h3 class="font-bold">There are no orders available at this time.</h3>
       </div>
     </ion-content>
@@ -171,4 +171,17 @@
 			</div>
 		</ion-content>
 	</ion-view>
+</script>
+
+<script id="image-edit-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Edit Product Image</h1>
+			<a class="button button-icon icon ion-close" ng-click="closeModal()"></a>
+    </ion-header-bar>
+    <ion-content class="p-md image-edit-modal">
+      <img-crop image="editImage.old" result-image="editImage.new" area-type="rectangle" aspect-ratio="0.6666" result-image-size='{w: 600,h: 900}'></img-crop>
+			<button class="button button-positive button-block icon-left ion-android-cloud-done" ng-click="saveEdit()">Done</button>
+    </ion-content>
+  </ion-modal-view>
 </script>

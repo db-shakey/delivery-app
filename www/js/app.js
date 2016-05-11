@@ -9,7 +9,7 @@ var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngI
                                         'timer', 'ksSwiper', 'ionic-datepicker', 'angularLazyImg',
                                         'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
                                         'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions',
-                                        'ionic.wizard']);
+                                        'ionic.wizard', 'ngImgCrop']);
 angular.module('templates', []);
 if(ionic.Platform.isAndroid())
   ionic.Platform.isFullScreen=true;

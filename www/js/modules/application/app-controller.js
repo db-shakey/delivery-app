@@ -47,7 +47,7 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
   });
 
   $scope.callSupport = function(event){
-    document.location.href = "tel:+15035681118";
+    window.open("tel:+15035681118");
   }
 });
 
@@ -55,7 +55,7 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
  *  LoginController
  *  @description: Handles login screen when not authenticated with Salesforce
  */
-angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicLoading, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth){
+angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicLoading, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth, $cordovaFacebook){
 
 
   $scope.login = function(){
@@ -79,10 +79,14 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   }
 
   $scope.facebookAuthenticate = function(){
-    $cordovaOauth.facebook("1687129318228339", ["email"]).then(function(result) {
-        console.log(result);
-    }, function(error) {
-        // error
+    $cordovaFacebook.login(["email", "public_profile", "user_location"]).then(function(result){
+      console.log(result);
+      var userId = result.authResponse.userID;
+      return $cordovaFacebook.api(userId + "?fields=location", ["public_profile", "user_location", "email"]);
+    }).then(function(userInfo){
+      console.log(userInfo);
+    }, function(err){
+      console.log(err);
     });
   }
 

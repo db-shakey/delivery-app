@@ -41,28 +41,40 @@ $button-calm-border:				transparent !default;
 $button-balanced-border:		transparent !default;
 $button-stable-border:			transparent !default;
 
-
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/release/fonts" !default;
 
-@font-face {
-	font-family: "Roboto Condensed";
-	src : url('../extras/fonts/RobotoCondensed-Regular.ttf');
-}
-@font-face { 
-	font-family: "FontAwesome";
-	src : url('../extras/fonts/fontawesome-webfont.woff2');
-}
+$RobotoDraftFontPath: "../lib/robotodraft/fonts"; // REMINDER: edit as appropriate!
+$RobotoDraftFontName: "RobotoDraft";
+$RobotoDraftFontVersion: "1.0.0";
+
+$item-thumbnail-width: 60px;
+
+@import "www/lib/robotodraft/sass/robotodraft.scss";
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 @import "www/lib/inspinia/style";
 @import "www/lib/ionic-filter-bar/scss/ionic.filter.bar";
+@import "www/lib/ng-img-crop-full-extended/source/scss/ng-img-crop";
 
 //font-bootstraping fix
 * {-webkit-text-size-adjust:100%;}
 
+//Hack to fix squashed title on iOS
+// ionic issue #4661
+.platform-ios {
+  .title.title-center.header-item {
+    left: 49px!important;
+    right: 49px!important;
+  }
+}
 
+.platform-android {
+  .title.title-left.header-item {
+    right: 68px!important;
+  }
+}
 
 ion-item.bg-positive.item, .bg-positive{
 	background-color : $positive;
@@ -78,7 +90,6 @@ ion-item.bg-positive.item, .bg-positive{
 		background-color: $stable;
 	}
 }
-
 
 .detail-label{
 	text-align: right;
@@ -254,19 +265,6 @@ i.icon.larger{
 	z-index: 11;
 }
 
-ion-list{
-	ion-item.item-thumbnail-left{
-		padding-left:5rem;
-		 a.item-content{
-				padding-left:5rem;
-		 }
-
-		img:first-child{
-			max-width: 60px !important;
-		}
-	}
-}
-
 .platform-android ion-side-menu-content ion-header-bar:nth-child(1) {
   border-top-width: 0;
   box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -280,6 +278,33 @@ select{
 }
 .bg-assertive{
 	background-color: $assertive;
+}
+
+/**
+ *	Component Overrides
+ */
+
+div.list, ion-list{
+	.item-divider{
+		background-color: $white;
+		font-weight: bold;
+		border-top: none;
+		color: $positive;
+	}
+}
+ion-list{
+	ion-item:last-child{
+		margin-bottom: 1rem;
+	}
+}
+div.list{
+	.item-divider:not(:first-child){
+		margin-top: 1rem;
+	}
+}
+
+ion-nav-view{
+	background-color: transparent !important;
 }
 
 /*******
@@ -752,7 +777,7 @@ ion-side-menu{
 }
 
 /**
- * Product List
+ * Variant Edit
  */
 .variant-edit{
 	.list{
@@ -761,7 +786,24 @@ ion-side-menu{
     	margin-top: .2rem;
 		}
 	}
+	ul.mfb-component--br{
+		.ion-android-more-vertical{
+			font-size: 28px;
+		}
+	}
 }
+
+/**
+ * Product List
+ */
+.product-list{
+	ul.mfb-component--br{
+		.ion-android-more-vertical{
+			font-size: 28px;
+		}
+	}
+}
+
 /**
  * New Product
  */
@@ -780,7 +822,20 @@ ion-side-menu{
 	.product-image{
 		border: 1px solid black;
 		height: 45vh;
+    position: relative;
+    button{
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-radius: 0px;
+      box-shadow: 0 5px 5px #888888;
+    }
 	}
+}
+.image-edit-modal{
+  img-crop{
+    max-height: 80%;
+  }
 }
 /********
  * FAB

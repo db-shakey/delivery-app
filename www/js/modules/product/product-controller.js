@@ -6,7 +6,7 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
     filterBarInstance = $ionicFilterBar.show({
       items: $scope.storeList,
       update: function (filteredItems, filterText) {
-				if(filterText && $scope.canLoad){
+				if($scope.canLoad){
 					$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
           $scope.search(filterText, 20);
 				}
@@ -14,7 +14,8 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 			cancel : function(){
 				if($scope.canLoad)
 					$scope.search('');
-			}
+			},
+			initialFilterText : $scope.searchText
     });
   };
 
@@ -68,10 +69,11 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 
 	$scope.$on('$ionicView.beforeEnter', function(){
     $scope.canLoad = true;
+		if($scope.searchString)
+      $scope.showFilterBar();
 
 		if(!$scope.deliveryId)
 			$ionicHistory.clearHistory();
-
 
 		if($scope.deliveryId){
 			$scope.$watch(DeliveryFactory.getDeliveryById($scope.deliveryId), function(delivery){
@@ -252,17 +254,14 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
     filterBarInstance = $ionicFilterBar.show({
       items: $scope.storeList,
       update: function (filteredItems, filterText) {
-				if(filterText && $scope.canLoad){
+				if($scope.canLoad){
 					$ionicLoading.show({
               template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
           });
           $scope.searchProducts(filterText);
 				}
       },
-			cancel : function(){
-				if($scope.canLoad)
-					$scope.searchProducts('', 10);
-			}
+			initialFilterText : $scope.searchString
     });
   };
 
@@ -272,14 +271,19 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 	}
 
 	$scope.$on('$ionicView.beforeEnter', function(){
-      $scope.productList = [];
 			$scope.canLoad = true;
-      $scope.searchProducts('', 10);
+			if($scope.searchString)
+	      $scope.showFilterBar();
+
+			if(!$scope.productList){
+				$scope.searchProducts('', 10);
+			}
+
 
   });
 });
 
-angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $interval, $q, StoreFactory, $cordovaImagePicker, $cordovaCamera, $timeout, ProductFactory, ImageService, ProductValidator, Log){
+angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $interval, $q, StoreFactory, $cordovaImagePicker, $cordovaCamera, $timeout, $ionicModal, ProductFactory, ImageService, ProductValidator, Log, JSUtils){
 
 	$scope.getStore = function(noCache){
 		$scope.$watch(StoreFactory.getStoreById($state.params.storeId, noCache), function(newValue, oldValue){
@@ -312,8 +316,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 					]
 				}
 				$scope.meta = {
-					brand : newValue[0].Brand__c,
-					district : newValue[0].Store__r.Shopping_District__c
+					brand : newValue[0].Brand__c
 				};
 				$scope.tag = {
 					externalModel : tags
@@ -379,44 +382,63 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 				Log.message(JSON.stringify(err.data), true, "Error");
 			})
 		}else{
-			$scope.product.metafields = new Array();
-			$scope.product.published = "false";
-			$scope.product.published_scope = "web";
-			$scope.product.body_html = '<span style="font-weight:700;">Description:</span> <br/>\
-													<span style="font-weight:700;">Fit:</span> <br/>\
-													<span style="font-weight:700;">Materials:</span> <br/>\
-													<span style="font-weight:700;">Condition:</span> <br/> Like New Very Good Good<br/>\
-													<span style="font-weight:700;">Notes:</span> <br/>\
-													<span style="font-weight:700;">Care:</span>';
-			$scope.product.vendor = $scope.store.External_Id__c;
-			$scope.product.options = [
-				{
-					name : "Size"
-				},
-				{
-					name : "Color"
-				}
-			];
-			$scope.product.variants = [
-				{
-					"option1" : "Small",
-					"option2" : "Blue",
-					"inventory_management" : "shopify",
-					"inventory_policy" : "deny",
-					"sku" : $scope.product.sku
-				}
-			];
-			$scope.product.metafields.push({
-				"key" : "brand",
-				"value" : $scope.meta.brand,
-				"value_type" : "string",
-				"namespace" : "product"
-			});
-			$scope.product.metafields.push({
-				"key" : "cluster",
-				"value" : $scope.meta.district,
-				"value_type" : "string",
-				"namespace" : "product"
+			$scope.product = JSUtils.mergeOptions($scope.product, {
+				published : false,
+				published_scope : "web",
+				body_html : '<span style="font-weight:700;">Description:</span> <br/>\
+														<span style="font-weight:700;">Fit:</span> <br/>\
+														<span style="font-weight:700;">Materials:</span> <br/>\
+														<span style="font-weight:700;">Condition:</span> <br/> Like New Very Good Good<br/>\
+														<span style="font-weight:700;">Notes:</span> <br/>\
+														<span style="font-weight:700;">Care:</span>',
+				vendor : $scope.store.External_Id__c,
+				options : [
+					{name : 'Size'},
+					{name : 'Color'}
+				],
+				variants : [
+					{
+						"option1" : "Small",
+						"option2" : "Blue",
+						"inventory_management" : "shopify",
+						"inventory_policy" : "deny",
+						"sku" : $scope.product.sku,
+						metafields : [
+							{
+								"key" : "metaprice",
+								"value" : ($scope.meta.price) ? $scope.meta.price * 100 : 0,
+								"value_type" : "integer",
+								"namespace" : "price"
+							},
+							{
+								"key" : "metalistprice",
+								"value" : ($scope.meta.price) ? $scope.meta.price * 100 : 0,
+								"value_type" : "integer",
+								"namespace" : "price"
+							},
+							{
+								"key" : "metalistpricecurrent",
+								"value" : ($scope.meta.price) ? $scope.meta.price * 100 : 0,
+								"value_type" : "integer",
+								"namespace" : "price"
+							}
+						]
+					}
+				],
+				metafields : [
+					{
+						"key" : "brand",
+						"value" : ($scope.meta.brand) ? $scope.meta.brand : 'N/A',
+						"value_type" : "string",
+						"namespace" : "product"
+					},
+					{
+						"key" : "cluster",
+						"value" : ($scope.store.Shopping_District__c) ? $scope.store.Shopping_District__c : 'N/A',
+						"value_type" : "string",
+						"namespace" : "product"
+					}
+				]
 			});
 			ProductFactory.createProduct($scope.product, $scope.store.Id, function(res){
 				var tries = 0;
@@ -430,6 +452,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 						}else if(tries >= 6){
 							$ionicLoading.hide();
 							$interval.cancel(checkProduct);
+							Log.message("The product is taking longer than expected to create. It will be available in the product list when it is finished.", true, "Warning");
 							$ionicHistory.goBack();
 						}
 						tries++;
@@ -450,13 +473,13 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 							destinationType: Camera.DestinationType.DATA_URL,
 							sourceType: Camera.PictureSourceType.CAMERA,
 							allowEdit : true,
+							encodingType: Camera.EncodingType.PNG,
+							saveToPhotoAlbum : true,
 							targetWidth: 600,
-							targetHeight: 900,
-							encodingType: Camera.EncodingType.JPEG
+							targetHeight: 900
 					};
 					$cordovaCamera.getPicture(options).then(function(data) {
 						$scope.product.images[0] = {"attachment": data}
-						console.log($scope.product);
 					});
 			}catch(err){
 				Log.message("Cannot access camera", true, "Error");
@@ -465,8 +488,6 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 	$scope.getPictureFromGallery = function(e) {
 			var options = {
 					maximumImagesCount: 1,
-					width: 600,
-					height: 900,
 					quality: 100
 			};
 
@@ -478,7 +499,6 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 											if(data.indexOf('base64,') != -1)
 												data = data.substring(data.indexOf('base64,') + 7);
 											$timeout(function(){
-												console.log($scope.product);
 												$scope.product.images[0] = {"attachment": data};
 											})
 										}, "image/jpeg");
@@ -495,6 +515,28 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		var ionAutocompleteElement = document.getElementsByClassName("tags");
     angular.element(ionAutocompleteElement).controller('ionAutocomplete').fetchSearchQuery("", true);
     angular.element(ionAutocompleteElement).controller('ionAutocomplete').showModal();
+	}
+	$scope.closeModal = function(){
+		$scope.modal.remove();
+	}
+	$scope.saveEdit = function(){
+		if($scope.editImage.new)
+			$scope.product.images[0].attachment = $scope.editImage.new.substring($scope.editImage.new.indexOf('base64,') + 7);
+		delete $scope.product.images[0].src;
+		$scope.modal.remove();
+	}
+
+	$scope.doCropImage = function(){
+		$scope.editImage = {
+			old : ($scope.product.images[0].attachment) ? 'data:image/jpeg;base64,' + $scope.product.images[0].attachment : $scope.product.images[0].src
+		};
+		$ionicModal.fromTemplateUrl("image-edit-modal.html", {
+			scope : $scope,
+			animation : "slide-in-up"
+		}).then(function(modal){
+			$scope.modal = modal;
+			$scope.modal.show();
+		})
 	}
 
 	$scope.$on('$ionicView.beforeEnter', function(){
@@ -576,41 +618,47 @@ angular.module('dorrbell').controller('DbProductDetailController', function($sco
 
 angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicHistory, $cordovaBarcodeScanner, $q, $filter, ProductFactory, MetadataFactory, Log){
 	$scope.getProduct = function(noCache){
-		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
+		$scope.$watch(ProductFactory.getProductDetailsById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
 				$scope.parentProduct = newValue[0];
-				if(newValue != oldValue)
-					$scope.variant.sku = $scope.parentProduct.SKU__c;
+				$scope.variant.sku = $scope.parentProduct.SKU__c;
+				if(newValue[0].Variants__r && newValue[0].Variants__r.records.length > 0){
+					ProductFactory.getPriceForProduct(newValue[0].Variants__r.records[0].Id).then(function(results){
+						if(results && results.length > 0)
+							$scope.metaprice.price = results[0].UnitPrice;
+					})
+				}
 			}
-
 			$scope.$broadcast('scroll.refreshComplete');
 		})
 	}
 
 	$scope.saveVariant = function(goToNew){
-		$scope.variant.metafields = new Array();
 		$scope.menu = "closed";
 		$ionicLoading.show({
     	template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
   	});
-		$scope.variant.metafields.push({
-			"key" : "metaprice",
-			"value" : $scope.metaprice.price * 100,
-			"value_type" : "integer",
-			"namespace" : "price"
-		});
-		$scope.variant.metafields.push({
-			"key" : "metalistprice",
-			"value" : $scope.metaprice.price * 100,
-			"value_type" : "integer",
-			"namespace" : "price"
-		});
-		$scope.variant.metafields.push({
-			"key" : "metalistpricecurrent",
-			"value" : $scope.metaprice.price * 100,
-			"value_type" : "integer",
-			"namespace" : "price"
-		});
+
+		$scope.variant.metafields = [
+			{
+				"key" : "metaprice",
+				"value" : $scope.metaprice.price * 100,
+				"value_type" : "integer",
+				"namespace" : "price"
+			},
+			{
+				"key" : "metalistprice",
+				"value" : $scope.metaprice.price * 100,
+				"value_type" : "integer",
+				"namespace" : "price"
+			},
+			{
+				"key" : "metalistpricecurrent",
+				"value" : $scope.metaprice.price * 100,
+				"value_type" : "integer",
+				"namespace" : "price"
+			}
+		];
 		$scope.variant.inventory_policy = "deny";
 		$scope.variant.inventory_management = "shopify";
 		if($scope.parentProduct.Image__r)
@@ -671,7 +719,7 @@ angular.module('dorrbell').controller('VariantNewController', function($scope, $
 
 angular.module('dorrbell').controller('VariantEditController', function($scope, $ionicLoading, $state, $timeout, $ionicHistory, $cordovaBarcodeScanner, $q, $filter, ProductFactory, Log){
 	$scope.getProduct = function(noCache){
-		$scope.$watch(ProductFactory.getVariantById($state.params.productId, noCache), function(newValue, oldValue){
+		$scope.$watch(ProductFactory.getProductDetailsById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
 				$scope.product = newValue[0];
 			}

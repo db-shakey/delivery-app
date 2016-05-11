@@ -23,7 +23,9 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
           });
           $scope.searchStores(filterText);
         }
-      }
+      },
+      initialFilterText : $scope.searchString,
+      favoritesEnabled : false
     });
   };
 
@@ -33,9 +35,11 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
   }
 
   $scope.$on('$ionicView.beforeEnter', function(){
+    if($scope.searchString)
+      $scope.showFilterBar();
+
     $scope.canLoad = true;
     if(!$scope.storeList){
-      $scope.storeList = [];
       $scope.searchStores('', 10);
     }
   });

@@ -15,16 +15,96 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+/* BEGIN Thin */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en");
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @font-face {
-  font-family: "Roboto Condensed";
-  src: url("../extras/fonts/RobotoCondensed-Regular.ttf"); }
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Thin/RobotoDraft-Thin.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Thin/RobotoDraft-Thin.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Thin/RobotoDraft-Thin.ttf?v=1.0.0") format("truetype");
+  font-weight: 100;
+  font-style: normal; }
+
+/* END Thin */
+/* BEGIN Light */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Light/RobotoDraft-Light.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Light/RobotoDraft-Light.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Light/RobotoDraft-Light.ttf?v=1.0.0") format("truetype");
+  font-weight: 300;
+  font-style: normal; }
+
+/* END Light */
+/* BEGIN Regular */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.ttf?v=1.0.0") format("truetype");
+  font-weight: 400;
+  font-style: normal; }
 
 @font-face {
-  font-family: "FontAwesome";
-  src: url("../extras/fonts/fontawesome-webfont.woff2"); }
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Regular/RobotoDraft-Regular.ttf?v=1.0.0") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
 
+/* END Regular */
+/* BEGIN Italic */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.ttf?v=1.0.0") format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Italic/RobotoDraft-Italic.ttf?v=1.0.0") format("truetype");
+  font-weight: normal;
+  font-style: italic; }
+
+/* END Italic */
+/* BEGIN Medium */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Medium/RobotoDraft-Medium.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Medium/RobotoDraft-Medium.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Medium/RobotoDraft-Medium.ttf?v=1.0.0") format("truetype");
+  font-weight: 500;
+  font-style: normal; }
+
+/* END Medium */
+/* BEGIN Bold */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.ttf?v=1.0.0") format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Bold/RobotoDraft-Bold.ttf?v=1.0.0") format("truetype");
+  font-weight: bold;
+  font-style: normal; }
+
+/* END Bold */
+/* BEGIN Bold Italic */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.ttf?v=1.0.0") format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/BoldItalic/RobotoDraft-BoldItalic.ttf?v=1.0.0") format("truetype");
+  font-weight: bold;
+  font-style: italic; }
+
+/* END Bold Italic */
+/* BEGIN Black */
+@font-face {
+  font-family: RobotoDraft;
+  src: url("../lib/robotodraft/fonts/Black/RobotoDraft-Black.woff2?v=1.0.0") format("woff2"), url("../lib/robotodraft/fonts/Black/RobotoDraft-Black.woff?v=1.0.0") format("woff"), url("../lib/robotodraft/fonts/Black/RobotoDraft-Black.ttf?v=1.0.0") format("truetype");
+  font-weight: 900;
+  font-style: normal; }
+
+/* END Black */
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -3349,7 +3429,7 @@ body,
   word-wrap: break-word;
   font-size: 14px;
   font-family: -apple-system;
-  font-family: "-apple-system", "FontAwesome", sans-serif;
+  font-family: "-apple-system", "Helvetica Neue", "RobotoDraft", "Segoe UI", sans-serif;
   line-height: 20px;
   text-rendering: optimizeLegibility;
   -webkit-backface-visibility: hidden;
@@ -3605,7 +3685,7 @@ h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   color: #676a6c;
   font-weight: 500;
-  font-family: "-apple-system", "FontAwesome", sans-serif;
+  font-family: "-apple-system", "Helvetica Neue", "RobotoDraft", "Segoe UI", sans-serif;
   line-height: 1.2; }
   h1 small, h2 small, h3 small, h4 small, h5 small, h6 small,
   .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small {
@@ -5114,7 +5194,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   white-space: nowrap;
   font-weight: 400;
   font-size: 14px;
-  font-family: "-apple-system", "FontAwesome", sans-serif;
+  font-family: "-apple-system", "Helvetica Neue", "RobotoDraft", "Segoe UI", sans-serif;
   opacity: 0.7; }
   .tab-item:hover {
     cursor: pointer; }
@@ -6336,7 +6416,7 @@ button.item.item-button-right {
 .item-thumbnail-left,
 .item-thumbnail-left .item-content {
   padding-top: 8px;
-  padding-left: 106px;
+  padding-left: 86px;
   min-height: 100px; }
   .item-thumbnail-left > img:first-child,
   .item-thumbnail-left .item-image,
@@ -6345,7 +6425,7 @@ button.item.item-button-right {
     position: absolute;
     top: 10px;
     left: 10px;
-    max-width: 80px;
+    max-width: 60px;
     max-height: 80px;
     width: 100%;
     height: 100%; }
@@ -6359,7 +6439,7 @@ button.item.item-button-right {
 .item-thumbnail-right,
 .item-thumbnail-right .item-content {
   padding-top: 8px;
-  padding-right: 106px;
+  padding-right: 86px;
   min-height: 100px; }
   .item-thumbnail-right > img:first-child,
   .item-thumbnail-right .item-image,
@@ -6368,7 +6448,7 @@ button.item.item-button-right {
     position: absolute;
     top: 10px;
     right: 10px;
-    max-width: 80px;
+    max-width: 60px;
     max-height: 80px;
     width: 100%;
     height: 100%; }
@@ -7544,7 +7624,7 @@ input,
 button,
 select,
 textarea {
-  font-family: "-apple-system", "FontAwesome", sans-serif; }
+  font-family: "-apple-system", "Helvetica Neue", "RobotoDraft", "Segoe UI", sans-serif; }
 
 .item-input {
   display: -webkit-box;
@@ -18891,8 +18971,44 @@ body.md-skin {
 .filter-bar-hide {
   display: none; }
 
+img-crop {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  overflow: hidden; }
+  img-crop canvas {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    /* mobile webkit */ }
+  img-crop .loading {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute; }
+
 * {
   -webkit-text-size-adjust: 100%; }
+
+.platform-ios .title.title-center.header-item {
+  left: 49px !important;
+  right: 49px !important; }
+
+.platform-android .title.title-left.header-item {
+  right: 68px !important; }
 
 ion-item.bg-positive.item, .bg-positive {
   background-color: #14a1bf;
@@ -19065,13 +19181,6 @@ i.icon.larger {
 .popup-open .backdrop {
   z-index: 11; }
 
-ion-list ion-item.item-thumbnail-left {
-  padding-left: 5rem; }
-  ion-list ion-item.item-thumbnail-left a.item-content {
-    padding-left: 5rem; }
-  ion-list ion-item.item-thumbnail-left img:first-child {
-    max-width: 60px !important; }
-
 .platform-android ion-side-menu-content ion-header-bar:nth-child(1) {
   border-top-width: 0;
   box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26); }
@@ -19085,6 +19194,24 @@ select {
 
 .bg-assertive {
   background-color: #d4271a; }
+
+/**
+ *	Component Overrides
+ */
+div.list .item-divider, ion-list .item-divider {
+  background-color: #fff;
+  font-weight: bold;
+  border-top: none;
+  color: #14a1bf; }
+
+ion-list ion-item:last-child {
+  margin-bottom: 1rem; }
+
+div.list .item-divider:not(:first-child) {
+  margin-top: 1rem; }
+
+ion-nav-view {
+  background-color: transparent !important; }
 
 /*******
  * Calendar overrides
@@ -19460,11 +19587,20 @@ ion-view ion-header-bar.bar-subheader {
     text-align: left; }
 
 /**
- * Product List
+ * Variant Edit
  */
 .variant-edit .list .item-button-right button {
   padding: .2rem 1rem .2rem .7rem;
   margin-top: .2rem; }
+
+.variant-edit ul.mfb-component--br .ion-android-more-vertical {
+  font-size: 28px; }
+
+/**
+ * Product List
+ */
+.product-list ul.mfb-component--br .ion-android-more-vertical {
+  font-size: 28px; }
 
 /**
  * New Product
@@ -19480,7 +19616,17 @@ ion-view ion-header-bar.bar-subheader {
 
 .product-new .product-image, .variant-edit .product-image {
   border: 1px solid black;
-  height: 45vh; }
+  height: 45vh;
+  position: relative; }
+  .product-new .product-image button, .variant-edit .product-image button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0px;
+    box-shadow: 0 5px 5px #888888; }
+
+.image-edit-modal img-crop {
+  max-height: 80%; }
 
 /********
  * FAB
