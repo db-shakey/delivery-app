@@ -185,3 +185,15 @@
     </ion-content>
   </ion-modal-view>
 </script>
+
+<script id="store-hours.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title text-center">{{store.Name}} Hours</h1>
+			<a class="button button-icon icon ion-close" ng-click="closeModal()"></a>
+    </ion-header-bar>
+    <ion-content class="p-md">
+      <pre>{{store.Google_Store_Hours__c}}</pre>
+    </ion-content>
+  </ion-modal-view>
+</script>

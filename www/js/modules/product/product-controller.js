@@ -449,7 +449,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 							$interval.cancel(checkProduct);
 							$ionicHistory.currentView($ionicHistory.backView());
 							$state.go("db.productDetail", {productId : results[0].Id});
-						}else if(tries >= 6){
+						}else if(tries >= 30){
 							$ionicLoading.hide();
 							$interval.cancel(checkProduct);
 							Log.message("The product is taking longer than expected to create. It will be available in the product list when it is finished.", true, "Warning");

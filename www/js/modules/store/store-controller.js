@@ -46,7 +46,7 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
 
 });
 
-angular.module('dorrbell').controller("StoreDetailController", function($scope, $state, StoreFactory){
+angular.module('dorrbell').controller("StoreDetailController", function($scope, $state, $ionicModal, StoreFactory){
   $scope.getStore = function( noCache){
     $scope.$watch(StoreFactory.getStoreById($state.params.storeId, noCache), function(newValue, oldValue) {
       if (newValue){
@@ -60,6 +60,33 @@ angular.module('dorrbell').controller("StoreDetailController", function($scope, 
         }
       }
       $scope.$broadcast('scroll.refreshComplete');
+    });
+  }
+
+  $scope.goToUrl = function(url){
+    window.open(url, '_system', 'location=yes');
+  }
+
+  $scope.doCall = function(phone){
+    window.open("tel:+1" + phone);
+  }
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.openHours = function(){
+    $ionicModal.fromTemplateUrl('store-hours.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
+
+    // Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
     });
   }
 
