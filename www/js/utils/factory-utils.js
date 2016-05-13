@@ -71,22 +71,74 @@ angular.module('dorrbell').factory("$localCache", function($rootScope, JSUtils, 
 	}
 })
 
-angular.module('dorrbell').factory("$localStorage", function($window){
+angular.module('dorrbell').factory("$localStorage", function($window, $q){
+	var ss;
+	var useLocal = true;
+	if(window.cordova){
+		ss = new cordova.plugins.SecureStorage(
+			function () {useLocal = false},
+			function (error){useLocal = true},
+		'dorrbell');
+	}
+
 	return {
 	    set: function(key, value) {
-	      $window.localStorage[key] = value;
+				return $q(function(resolve, reject){
+					if(useLocal)
+						resolve($window.localStorage[key] = value);
+					else{
+						ss.set(
+							resolve,
+							reject,
+							key,
+							value
+						);
+					}
+				});
 	    },
 	    get: function(key, defaultValue) {
-	      return $window.localStorage[key] || defaultValue;
+				return $q(function(resolve, reject){
+					if(useLocal)
+						resolve($window.localStorage[key] || defaultValue);
+					else
+						ss.get(resolve, function(){resolve(defaultValue);}, key);
+				});
 	    },
 	    setObject: function(key, value) {
-	      $window.localStorage[key] = JSON.stringify(value);
+				return $q(function(resolve, reject){
+					if(useLocal)
+						resolve($window.localStorage[key] = JSON.stringify(value));
+					else{
+						ss.set(
+							resolve,
+							reject,
+							key,
+							JSON.stringify(value)
+						);
+					}
+				});
 	    },
 	    getObject: function(key) {
-	      return JSON.parse($window.localStorage[key] || '{}');
+				return $q(function(resolve, reject){
+					if(useLocal)
+						resolve(JSON.parse($window.localStorage[key] || '{}'));
+					else
+						ss.get(function(v){
+							resolve(JSON.parse(v || '{}'));
+						}, reject, key);
+				});
 	    },
 	    deleteObject : function(key){
-	    	$window.localStorage.removeItem(key);
+				return $q(function(resolve, reject){
+					if(useLocal)
+						resolve($window.localStorage.removeItem(key));
+					else{
+						ss.remove(
+							resolve,
+							reject,
+							key);
+					}
+				});
 	    }
 	  }
 });
@@ -145,10 +197,8 @@ angular.module('dorrbell').factory("RecordTypeFactory", function(force){
 angular.module('dorrbell').factory("force", function(Log, HerokuService, $rootScope, $localCache){
 
 	return{
-		query : function(query, callback){
-			HerokuService.post("/api/query", {"query" : query}, callback, function(err){
-				console.log(err);
-			});
+		query : function(query, callback, error){
+			HerokuService.post("/api/query", {"query" : query}, callback, error);
 		},
 		describe : function(objectName, callback){
 			HerokuService.get("/api/describe/" + objectName, callback, this.onError);
@@ -165,6 +215,9 @@ angular.module('dorrbell').factory("force", function(Log, HerokuService, $rootSc
 				if(callback)
 					callback(res);
 			}, errorHandler);
+		},
+		get : function(endpoint, success, error){
+			HerokuService.get(endpoint, success, error);
 		},
 		onError : function(err){
 			HerokuService.onDbError(null, err);

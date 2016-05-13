@@ -213,8 +213,8 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 	$scope.storeId = $state.params.storeId;
 
 	$scope.searchProducts = function(searchText, limit){
-		$scope.limit = limit;
-		$scope.searchString = searchText;
+		$scope.limit = (limit) ? limit : 10;
+		$scope.searchString = (searchText) ? searchText : '';
 		SearchFactory.searchItems(searchText, $state.params.storeId, limit, function(result){
 			$scope.productList = result.records;
 			$scope.hasMore = result.hasMore;
@@ -272,12 +272,12 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 
 	$scope.$on('$ionicView.beforeEnter', function(){
 			$scope.canLoad = true;
-			if($scope.searchString)
-	      $scope.showFilterBar();
-
-			if(!$scope.productList){
-				$scope.searchProducts('', 10);
+			if($scope.searchString){
+				$scope.showFilterBar();
 			}
+
+
+			$scope.searchProducts($scope.searchString, $scope.limit);
 
 
   });

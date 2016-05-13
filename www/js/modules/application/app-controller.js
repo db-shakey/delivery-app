@@ -1,30 +1,43 @@
 angular.module('dorrbell').controller("BaseController", function($scope, $rootScope, $state, $ionicHistory, $ionicLoading, HerokuService, MetadataFactory){
 
+  $scope.$on('$ionicView.beforeEnter', function(){
+    console.log('before enter');
+    HerokuService.refreshToken(function(){
+      //Cache Metadata
+      /*
+      MetadataFactory.describe("Order");
+      MetadataFactory.describe("Store__c");
+      MetadataFactory.describe("Order_Store__c");
+      MetadataFactory.describe("OrderItem");
+      */
+      $ionicHistory.nextViewOptions({
+        disableBack: true,
+        historyRoot: true
+      });
 
-  HerokuService.refreshToken(function(){
-    //Cache Metadata
-    MetadataFactory.describe("Order");
-    MetadataFactory.describe("Store__c");
-    MetadataFactory.describe("Order_Store__c");
-    MetadataFactory.describe("OrderItem");
-    $ionicHistory.nextViewOptions({
-      disableBack: true
-    });
+      $ionicLoading.hide();
+      if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
+        $state.go("app.orders", {type : "Unassigned_Order"});
+      else if($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
+        $state.go("ret.deliveryList", {type : "New"});
+      else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
+        $state.go("db.storeList");
+      else{
+        $state.go("unavailable");
+      }
 
-    $ionicLoading.hide();
-    if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
-      $state.go("app.orders", {type : "Unassigned_Order"});
-    else if($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
-      $state.go("ret.deliveryList", {type : "New"});
-    else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
-      $state.go("db.storeList");
-  }, function(err){
-    $ionicHistory.nextViewOptions({
-      disableBack: true,
-      historyRoot: true
+
+    }, function(err){
+      $ionicHistory.nextViewOptions({
+        disableBack: true,
+        historyRoot: true
+      });
+      $state.go("login");
     });
-    $state.go("login");
   });
+
+
+
 
 });
 
@@ -55,7 +68,7 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
  *  LoginController
  *  @description: Handles login screen when not authenticated with Salesforce
  */
-angular.module('dorrbell').controller("LoginController", function($scope, $state, HerokuService, Log, $ionicModal, $ionicLoading, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth, $cordovaFacebook){
+angular.module('dorrbell').controller("LoginController", function($scope, $state, $q, HerokuService, force, ImageService, Log, $ionicModal, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth, $cordovaFacebook){
 
 
   $scope.login = function(){
@@ -64,14 +77,8 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
     });
 
     HerokuService.login($scope.user, function(res){
-      if($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact')
-        $state.go("app.orders");
-      else if($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
-        $state.go("ret.deliveryList");
-      else if($rootScope.currentUser.RecordType.DeveloperName == 'Dorrbell_Employee_Contact')
-        $state.go("db.storeList");
-
       $ionicLoading.hide();
+      $state.go("home");
     }, function(err){
         $ionicLoading.hide();
         Log.message((err && err.data) ? err.data.message : 'There was a problem logging in', true, 'Login Failed');
@@ -79,13 +86,37 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   }
 
   $scope.facebookAuthenticate = function(){
+    var authResponse;
     $cordovaFacebook.login(["email", "public_profile", "user_location"]).then(function(result){
-      console.log(result);
-      var userId = result.authResponse.userID;
-      return $cordovaFacebook.api(userId + "?fields=location", ["public_profile", "user_location", "email"]);
+      $scope.closeModal();
+      $ionicLoading.show({
+          template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
+      });
+      authResponse = result.authResponse;
+      return $cordovaFacebook.api(result.authResponse.userID + "?fields=location{location},first_name,last_name,locale,middle_name,payment_pricepoints,relationship_status,gender,picture,email");
     }).then(function(userInfo){
-      console.log(userInfo);
+      ImageService.convertUrlToBase64(userInfo.picture.data.url, function(data) {
+        userInfo.attachment = data;
+        userInfo.accessToken = authResponse.accessToken;
+        force.post('/api/fb-register', userInfo, null, null, function(res){
+          HerokuService.login({
+              username: userInfo.email,
+              password: userInfo.accessToken
+          }, function(res) {
+              $ionicLoading.hide();
+              $state.go("home");
+          }, function(err) {
+              console.log('errored');
+              $ionicLoading.hide();
+              $state.go("login");
+          });
+        }, function(err){
+          $ionicLoading.hide();
+          Log.message("There was an error authenticating", true, "Registration Failed");
+        });
+      }, "image/jpeg");
     }, function(err){
+      $ionicLoading.hide();
       console.log(err);
     });
   }
@@ -98,48 +129,6 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
     });
   }
 
-
-  /*
-  $scope.showBeta = function(){
-    $scope.checkBeta = false;
-    try{
-      cordova.plugins.Keyboard.disableScroll(false);
-    }catch(e){
-      console.log(e);
-    }
-
-
-    var p = $ionicPopup.show({
-      template : '<input type="text" ng-model="user.beta_key"/>',
-      title : 'Enter Beta Key',
-      subTitle : 'Please enter the beta key you received to continue.',
-      scope : $scope,
-      buttons : [
-        {text : 'Cancel'},
-        {
-          text : '<b>Confirm</b>',
-          type : 'button-positive',
-          onTap : function(e){
-            $scope.checkBeta = true;
-          }
-        }
-      ]
-    }).then(function(){
-      try{
-        cordova.plugins.Keyboard.disableScroll(true);
-      }catch(e){console.log(e)};
-
-      if($scope.checkBeta){
-        HerokuService.get('/api/beta/' + $scope.user.beta_key, function(res){
-          $ionicViewSwitcher.nextDirection('forward');
-          $state.go("register", {contact : res});
-        }, function(err){
-          Log.message(err.data.message, true, 'Invalid Key');
-        })
-      }
-    });
-  }
-  */
   $scope.checkBeta = function(){
     $scope.modal.remove();
 
@@ -178,7 +167,7 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   });
 });
 
-angular.module('dorrbell').controller("RegisterController", function($scope, $state, RegistrationValidator, HerokuService, Log) {
+angular.module('dorrbell').controller("RegisterController", function($scope, $state, RegistrationValidator, force, Log) {
     $scope.contact = $state.params.contact;
     $scope.contact.Password__c = null;
     $scope.submit = function() {
@@ -186,9 +175,9 @@ angular.module('dorrbell').controller("RegisterController", function($scope, $st
           Log.message("Your passwords do not match.", true, "Password Mismatch");
         }else if (RegistrationValidator.validateContact($scope.contactForm)) {
             delete $scope.contact.password_confirm;
-            HerokuService.post('/api/register/' + $scope.contact.Id, $scope.contact,
+            force.post('/api/register/' + $scope.contact.Id, $scope.contact, null, null,
                 function(res) {
-                    if (res.sucess = true) {
+                    if (res.sucess == true) {
                         HerokuService.login({
                             username: $scope.contact.Email,
                             password: $scope.contact.Password__c

@@ -1,4 +1,4 @@
-angular.module('dorrbell').factory("DeliveryFactory", function(force, $rootScope, $localCache, HerokuService){
+angular.module('dorrbell').factory("DeliveryFactory", function(force, $rootScope, $localCache){
 	var cache = {};
 	return {
 		getDeliveriesForOrder : function(orderId, noCache){
@@ -30,7 +30,6 @@ angular.module('dorrbell').factory("DeliveryFactory", function(force, $rootScope
 							FROM Order_Store__c \
 							WHERE Store__c = '" + $rootScope.currentUser.Store__c + "' \
 							AND Order__r.In_Home_Try_On_Start__c > " + beginDate.toISOString() + " AND Order__r.In_Home_Try_On_Start__c < " + endDate.toISOString();
-			console.log(query);
 			return $localCache.watchRecords(query, noCache);
 		},
 		getDeliveryById : function(deliveryId, noCache){
@@ -78,7 +77,7 @@ angular.module('dorrbell').factory("DeliveryFactory", function(force, $rootScope
 			force.update("Order_Store__c", data, callback);
 		},
 		createOrderItem : function(PricebookEntry, OrderShopifyId, orderStoreId, callback, error){
-			HerokuService.post("/api/createOrderItem", {"PricebookEntry" : PricebookEntry, "OrderId" : OrderShopifyId, "ContactId" : $rootScope.currentUser.Id}, function(res){
+			force.post("/api/createOrderItem", {"PricebookEntry" : PricebookEntry, "OrderId" : OrderShopifyId, "ContactId" : $rootScope.currentUser.Id}, 'Order_Store__c', orderStoreId,  function(res){
 				if(res == "Ok"){
 					$localCache.triggerUpdate("Order_Store__c", orderStoreId);
 					callback();
@@ -132,15 +131,15 @@ angular.module('dorrbell').factory("DeliveryItemFactory", function(force, $rootS
 	}
 });
 
-_app.factory("SearchFactory", function(force, $rootScope, HerokuService){
+_app.factory("SearchFactory", function(force, $rootScope){
 	return {
 		searchItems : function(searchText, store, limit, coords, callback){
 			searchText = (!searchText || searchText.trim().length == 0) ? ' ' : searchText;
 			store = (!store || store.trim().length == 0) ? ' ' : store;
-			HerokuService.get("/api/searchAllItems/" + encodeURIComponent(searchText) + "/" + store + "/"  + limit, callback);
+			force.get("/api/searchAllItems/" + encodeURIComponent(searchText) + "/" + store + "/"  + limit, callback);
 		},
 		searchByBarcode : function(barcode, store, callback){
-			HerokuService.get("/api/searchProductByBarcode/" + barcode + "/" + store, callback);
+			force.get("/api/searchProductByBarcode/" + barcode + "/" + store, callback);
 		}
 	}
 });

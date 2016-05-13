@@ -434,6 +434,8 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 	var wsEndpoint = "ws://shrouded-hollows-1707.herokuapp.com";
 	//var endpoint = "http://localhost:5000";
 	//var wsEndpoint = "ws://localhost:5000";
+	//var endpoint = "http://24.247.172.101:5000";
+	//var wsEndpoint = "ws://24.247.172.101:5000";
 
 	var storage_id = "doorbell_auth";
 	var storage_user = "dorrbell_user";
@@ -454,11 +456,12 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 	this.login = function(data, callback, error){
 		var that = this;
 		this.post('/api/authenticate', data, function(res){
-			console.log('setting storage user');
-			$localStorage.setObject(storage_user, data);
-	      	$localStorage.setObject(storage_id, res.token);
-	      	that.setSessionUser(callback);
-	    }, error)
+			$localStorage.setObject(storage_user, data).then(function(){
+				return $localStorage.setObject(storage_id, res.token)
+			}).then(function(){
+				that.setSessionUser(callback);
+			}, error);
+		}, error);
 	}
 
 	this.refreshToken = function(callback, error){
@@ -485,11 +488,10 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 	}
 
 	this.trySavedCreds = function(callback, error){
-		if($localStorage.getObject(storage_user)){
-			this.login($localStorage.getObject(storage_user), callback, error);
-		}else{
-			error();
-		}
+		var that = this;
+		$localStorage.getObject(storage_user).then(function(user){
+			that.login(user, callback, error);
+		}, error);
 	}
 
 	this.revoke = function(){
@@ -499,55 +501,60 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 
 	this.get = function(what, callback, errorCallback){
 		var that = this;
-		var token = this.getToken();
-		$http({
-			method : 'GET',
-			url : endpoint + what,
-			headers : {
-				'x-access-token' : this.getToken(),
-				'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
-			}
-		}).then(function(response){
-			if(response.data)
-				callback(response.data);
-			else
-				callback(response);
-		}, function(err){
-			if(errorCallback)
-				errorCallback(err);
-			else
-				that.onDbError(function(){
-					that.get(what, callback, errorCallback);
-				}, err);
-		});
+		this.getToken().then(function(token){
+			$http({
+				method : 'GET',
+				url : endpoint + what,
+				headers : {
+					'x-access-token' : token,
+					'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
+				}
+			}).then(function(response){
+				if(response.data)
+					callback(response.data);
+				else
+					callback(response);
+			}, function(err){
+				if(errorCallback)
+					errorCallback(err);
+				else
+					that.onDbError(function(){
+						that.get(what, callback, errorCallback);
+					}, err);
+			});
+		}, errorCallback);
 	}
 
 	this.post = function(what, data, callback, errorCallback, silent){
 		var that = this;
-		$http({
-			method : 'POST',
-			url : endpoint + what,
-			data : data,
-			headers : {
-				'Content-Type' : 'application/json',
-				'x-access-token' : this.getToken(),
-				'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
-			}
-		}).then(function(response){
-			if(response.data)
-				callback(response.data);
-			else
-				callback(response);
-		}, function(err){
-			if(errorCallback)
-				errorCallback(err);
-			else
-				that.onDbError(err);
-		});
+		this.getToken().then(function(token){
+			$http({
+				method : 'POST',
+				url : endpoint + what,
+				data : data,
+				headers : {
+					'Content-Type' : 'application/json',
+					'x-access-token' : token,
+					'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
+				}
+			}).then(function(response){
+				if(response.data)
+					callback(response.data);
+				else
+					callback(response);
+			}, function(err){
+				if(errorCallback)
+					errorCallback(err);
+				else
+					that.onDbError(err);
+			});
+		}, errorCallback);
 	}
 
 	this.getToken = function(){
-		return $localStorage.getObject(storage_id);
+		return $q(function(resolve, reject){
+			$localStorage.getObject(storage_id).then(resolve, resolve);
+		})
 	}
 
 	this.getEndpoints = function(){
