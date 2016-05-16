@@ -1,4 +1,13 @@
-angular.module('dorrbell').config(function($urlRouterProvider, $ionicConfigProvider, $locationProvider, lazyImgConfigProvider, $ionicNativeTransitionsProvider){
+angular.module('dorrbell').config(function($urlRouterProvider, $ionicConfigProvider, $locationProvider, lazyImgConfigProvider, $ionicNativeTransitionsProvider, ionGalleryConfigProvider){
+  ionGalleryConfigProvider.setGalleryConfig({
+                          action_label: 'Close',
+                          template_gallery: 'js/modules/product/templates/gallery.html',
+                          template_slider: 'js/modules/product/templates/slider.html',
+                          toggle: false,
+                          row_size: 3,
+                          fixed_row_size: true
+  });
+
   $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $ionicConfigProvider.scrolling.jsScrolling(false);
   lazyImgConfigProvider.setOptions({

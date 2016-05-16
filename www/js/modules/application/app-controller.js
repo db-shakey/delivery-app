@@ -1,7 +1,9 @@
 angular.module('dorrbell').controller("BaseController", function($scope, $rootScope, $state, $ionicHistory, $ionicLoading, HerokuService, MetadataFactory){
 
   $scope.$on('$ionicView.beforeEnter', function(){
-    console.log('before enter');
+    if(navigator.splashscreen) {
+      navigator.splashscreen.hide();
+    }
     HerokuService.refreshToken(function(){
       //Cache Metadata
       /*
@@ -35,10 +37,6 @@ angular.module('dorrbell').controller("BaseController", function($scope, $rootSc
       $state.go("login");
     });
   });
-
-
-
-
 });
 
 /**

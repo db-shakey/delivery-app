@@ -219,10 +219,9 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 			$scope.productList = result.records;
 			$scope.hasMore = result.hasMore;
 			$ionicLoading.hide();
+			$scope.$broadcast('scroll.refreshComplete');
 		});
-
 	}
-
 
 	$scope.scanBarcode = function(){
 		var goToProduct = function(barcode){
@@ -261,6 +260,8 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
           $scope.searchProducts(filterText);
 				}
       },
+			scan : $scope.scanBarcode,
+			favoritesEnabled : true,
 			initialFilterText : $scope.searchString
     });
   };
@@ -271,19 +272,15 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 	}
 
 	$scope.$on('$ionicView.beforeEnter', function(){
-			$scope.canLoad = true;
-			if($scope.searchString){
-				$scope.showFilterBar();
-			}
-
-
-			$scope.searchProducts($scope.searchString, $scope.limit);
-
-
+		$scope.canLoad = true;
+		if($scope.searchString){
+			$scope.showFilterBar();
+		}
+		$scope.searchProducts($scope.searchString, $scope.limit);
   });
 });
 
-angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $interval, $q, StoreFactory, $cordovaImagePicker, $cordovaCamera, $timeout, $ionicModal, ProductFactory, ImageService, ProductValidator, Log, JSUtils){
+angular.module('dorrbell').controller('NewProductController', function($scope, $state, $ionicLoading, $filter, $ionicHistory, $interval, $q, StoreFactory, $cordovaImagePicker, $cordovaCamera, $timeout, $ionicModal, ProductFactory, ImageService, ProductValidator, ProductService, Log, JSUtils){
 
 	$scope.getStore = function(noCache){
 		$scope.$watch(StoreFactory.getStoreById($state.params.storeId, noCache), function(newValue, oldValue){
@@ -299,35 +296,20 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		$scope.$watch(ProductFactory.getProductDetailsById($state.params.productId, noCache), function(newValue, oldValue){
 			if(newValue){
 				$scope.editProduct = newValue[0];
-				var tags = newValue[0].Tags__c.split(",");
-				$scope.product = {
-					id : newValue[0].Shopify_Id__c,
-					title : newValue[0].Name,
-					tags : tags,
-					sku : newValue[0].SKU__c,
-					product_type : newValue[0].Family,
-					images : new Array()
-				};
-				if(newValue[0].Image__r){
-					$scope.product.images = [
-						{
-							"src" : newValue[0].Image__r.Image_Source__c
-						}
-					]
-				}
+				$scope.product = ProductService.getShopifyProduct(newValue[0]);
 				$scope.meta = {
 					brand : newValue[0].Brand__c
 				};
 				$scope.tag = {
-					externalModel : tags
+					externalModel : $scope.product.tags
 				}
-				for(var i in tags){
-					if($scope.categories.indexOf(tags[i].trim()) != -1)
-						$scope.tag.category = tags[i].trim();
-					else if($scope.genders.indexOf(tags[i].trim()) != -1)
-						$scope.tag.gender = tags[i].trim();
+				for(var i = 0; i<$scope.product.tags.length; i++){
+					if($scope.categories.indexOf($scope.product.tags[i].trim()) != -1)
+						$scope.tag.category = $scope.product.tags[i].trim();
+					else if($scope.genders.indexOf($scope.product.tags[i].trim()) != -1)
+						$scope.tag.gender = $scope.product.tags[i].trim();
 				}
-				$scope.ready = $scope.tag.category && $scope.tag.gender
+				console.log($scope.product);
 			}
 		})
 	}
@@ -344,7 +326,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 	$scope.getProductTags = function(query, isInitializing){
 		return $q(function(resolve, reject){
 			ProductFactory.getProductTags().then(function(res){
-				resolve($filter("listSorter")(res, query));
+				resolve($filter("listSorter")(res, query, $scope.product.tags));
 			})
 		});
 	}
@@ -467,48 +449,48 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 	}
 
 	$scope.getPicture = function(e) {
+			$scope.menu.state = "closed";
 			try{
 					var options = {
 							quality: 100,
 							destinationType: Camera.DestinationType.DATA_URL,
 							sourceType: Camera.PictureSourceType.CAMERA,
-							allowEdit : true,
+							allowEdit : false,
 							encodingType: Camera.EncodingType.PNG,
 							saveToPhotoAlbum : true,
-							targetWidth: 600,
-							targetHeight: 900
+							targetWidth: 1200,
+							targetHeight: 1800
 					};
 					$cordovaCamera.getPicture(options).then(function(data) {
-						$scope.product.images[0] = {"attachment": data}
+						$scope.product.images.push({"attachment": "data:image/png;base64," + data});
 					});
 			}catch(err){
 				Log.message("Cannot access camera", true, "Error");
 			}
 	}
 	$scope.getPictureFromGallery = function(e) {
-			var options = {
-					maximumImagesCount: 1,
-					quality: 100
-			};
+		$scope.menu.state = "closed";
+		var options = {
+				maximumImagesCount: 1,
+				quality: 100
+		};
 
-			try {
-				 $cordovaImagePicker.getPictures(options)
-						.then(function(results) {
-								if (results[0]) {
-										ImageService.convertUrlToBase64(results[0], function(data) {
-											if(data.indexOf('base64,') != -1)
-												data = data.substring(data.indexOf('base64,') + 7);
-											$timeout(function(){
-												$scope.product.images[0] = {"attachment": data};
-											})
-										}, "image/jpeg");
-								}
-						}, function(error) {
-								Log.message("Error loading photo", true, "Error");
-						});
-			} catch(err){
-				Log.message("Cannot access gallery", true, "Error");
-			}
+		try {
+			 $cordovaImagePicker.getPictures(options)
+					.then(function(results) {
+							if (results[0]) {
+									ImageService.convertUrlToBase64(results[0], function(data) {
+										$timeout(function(){
+											$scope.product.images.push({"attachment": data});
+										})
+									}, "image/jpeg");
+							}
+					}, function(error) {
+							Log.message("Error loading photo", true, "Error");
+					});
+		} catch(err){
+			Log.message("Cannot access gallery", true, "Error");
+		}
 	}
 
 	$scope.editTags = function(){
@@ -556,11 +538,8 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		$scope.categories = ['Clothing', 'Shoes', 'Handbags', 'Accessories'];
 		$scope.genders = ['Men', 'Women'];
 		$scope.validator = ProductValidator;
+		$scope.menu={state : "closed"};
   });
-	$scope.swiperOptions = {
-		loop : false,
-		pagination : false
-	}
 })
 
 angular.module('dorrbell').controller('DbProductDetailController', function($scope, $ionicActionSheet, $ionicLoading, $state, ProductFactory){

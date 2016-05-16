@@ -85,7 +85,8 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
             // When clear button is clicked, clear filterText, hide clear button, show backdrop, and focus the input
             var clearClick = function () {
               if (clearEl.classList.contains($scope.config.favorite)) {
-                $scope.showModal();
+                //$scope.showModal();
+                $scope.scan();
               } else {
                 $timeout(function () {
                   $scope.data.filterText = '';
@@ -205,7 +206,7 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
         done: 'ion-ios-checkmark-empty',
         remove: 'ion-ios-trash-outline',
         reorder: 'ion-drag',
-        favorite: 'ion-ios-star',
+        favorite: 'ion-ios-barcode',
         search: 'ion-ios-search-strong',
         backdrop: true,
         transition: 'vertical',
@@ -223,7 +224,7 @@ angular.module('jett.ionic.filter.bar', ['ionic']);
         close: 'ion-android-close',
         done: 'ion-android-done',
         remove: 'ion-android-delete',
-        favorite: 'ion-android-star',
+        favorite: 'ion-ios-barcode-outline',
         search: false,
         backdrop: false,
         transition: 'horizontal'

@@ -69,6 +69,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Parent_Product__c, \
 													Parent_Product__r.Shopify_Id__c, \
 													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE), \
+													(SELECT Id, Image_Source__c, Position__c, Shopify_Id__c FROM Images__r), \
 													(SELECT Id, UnitPrice FROM PricebookEntries), \
 													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
 										FROM Product2 \

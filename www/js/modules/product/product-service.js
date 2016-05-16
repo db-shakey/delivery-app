@@ -23,11 +23,43 @@ angular.module('dorrbell').service("ProductValidator", function(){
 
 });
 
+angular.module('dorrbell').service('ProductService', function(){
+  this.getShopifyProduct = function(product){
+    var tags = product.Tags__c.split(",");
+    var p = {
+      id : product.Shopify_Id__c,
+      title : product.Name,
+      tags : tags,
+      sku : product.SKU__c,
+      product_type : product.Family
+    }
+
+    if(product.Image__r){
+      p.image = {
+        id : product.Image__r.Shopify_Id__c,
+        src : product.Image__r.Image_Source__c
+      }
+    }
+    if(product.Images__r && product.Images__r.records){
+      p.images = new Array();
+      for(var i = 0; i<product.Images__r.records.length; i++){
+        var img = product.Images__r.records[i];
+        p.images.push({
+          id : img.Shopify_Id__c,
+          position: img.Position__c,
+          src : img.Image_Source__c
+        });
+      }
+    }
+    return p;
+  }
+})
+
 angular.module('dorrbell').filter('listSorter', function(){
   return function(res, query){
     var values = new Array();
     var customValue = true;
-    for(var i in res){
+    for(var i = 0; i < res.length; i++){
       if(res[i].indexOf(query) != -1)
         values.push(res[i]);
       if(res[i] == query)

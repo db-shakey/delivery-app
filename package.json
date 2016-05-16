@@ -25,7 +25,6 @@
     "cordova-plugin-device",
     "cordova-plugin-console",
     "cordova-plugin-whitelist",
-    "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     {
@@ -35,7 +34,8 @@
     {
       "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugins.git#master:local-webserver",
       "id": "cordova-plugin-facebook4"
-    }
+    },
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios",

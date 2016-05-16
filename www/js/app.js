@@ -9,13 +9,14 @@ var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngI
                                         'timer', 'ksSwiper', 'ionic-datepicker', 'angularLazyImg',
                                         'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
                                         'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions',
-                                        'ionic.wizard', 'ngImgCrop']);
+                                        'ion-gallery', 'ngImgCrop']);
 angular.module('templates', []);
 
 if(ionic.Platform.isAndroid())
   ionic.Platform.isFullScreen=true;
 
 ionic.Platform.ready(function(){
+
     angular.module('dorrbell').run(function($ionicPlatform, $ocLazyLoad, $rootScope, $state, HerokuService, $ionicHistory) {
 
       if(window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {

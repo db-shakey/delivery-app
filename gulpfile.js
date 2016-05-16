@@ -69,7 +69,7 @@ gulp.task('compress', function(){
             "./www/lib/ngmap/build/scripts/ng-map.min.js",
             "./www/lib/moment/min/moment.min.js",
             "./www/lib/angular-moment/angular-moment.min.js",
-            "./www/lib/ionic-wizard/dist/ion-wizard.min.js",
+            "./www/lib/ion-gallery/dist/ion-gallery.js",
             "./www/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js",
 
             //Calendar stuff

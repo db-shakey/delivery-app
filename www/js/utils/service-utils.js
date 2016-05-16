@@ -510,10 +510,12 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 					'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
 				}
 			}).then(function(response){
-				if(response.data)
-					callback(response.data);
-				else
-					callback(response);
+				if(callback){
+					if(response.data)
+						callback(response.data);
+					else
+						callback(response);
+				}
 			}, function(err){
 				if(errorCallback)
 					errorCallback(err);
