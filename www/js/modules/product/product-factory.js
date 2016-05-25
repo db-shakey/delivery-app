@@ -68,7 +68,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Store__r.Name, \
 													Parent_Product__c, \
 													Parent_Product__r.Shopify_Id__c, \
-													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE), \
+													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE ORDER BY Position__c ASC), \
 													(SELECT Id, Image_Source__c, Position__c, Shopify_Id__c FROM Images__r), \
 													(SELECT Id, UnitPrice FROM PricebookEntries), \
 													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
@@ -112,7 +112,12 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 		getPriceForProduct : function(productId){
 			var query = "SELECT UnitPrice FROM PricebookEntry WHERE Product2Id = '" + productId + "'";
 			return $q(function(resolve, reject){
-				force.query("/api/query", query, resolve, reject);
+				force.query(query, resolve, reject);
+			});
+		},
+		getProductImages : function(productId){
+			return $q(function(resolve, reject){
+					force.query("SELECT Id, Image_Source__c, Position__c, Shopify_Id__c FROM Image__c WHERE Product__c = '" + productId + "' ORDER BY Position__c ASC", resolve, reject);
 			});
 		},
 		createProduct : function(product, storeId, callback, error){
@@ -121,8 +126,14 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 		updateProduct : function(product, storeId, callback, error){
 			force.post('/api/shopify/updateProduct', product, 'Product2', product.Id, callback, error);
 		},
-		updateVariant : function(product, callback){
-			force.post('/api/shopify/updateVariant', product, 'Product2', product.Id, callback);
+		updateVariant : function(variant, parentProductShopifyId, parentProductId, callback, error){
+			force.post('/api/shopify/updateVariant', {variant : variant, parentProductId: parentProductShopifyId}, 'Product2', parentProductId, callback, error);
+		},
+		updateVariantBatch : function(variantArray, parentProductShopifyId, parentProductId, callback, error){
+			force.post('/api/shopify/updateVariantBatch', {variants : variantArray, parentProductId: parentProductShopifyId}, 'Product2', parentProductId, callback, error);
+		},
+		updateVariantFromProduct : function(product, callback){
+			force.post('/api/shopify/updateVariantFromProduct', product, 'Product2', product.Id, callback);
 		},
 		createVariant : function(productId, variant, callback, error){
 			force.post('/api/shopify/createVariant', {
@@ -149,6 +160,13 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 				force.get('/api/shopify/productTags', resolve, reject);
 			});
 		},
+		deleteProduct : function(productId, storeId){
+			return $q(function(resolve, reject){
+				force.post('/api/shopify/deleteProduct', {
+					"productId" : productId
+				}, "Store__c", storeId, resolve, reject);
+			});
+		},
 		getProductSizes : function(){
 			return $q(function(resolve, reject){
 				force.get('/api/shopify/sizes', resolve, reject);
@@ -157,6 +175,30 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 		getProductColors : function(){
 			return $q(function(resolve, reject){
 				force.get('/api/shopify/colors', resolve, reject);
+			});
+		},
+		createImage : function(image, productId){
+			return $q(function(resolve, reject){
+				force.post('/api/shopify/createImage', {
+					"image" : image,
+					"productId" : productId
+				}, null, null, resolve, reject);
+			});
+		},
+		deleteImage : function(imageId, productId){
+			return $q(function(resolve, reject){
+				force.post('/api/shopify/deleteImage', {
+					"imageId" : imageId,
+					"productId" : productId
+				}, null, null, resolve, reject);
+			});
+		},
+		updateImage : function(image, productId){
+			return $q(function(resolve, reject){
+				force.post('/api/shopify/updateImage', {
+					"image" : image,
+					"productId" : productId
+				}, null, null, resolve, reject);
 			});
 		}
 	}

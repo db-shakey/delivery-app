@@ -1,14 +1,38 @@
 <ion-view class="variant-edit">
-  	<ion-nav-title>
-  		New Variant
-  	</ion-nav-title>
-    <ion-nav-buttons side="right">
+  <ion-nav-bar class="bar bar-header bar-positive" align-title="center">
+      <ion-nav-back-button class="button button-clear no-icon">
+          Cancel
+      </ion-nav-back-button>
+      <ion-nav-title>
+    		New {{parentProduct.Name}}
+    	</ion-nav-title>
+      <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-click="saveVariant()" ng-if="variant">
+            Save
+        </button>
+      </ion-nav-buttons>
+  </ion-nav-bar>
 
-    </ion-nav-buttons>
   	<ion-content lazy-scroll ng-cloak>
       <div class="list">
         <div class="item item-divider">
-          {{parentProduct.Name}}
+          Variant Image
+        </div>
+        <div class="item text-center" ng-if="parentProduct.Images__r.records && parentProduct.Images__r.records.length > 0" ng-cloak>
+          <ion-slides options="options" slider="data.slider">
+            <ion-slide-page ng-repeat="image in parentProduct.Images__r.records">
+              <div lazy-img="{{image.Image_Source__c}}" class="thumb"></div>
+            </ion-slide-page>
+          </ion-slides>
+        </div>
+        <div class="item text-center" ng-if="!parentProduct.Images__r.records">
+          <ion-spinner></ion-spinner>
+        </div>
+        <div class="item text-center" ng-if="parentProduct.Images__r.records.length == 0">
+          <h3 class="font-bold">You must first add images to the product.</h3>
+        </div>
+        <div class="item item-divider">
+          Variant Details
         </div>
         <label class="item item-input item-stacked-label">
           <div class="input-label">
@@ -29,7 +53,7 @@
           <span class="input-label">Color</span>
           <input ion-autocomplete
                   type="text"
-                  placeholder="Size"
+                  placeholder="Blue"
                   cancel-label="Go back"
                   readonly="readonly"
                   class="ion-autocomplete"
@@ -55,17 +79,11 @@
           <span class="input-label">SKU</span>
           <input type="text" placeholder="1234" ng-model="variant.sku">
         </label>
-        <label class="item item-input item-stacked-label">
+        <label class="item item-input item-stacked-label m-b-xl">
           <span class="input-label">Quantity</span>
           <input type="text" placeholder="25" ng-model="variant.inventory_quantity" ui-number-mask="0">
         </label>
       </div>
 
   	</ion-content>
-    <nav mfb-menu position="br" effect="zoomin"
-         active-icon="ion-close-round" resting-icon="ion-android-more-vertical"
-         toggling-method="click" menu-state="menu">
-      <button mfb-button icon="ion-archive" label="Save" ng-click="saveVariant(false)"></button>
-      <button mfb-button icon="ion-plus-circled" label="Save &amp; New" ng-click="saveVariant(true)"></button>
-    </nav>
 </ion-view>

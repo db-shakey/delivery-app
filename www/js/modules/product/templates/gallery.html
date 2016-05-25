@@ -1,13 +1,23 @@
-<div class="gallery-view">
-  <div class="row" ng-repeat="item in items track by $index" ion-row-height>
-    <div ng-repeat="photo in item track by $index"
-         class="col col-{{responsiveGrid}} image-container">
+<ion-view class="product-gallery">
+  <ion-nav-title>{{product.Name}} Images</ion-nav-title>
+  <ion-content ng-cloak>
 
-      <img ion-image-scale
-           ng-src="{{photo.thumb}}"
-           ng-click="customCallback ? ionItemCallback({item:photo}) : showImage(photo.position)">
-
+    <div class="row" ng-if="product.Images__r.records">
+      <div ng-repeat="image in product.Images__r.records track by $index"
+            lazy-img="{{image.Image_Source__c}}"
+            on-hold="openSubmenu($event, image)"
+            ng-class="($parent.product.Image__r.Shopify_Id__c == image.Shopify_Id__c) ? 'col thumb selected' : 'col thumb'">
+        <i class="icon ion-checkmark-circled" ng-if="$parent.product.Image__r.Shopify_Id__c == image.Shopify_Id__c"></i>
+      </div>
     </div>
-  </div>
-  <div ion-slider></div>
-</div>
+    <div class="middle-box text-center p-m" ng-if="!product.Images__r.records || product.Images__r.records.length == 0">
+      <i class="icon ion-image"></i>
+      <h3 class="font-bold">Use the action button to add images for this product.</h3>
+    </div>
+  </ion-content>
+  <nav mfb-menu position="br" effect="zoomin" active-icon="ion-close" resting-icon="ion-plus-round" toggling-method="click" menu-state="menu.state">
+    <button mfb-button icon="ion-grid" label="Gallery" ng-click="getPictureFromGallery()"></button>
+    <button mfb-button icon="ion-camera" label="Camera" ng-click="getPicture()"></button>
+  </nav>
+
+</ion-view>

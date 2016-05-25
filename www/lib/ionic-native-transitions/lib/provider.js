@@ -152,6 +152,7 @@ export default function() {
                 unregisterToRouteEvents,
                 registerToStateChangeStartEvent,
                 unregisterToStateChangeStartEvent,
+                disablePendingTransition,
                 locationUrl,
                 stateGo,
                 goBack
@@ -175,8 +176,10 @@ export default function() {
                 return;
             }
             unregisterToStateChangeStartEvent();
-            $location.url(url);
+            var locationPromise = $location.url(url);
             transition(transitionOptions);
+            
+            return locationPromise;
         }
 
         /**
@@ -197,9 +200,13 @@ export default function() {
                 $log.debug('[native transition] cannot change state without a state...');
                 return;
             }
+            if ($state.current.name === state){
+                $log.debug('[native transition] same state transition are not possible');
+                return;
+            }
             unregisterToStateChangeStartEvent();
-            $state.go(state, stateParams, stateOptions);
             transition(transitionOptions);
+            return $timeout(() => $state.go(state, stateParams, stateOptions));
         }
 
         /**
@@ -281,6 +288,7 @@ export default function() {
             let type = options.type;
             delete options.type;
             $log.debug('[native transition]', options);
+            $rootScope.$broadcast('ionicNativeTransitions.beforeTransition');
             switch (type) {
                 case 'flip':
                     window.plugins.nativepagetransitions.flip(options, transitionSuccess, transitionError);
@@ -343,12 +351,22 @@ export default function() {
             // $rootScope.$broadcast('ionicNativeTransitions.', executePendingTransition);
             registerToStateChangeStartEvent();
         }
+        
+        function disablePendingTransition() {
+            // If native transition support cancelling transition (> 0.6.4), cancel pending transition
+            if (window.plugins && window.plugins.nativepagetransitions && angular.isFunction(window.plugins.nativepagetransitions.cancelPendingTransition)) {
+                 window.plugins.nativepagetransitions.cancelPendingTransition();
+                 registerToStateChangeStartEvent();
+            } else {
+                 executePendingTransition();
+            }
+        }
 
         function registerToRouteEvents() {
             unregisterToRouteEvents();
             registerToStateChangeStartEvent();
             // $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
-            $stateChangeError = $rootScope.$on('$stateChangeError', executePendingTransition);
+            $stateChangeError = $rootScope.$on('$stateChangeError', disablePendingTransition);
             $stateAfterEnter = $rootScope.$on(getDefaultOptions().triggerTransitionEvent, executePendingTransition);
         }
 
@@ -449,7 +467,7 @@ export default function() {
         function init() {
             legacyGoBack = $rootScope.$ionicGoBack;
             if (!isEnabled()) {
-                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
+                $log.debug('[native transition] The plugin is either disabled or nativepagetransitions plugin by telerik is not present. If you are getting this message in a browser, this is normal behavior, native transitions only work on device.');
                 return;
             } else {
                 enableFromService();
@@ -499,8 +517,8 @@ export default function() {
             let currentStateTransition = angular.extend({}, $state.current);
             let toStateTransition = angular.extend({}, $state.get(stateName));
             $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
-            $ionicHistory.goBack(backCount);
             transition('back', currentStateTransition, toStateTransition);
+            return $timeout(() => $ionicHistory.goBack(backCount));
         }
     }
 };

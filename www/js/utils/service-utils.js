@@ -568,15 +568,15 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 });
 
 angular.module('dorrbell').service("ImageService", function(){
-	this.convertUrlToBase64 = function(url, callback, outputFormat){
+	this.convertUrlToBase64 = function(url, callback, outputFormat, width, height){
 		var img = new Image();
 	    img.crossOrigin = 'Anonymous';
 	    img.onload = function(){
 	        var canvas = document.createElement('CANVAS'),
 	        ctx = canvas.getContext('2d'), dataURL;
-	        canvas.height = this.height;
-	        canvas.width = this.width;
-	        ctx.drawImage(this, 0, 0);
+	        canvas.height = (height) ? height : this.height;
+	        canvas.width = (width) ? width : this.width;
+	        ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
 	        dataURL = canvas.toDataURL(outputFormat);
 	        callback(dataURL);
 	        canvas = null;

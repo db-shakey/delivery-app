@@ -34,8 +34,8 @@
           </p>
         </ion-item>
       </ion-list>
-      <div class="middle-box text-center" ng-if="!storeList">
-        <i class="icon ion-refresh"></i>
+      <div class="middle-box text-center loading" ng-if="!storeList">
+        <ion-spinner></ion-spinner>
         <h3 class="font-bold">Loading Stores</h3>
       </div>
       <div class="middle-box text-center" ng-if="storeList.length == 0">

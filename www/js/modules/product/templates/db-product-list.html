@@ -27,8 +27,8 @@
       <i class="icon ion-android-cancel"></i>
       <h3 class="font-bold">No products to display.</h3>
     </div>
-    <div class="middle-box text-center" ng-if="!productList">
-      <i class="icon ion-refresh"></i>
+    <div class="middle-box text-center loading" ng-if="!productList">
+      <ion-spinner></ion-spinner>
       <h3 class="font-bold">Loading Products</h3>
     </div>
     <ion-infinite-scroll on-infinite="searchProducts(searchText, limit + 10)" distance="1%" ng-if="hasMore"></ion-infinite-scroll>

@@ -1,3 +1,14 @@
+<a name="1.0.0-rc11"></a>
+### 1.0.0-rc11
+
+* [BUG] The transition is not right on IOS with Ionic 1.3.0 <https://github.com/shprink/ionic-native-transitions/issues/97>
+
+<a name="1.0.0-rc10"></a>
+### 1.0.0-rc10
+
+* [FEATURE] Add onBefore transition event <https://github.com/shprink/ionic-native-transitions/issues/74>
+* [BUG] Prevent same state transition when using stateGo function <https://github.com/shprink/ionic-native-transitions/issues/75>
+
 <a name="1.0.0-rc9"></a>
 ### 1.0.0-rc9
 

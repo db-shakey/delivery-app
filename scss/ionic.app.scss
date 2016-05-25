@@ -57,7 +57,6 @@ $item-thumbnail-width: 60px;
 @import "www/lib/inspinia/style";
 @import "www/lib/ionic-filter-bar/scss/ionic.filter.bar";
 @import "www/lib/ng-img-crop-full-extended/source/scss/ng-img-crop";
-@import "www/lib/ion-gallery/src/scss/ion-gallery";
 
 //font-bootstraping fix
 * {-webkit-text-size-adjust:100%;}
@@ -76,11 +75,18 @@ $item-thumbnail-width: 60px;
       right: 1.2rem;
     }
   }
-  .product-new{
+  .variant-edit, .product-new{
     ion-header-bar{
       height: 40px !important;
-      &>*{
-        margin-top: 0px !important;
+      box-shadow: none !important;
+      button{
+        font-weight: 300 !important;
+      }
+      >*{
+        margin-top: 1px !important;
+      }
+      div.title{
+        line-height: 40px;
       }
     }
   }
@@ -409,7 +415,12 @@ label.header-input input[disabled]{
 		}
 	}
 	button{
-		color : $calm !important;
+    &.action-sheet-option{
+        color : $calm !important;
+    }
+    &.action-sheet-destructive{
+      color : $assertive !important;
+    }
 		text-align : left;
 		padding-left : 1em !important;
 		text-transform : inherit;
@@ -658,6 +669,9 @@ ion-side-menu{
 	ion-slides{
 		height: initial;
 	}
+  h2 button{
+    width: 4rem;
+  }
 }
 
 /********
@@ -811,6 +825,9 @@ ion-side-menu{
 			font-size: 28px;
 		}
 	}
+  .swiper-slide-active{
+    border: 4px solid $positive;
+  }
 }
 
 /**
@@ -861,10 +878,38 @@ ion-side-menu{
     z-index: 5 !important;
   }
 }
-.image-edit-modal{
-  img-crop{
-    max-height: 80%;
+.product-gallery{
+  .row{
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    .col{
+      &.selected{
+        border: 4px solid $positive;
+        i{
+          position: absolute;
+          right: .3rem;
+          top: .2rem;
+          color: $positive;
+          font-size: $font-size-large;
+        }
+      }
+    }
   }
+}
+div.thumb{
+  height: 25vh;
+  transition-duration: 500ms;
+  transition-property: width, height;
+  direction: ltr;
+  zoom: 1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: left;
+  max-width: 30.333%;
+  min-width: 25vw;
+  position: relative;
+  margin: 5px 5px;
+  background-color: $light;
 }
 /********
  * FAB
@@ -872,3 +917,14 @@ ion-side-menu{
  .ab-margin{
  	margin-bottom: 50px !important;
  }
+
+ /********
+  * Loading
+  ********/
+  .middle-box.loading{
+    margin-top: 10vh;
+    ion-spinner svg{
+      width: 50px;
+      height: 50px;
+    }
+  }

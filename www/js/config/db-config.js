@@ -109,6 +109,28 @@ angular.module('dorrbell').config(function($stateProvider) {
       }
     })
 
+    .state('db.productGallery', {
+      url : '/productgallery/:productId',
+      views : {
+        'menuContent' : {
+          templateUrl : 'js/modules/product/templates/gallery.html',
+          controller : 'GalleryController'
+        }
+      },
+      resolve : {
+        loadController : function($ocLazyLoad){
+          return $ocLazyLoad.load({
+            serie : false,
+            files : [
+              'js/modules/delivery/product-servicejs',
+              'js/modules/product/product-factory.js',
+              'js/modules/product/product-controller.js'
+            ]
+          })
+        }
+      }
+    })
+
     .state('db.variantEdit', {
       url : '/variantEdit/:productId',
       views : {
@@ -133,7 +155,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     })
 
     .state('db.variantNew', {
-      url : '/variantNew/:productId',
+      url : '/variantNew/:productId/:color',
       views : {
         'menuContent' : {
           templateUrl : 'js/modules/product/templates/db-variant-new.html',

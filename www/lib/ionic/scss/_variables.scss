@@ -16,7 +16,7 @@ $dark:                            #444 !default;
 // Base
 // -------------------------------
 
-$font-family-sans-serif:           '-apple-system', "Helvetica Neue", "RobotoDraft", "Segoe UI", sans-serif !default;
+$font-family-sans-serif:           '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif !default;
 
 $font-family-light-sans-serif:    '-apple-system', "HelveticaNeue-Light", "Roboto-Light", "Segoe UI-Light", sans-serif-light !default;
 $font-family-serif:               serif !default;
@@ -92,6 +92,9 @@ $button-bar-button-font-size:     13px !default;
 $button-bar-button-height:        32px !default;
 $button-bar-button-padding:       8px !default;
 $button-bar-button-icon-size:     20px !default;
+
+$button-default-border:       transparent;
+$button-default-active-border:null;
 
 $button-light-bg:                 $light !default;
 $button-light-text:               #444 !default;

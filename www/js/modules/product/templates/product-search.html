@@ -16,7 +16,6 @@
           <img fallback-src ng-if="!product.Image__r.Image_Source__c">
           <h2>
             {{product.Name}}
-
           </h2>
           <p class="m-t-xs">{{product.Brand__c}}</p>
           <p class="text-muted m-t-xs" ng-if="product.Variants__r">
@@ -28,8 +27,8 @@
       <i class="icon ion-android-cancel"></i>
       <h3 class="font-bold">No products to display.</h3>
     </div>
-    <div class="middle-box text-center" ng-if="!productList">
-      <i class="icon ion-refresh"></i>
+    <div class="middle-box text-center loading" ng-if="!productList">
+      <ion-spinner></ion-spinner>
       <h3 class="font-bold">Loading Products</h3>
     </div>
     <ion-infinite-scroll on-infinite="search(searchText, limit + 10)" distance="1%" ng-if="hasMore"></ion-infinite-scroll>

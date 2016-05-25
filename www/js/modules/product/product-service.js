@@ -50,10 +50,42 @@ angular.module('dorrbell').service('ProductService', function(){
           src : img.Image_Source__c
         });
       }
-    }
+    }else
+        p.images = new Array();
     return p;
+  },
+
+  this.descriptionParser = function(html){
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(html, 'text/html');
+
+    var selectors = ["description", "fit", "materials", "condition", "notes", "care"];
+    var d = {};
+    for(var i = 0; i<selectors.length; i++){
+      if(doc.querySelector("#" + selectors[i]))
+        d[selectors[i]] = doc.querySelector("#" + selectors[i]).innerHTML;
+    }
+    return d;
+  },
+
+  this.descriptionToHtml = function(info){
+    var html = "";
+    if(info.description)
+      html += '<b>Description:</b><span id="description" style="margin-right:1rem;">' + info.description + '</span><br/>';
+    if(info.fit)
+      html += '<b>Fit:</b><span id="fit" style="margin-right:1rem;">' + info.fit + '</span><br/>';
+    if(info.materials)
+      html += '<b>Materials:</b><span id="materials" style="margin-right:1rem;">' + info.materials + '</span><br/>';
+    if(info.condition)
+      html += '<b>Condition:</b><span id="condition" style="margin-right:1rem;">' + info.condition + '</span><br/>';
+    if(info.notes)
+      html += '<b>Notes:</b><span id="notes" style="margin-right:1rem;">' + info.notes + '</span><br/>';
+    if(info.care)
+      html += '<b>Care:</b><span id="care" style="margin-right:1rem;">' + info.care + '</span><br/>';
+
+    return html;
   }
-})
+});
 
 angular.module('dorrbell').filter('listSorter', function(){
   return function(res, query){

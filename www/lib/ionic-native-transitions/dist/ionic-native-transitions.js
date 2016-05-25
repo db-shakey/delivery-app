@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc9
+ * @version: v1.0.0-rc11
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -273,6 +273,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            unregisterToRouteEvents: unregisterToRouteEvents,
 	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent,
+	            disablePendingTransition: disablePendingTransition,
 	            locationUrl: locationUrl,
 	            stateGo: stateGo,
 	            goBack: goBack
@@ -298,8 +299,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
-	            $location.url(url);
+	            var locationPromise = $location.url(url);
 	            transition(transitionOptions);
+	
+	            return locationPromise;
 	        }
 	
 	        /**
@@ -325,9 +328,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $log.debug('[native transition] cannot change state without a state...');
 	                return;
 	            }
+	            if ($state.current.name === state) {
+	                $log.debug('[native transition] same state transition are not possible');
+	                return;
+	            }
 	            unregisterToStateChangeStartEvent();
-	            $state.go(state, stateParams, stateOptions);
 	            transition(transitionOptions);
+	            return $timeout(function () {
+	                return $state.go(state, stateParams, stateOptions);
+	            });
 	        }
 	
 	        /**
@@ -415,6 +424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var type = options.type;
 	            delete options.type;
 	            $log.debug('[native transition]', options);
+	            $rootScope.$broadcast('ionicNativeTransitions.beforeTransition');
 	            switch (type) {
 	                case 'flip':
 	                    window.plugins.nativepagetransitions.flip(options, transitionSuccess, transitionError);
@@ -482,11 +492,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            registerToStateChangeStartEvent();
 	        }
 	
+	        function disablePendingTransition() {
+	            // If native transition support cancelling transition (> 0.6.4), cancel pending transition
+	            if (window.plugins && window.plugins.nativepagetransitions && angular.isFunction(window.plugins.nativepagetransitions.cancelPendingTransition)) {
+	                window.plugins.nativepagetransitions.cancelPendingTransition();
+	                registerToStateChangeStartEvent();
+	            } else {
+	                executePendingTransition();
+	            }
+	        }
+	
 	        function registerToRouteEvents() {
 	            unregisterToRouteEvents();
 	            registerToStateChangeStartEvent();
 	            // $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
-	            $stateChangeError = $rootScope.$on('$stateChangeError', executePendingTransition);
+	            $stateChangeError = $rootScope.$on('$stateChangeError', disablePendingTransition);
 	            $stateAfterEnter = $rootScope.$on(getDefaultOptions().triggerTransitionEvent, executePendingTransition);
 	        }
 	
@@ -587,7 +607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function init() {
 	            legacyGoBack = $rootScope.$ionicGoBack;
 	            if (!isEnabled()) {
-	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
+	                $log.debug('[native transition] The plugin is either disabled or nativepagetransitions plugin by telerik is not present. If you are getting this message in a browser, this is normal behavior, native transitions only work on device.');
 	                return;
 	            } else {
 	                enableFromService();
@@ -637,8 +657,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentStateTransition = angular.extend({}, $state.current);
 	            var toStateTransition = angular.extend({}, $state.get(stateName));
 	            $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
-	            $ionicHistory.goBack(backCount);
 	            transition('back', currentStateTransition, toStateTransition);
+	            return $timeout(function () {
+	                return $ionicHistory.goBack(backCount);
+	            });
 	        }
 	    }
 	};

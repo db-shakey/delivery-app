@@ -16,10 +16,12 @@ export default function(
     vm.enable = enable;
     vm.disable = disable;
     vm.stateGo = stateGo;
+    vm.sameStateGo = sameStateGo;
     vm.locationUrl = locationUrl;
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
     vm.openModal = openModal;
     vm.goBack = goBack;
+    vm.stateError = stateError;
 
     $rootScope.$on('ionicNativeTransitions.success', function() {
         $log.info('yeah!');
@@ -27,6 +29,10 @@ export default function(
 
     $rootScope.$on('ionicNativeTransitions.error', function() {
         $log.info(':(');
+    });
+
+    $rootScope.$on('ionicNativeTransitions.beforeTransition', function(){
+        $log.info('Transition is about to happen');
     });
 
     function openModal() {
@@ -72,6 +78,10 @@ export default function(
         vm.isEnable = $ionicNativeTransitions.isEnabled();
     }
 
+    function sameStateGo() {
+        $ionicNativeTransitions.stateGo('tabs.home');
+    }
+
     function stateGo() {
         $ionicNativeTransitions.stateGo('four', {
             test: 'buyakacha!',
@@ -92,5 +102,9 @@ export default function(
     function goBack(count) {
         console.log('count', count, $ionicHistory.viewHistory())
         $rootScope.$ionicGoBack(count);
+    }
+    
+    function stateError() {
+          $ionicNativeTransitions.stateGo('five');
     }
 }
