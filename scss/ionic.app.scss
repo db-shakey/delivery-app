@@ -885,13 +885,14 @@ ion-side-menu{
     .col{
       &.selected{
         border: 4px solid $positive;
-        i{
-          position: absolute;
-          right: .3rem;
-          top: .2rem;
-          color: $positive;
-          font-size: $font-size-large;
-        }
+      }
+      i{
+        opacity: 1;
+        position: absolute;
+        right: .3rem;
+        top: .2rem;
+        color: $positive;
+        font-size: $font-size-large;
       }
     }
   }
@@ -910,6 +911,12 @@ div.thumb{
   position: relative;
   margin: 5px 5px;
   background-color: $light;
+  -webkit-flex: 1 1 25vw;
+  flex: 1 1 25vw;
+
+  &.new{
+    opacity: .2;
+  }
 }
 /********
  * FAB

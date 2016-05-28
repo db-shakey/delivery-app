@@ -50,7 +50,7 @@
               </label>
               <label class="item item-input item-stacked-label" ng-if="!editProduct">
                 <span class="input-label">Price</span>
-                <input type="tel" placeholder="$1.99" ng-model="meta.price" ui-number-mask>
+                <input type="tel" placeholder="$1.99" ng-model="meta.price" ui-number-mask ng-change="updatePrice()">
               </label>
             </div>
           </ion-content>
@@ -63,7 +63,7 @@
           <ion-content>
             <ion-list>
               <ion-item class="item-divider">
-                Gender
+                Department
               </ion-item>
               <ion-radio ng-model="tag.gender" ng-value="gender" name="gender" ng-change="updateGender('{{tag.gender}}')" ng-repeat="gender in genders">{{gender}}</ion-radio>
             </ion-list>

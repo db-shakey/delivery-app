@@ -9,6 +9,12 @@
             ng-class="($parent.product.Image__r.Shopify_Id__c == image.Shopify_Id__c) ? 'col thumb selected' : 'col thumb'">
         <i class="icon ion-checkmark-circled" ng-if="$parent.product.Image__r.Shopify_Id__c == image.Shopify_Id__c"></i>
       </div>
+
+      <div ng-repeat="image in loading.images track by $index"
+            lazy-img="{{image.Image_Source__c}}"
+            class="col thumb new">
+        <i class="icon ion-ios-upload"></i>
+      </div>
     </div>
     <div class="middle-box text-center p-m" ng-if="!product.Images__r.records || product.Images__r.records.length == 0">
       <i class="icon ion-image"></i>

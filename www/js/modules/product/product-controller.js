@@ -347,11 +347,28 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		$scope.tag.externalModel.push($scope.tag.gender);
 		$scope.ready = $scope.tag.category && $scope.tag.gender
 	}
+	$scope.updatePrice = function(){
+		var tags = ['Under 50', 'Under 75', 'Under 100', 'Under 25'];
+		for(var i = 0; i<tags.length; i++){
+			if($scope.tag.externalModel.indexOf(tags[i]) != -1)
+				$scope.tag.externalModel.splice($scope.tag.externalModel.indexOf(tags[i]));
+		}
+
+		if($scope.meta.price < 25)
+			Array.prototype.push.apply($scope.tag.externalModel, ['Under 25', 'Under 50', 'Under 75', 'Under 100']);
+		else if($scope.meta.price < 50)
+			Array.prototype.push.apply($scope.tag.externalModel, ['Under 50', 'Under 75', 'Under 100']);
+		else if($scope.meta.price < 75)
+			Array.prototype.push.apply($scope.tag.externalModel, ['Under 75', 'Under 100']);
+		else if($scope.meta.price < 100)
+			Array.prototype.push.apply($scope.tag.externalModel, ['Under 100']);
+	}
 
 	$scope.saveProduct = function(){
 		$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
 		$scope.product.body_html = ProductService.descriptionToHtml($scope.info);
-
+		if(!$scope.product.tags)
+			$scope.product.tags = $scope.tag.externalModel.join(", ");
 		if($scope.editProduct){
 			ProductFactory.updateProduct($scope.product, $scope.store.Id, function(){
 				$timeout(function(){
@@ -442,53 +459,6 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		}
 	}
 
-	/*
-	$scope.getPicture = function(e) {
-			$scope.menu.state = "closed";
-			try{
-					var options = {
-							quality: 100,
-							destinationType: Camera.DestinationType.DATA_URL,
-							sourceType: Camera.PictureSourceType.CAMERA,
-							allowEdit : false,
-							encodingType: Camera.EncodingType.PNG,
-							saveToPhotoAlbum : true,
-							targetWidth: 1200,
-							targetHeight: 1800
-					};
-					$cordovaCamera.getPicture(options).then(function(data) {
-						$scope.product.images.push({"attachment": "data:image/png;base64," + data});
-					});
-			}catch(err){
-				Log.message("Cannot access camera", true, "Error");
-			}
-	}
-	$scope.getPictureFromGallery = function(e) {
-		$scope.menu.state = "closed";
-		var options = {
-				maximumImagesCount: 1,
-				quality: 100
-		};
-
-		try {
-			 $cordovaImagePicker.getPictures(options)
-					.then(function(results) {
-							if (results[0]) {
-									ImageService.convertUrlToBase64(results[0], function(data) {
-										$timeout(function(){
-											$scope.product.images.push({"attachment": data});
-										})
-									}, "image/jpeg");
-							}
-					}, function(error) {
-							Log.message("Error loading photo", true, "Error");
-					});
-		} catch(err){
-			Log.message("Cannot access gallery", true, "Error");
-		}
-	}
-	*/
-
 	$scope.editTags = function(){
 		var ionAutocompleteElement = document.getElementsByClassName("tags");
     angular.element(ionAutocompleteElement).controller('ionAutocomplete').fetchSearchQuery("", true);
@@ -503,20 +473,6 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 		delete $scope.product.images[0].src;
 		$scope.modal.remove();
 	}
-	/*
-	$scope.doCropImage = function(){
-		$scope.editImage = {
-			old : ($scope.product.images[0].attachment) ? 'data:image/jpeg;base64,' + $scope.product.images[0].attachment : $scope.product.images[0].src
-		};
-		$ionicModal.fromTemplateUrl("image-edit-modal.html", {
-			scope : $scope,
-			animation : "slide-in-up"
-		}).then(function(modal){
-			$scope.modal = modal;
-			$scope.modal.show();
-		})
-	}
-	*/
 
 	$scope.$on('$ionicView.beforeEnter', function(){
     if(!$scope.store){
@@ -526,8 +482,7 @@ angular.module('dorrbell').controller('NewProductController', function($scope, $
 			$scope.getProduct(false);
 		}else{
 			$scope.product = {
-				images : [],
-				tags : ['New']
+				images : []
 			};
 			$scope.tag = {externalModel : ['New']};
 			$scope.meta = {district : "Pearl District"};
@@ -656,6 +611,15 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 		return ProductFactory.getProductDetailsById($state.params.productId, noCache);
 	}
 
+	$scope.getImageClass = function(image){
+		if(!image.Shopify_Id__c)
+			return 'col thumb new';
+		else if(image.Shopify_Id__c == $scope.product.Image__r.Shopify_Id__c)
+			return 'col thumb selected';
+		else
+			return 'col thumb';
+	}
+
 	$scope.getPicture = function(e) {
 			$scope.menu.state = "closed";
 			try{
@@ -669,17 +633,23 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 							targetWidth: 1200,
 							targetHeight: 1800
 					};
-					$ionicLoading.show({template: 'Uploading your image...<br/>this may take a minute', duration : 30000});
 					$cordovaCamera.getPicture(options).then(function(data) {
+						var loadingImage = {Image_Source__c : "data:image/png;base64," + data};
+						$scope.loading.images.push(loadingImage);
+
+
 						var image = {attachment : data};
 						if(!$scope.product.Images__r || $scope.product.Images__r.records.length == 0)
 							image.position = 1;
-						ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(reload, errorHandler);
+
+						ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(function(){
+							$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
+							reload();
+						}, errorHandler);
 					}, function(){
-						$ionicLoading.hide();
+
 					});
 			}catch(err){
-				$ionicLoading.hide();
 				Log.message("Cannot access camera", true, "Error");
 			}
 	}
@@ -691,30 +661,36 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 		};
 
 		try {
-			$ionicLoading.show({template: 'Uploading your image...<br/>this may take a minute', duration : 30000});
 			 $cordovaImagePicker.getPictures(options)
 					.then(function(results) {
 							if (results[0]) {
+									if(ionic.Platform.isIOS())
+										results[0] = results[0].substring(results[0].indexOf('/tmp/'));
+
 									ImageService.convertUrlToBase64(results[0], function(data) {
 										$timeout(function(){
+											var loadingImage = {Image_Source__c : data};
+											$scope.loading.images.push(loadingImage);
+
 											if(data.indexOf('base64,') >= 0)
 												data = data.substring(data.indexOf('base64,') + 7);
 
 											var image = {attachment : data};
 											if(!$scope.product.Images__r || $scope.product.Images__r.records.length == 0)
 												image.position = 1;
-											ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(reload, errorHandler);
+											ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(function(){
+												$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
+												reload();
+											}, errorHandler);
 										})
 									}, "image/jpeg", 1200, 1800);
 							}else{
-								$ionicLoading.hide();
+
 							}
 					}, function(error) {
-						$ionicLoading.hide();
 						Log.message("Error loading photo", true, "Error");
 					});
 		} catch(err){
-			$ionicLoading.hide();
 			Log.message("Cannot access gallery", true, "Error");
 		}
 	}
@@ -771,6 +747,7 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 			window.screen.unlockOrientation()
 		}
 	});
+	$scope.loading = {images : new Array()};
 });
 
 angular.module('dorrbell').controller('VariantNewController', function($scope, $state, $ionicLoading, $ionicPopup, $ionicHistory, $cordovaBarcodeScanner, $ionicNativeTransitions, $q, $filter, ProductFactory, MetadataFactory, Log){

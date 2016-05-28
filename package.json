@@ -36,10 +36,12 @@
       "id": "cordova-plugin-facebook4"
     },
     "cordova-plugin-splashscreen",
-    "cordova-plugin-screen-orientation"
+    "cordova-plugin-screen-orientation",
+    "cordova-plugin-wkwebview",
+    "cordova-plugin-file"
   ],
   "cordovaPlatforms": [
-    "ios",
-    "android"
+    "android",
+    "ios"
   ]
 }
