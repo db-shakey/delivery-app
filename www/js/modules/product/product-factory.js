@@ -9,12 +9,14 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 									Product2.Id, \
 									UnitPrice, \
 									Product2.Image__r.Image_Source__c, \
+									Product2.Image__r.Image_Thumb__c, \
 									Product2.Barcode__c, \
 									Product2.Store__r.Name, \
 									Product2.Store__r.External_Id__c, \
 									Product2.Store__c, \
 									Product2.Parent_Product__r.Brand__c, \
 									Product2.Parent_Product__r.Image__r.Image_Source__c, \
+									Product2.Parent_Product__r.Image__r.Image_Thumb__c, \
 									Product2.Body_Html__c, \
 									Product2.Family, \
 									External_Id__c, \
@@ -34,6 +36,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 														Name, \
 														Shopify_Id__c, \
 														Image__r.Image_Source__c, \
+														Image__r.Image_Thumb__c, \
 														Barcode__c, \
 														Store__r.Name, \
 														Store__r.External_Id__c, \
@@ -41,7 +44,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 														Body_Html__c, \
 														Family, \
 														Tags__c, \
-														(SELECT Id, Name, SKU__c, Barcode__c, Image__r.Image_Source__c FROM Variants__r), \
+														(SELECT Id, Name, SKU__c, Barcode__c, Image__r.Image_Source__c, Image__r.Image_Thumb__c FROM Variants__r), \
 														(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
 											FROM Product2 \
 											WHERE Shopify_Id__c = '" + externalId + "'", resolve);
@@ -61,6 +64,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Root_Product_Name__c, \
 													Published_At__c, \
 													Image__r.Image_Source__c, \
+													Image__r.Image_Thumb__c, \
 													Image__r.Shopify_Id__c, \
 													Store__r.External_Id__c, \
 													Store__c, \
@@ -68,8 +72,8 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 													Store__r.Name, \
 													Parent_Product__c, \
 													Parent_Product__r.Shopify_Id__c, \
-													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c FROM Variants__r WHERE IsActive = TRUE ORDER BY Position__c ASC), \
-													(SELECT Id, Image_Source__c, Position__c, Shopify_Id__c FROM Images__r), \
+													(SELECT Id, Name, SKU__c, Barcode__c, Shopify_Id__c, Image__r.Image_Source__c, Image__r.Image_Thumb__c FROM Variants__r WHERE IsActive = TRUE ORDER BY Position__c ASC), \
+													(SELECT Id, Image_Source__c, Image_Thumb__c, Position__c, Shopify_Id__c FROM Images__r), \
 													(SELECT Id, UnitPrice FROM PricebookEntries), \
 													(SELECT Id, Value__c, Option__r.Name FROM Product_Options__r) \
 										FROM Product2 \
@@ -87,6 +91,8 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 															PricebookEntry.Product2.Name, \
 															PricebookEntry.Product2.Image__r.Image_Source__c, \
 															PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c, \
+															PricebookEntry.Product2.Image__r.Image_Thumb__c, \
+															PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Thumb__c, \
 															PricebookEntry.Product2.Root_Product_Name__c, \
 															PricebookEntryId, \
 															Status__c, \
@@ -117,7 +123,7 @@ angular.module('dorrbell').factory("ProductFactory", function(force, $rootScope,
 		},
 		getProductImages : function(productId){
 			return $q(function(resolve, reject){
-					force.query("SELECT Id, Image_Source__c, Position__c, Shopify_Id__c FROM Image__c WHERE Product__c = '" + productId + "' ORDER BY Position__c ASC", resolve, reject);
+					force.query("SELECT Id, Image_Source__c, Image_Thumb__c, Position__c, Shopify_Id__c FROM Image__c WHERE Product__c = '" + productId + "' ORDER BY Position__c ASC", resolve, reject);
 			});
 		},
 		createProduct : function(product, storeId, callback, error){

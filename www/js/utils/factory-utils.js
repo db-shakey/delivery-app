@@ -6,19 +6,19 @@ angular.module('dorrbell').factory("$localCache", function($rootScope, JSUtils, 
 		init : function(callback){
 			var that = this;
 			if(!socket){
-				socket = io(HerokuService.getEndpoints().ws, {
-					path : '/socket.io-client',
-					transports : ['websocket']
-				});
-
-				socket.on("update", function(data){
-					for(var x in cache){
-						if(JSUtils.hasId(cache[x], data.id)){
-							that.updateCache(x, true);
+					socket = io(HerokuService.getEndpoints().ws, {
+						path : '/socket.io-client',
+						transports : ['websocket']
+					});
+					socket.on("update", function(data){
+						for(var x in cache){
+							if(JSUtils.hasId(cache[x], data.id)){
+								that.updateCache(x, true);
+							}
 						}
-					}
-				});
-				socket.on("connect", callback);
+					});
+					socket.on("connect", callback);
+
 			}else{
 				callback();
 			}

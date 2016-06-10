@@ -4,7 +4,7 @@
   <ion-nav-title>
       Order #{{order.Name}}
   </ion-nav-title>
-  
+
   <ion-content has-bouncing="false" ng-cloak>
 
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getOrder(true)"></ion-refresher>
@@ -12,7 +12,7 @@
       <div class="list list-inset" ng-repeat="item in order.OrderItems.records" ng-if="order">
         <div class="item row product-detail">
           <div class="col padding-horizontal">
-            <img ng-click="showImageModal(item)" fallback-src="{{item.PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c}}" ng-src="{{item.PricebookEntry.Product2.Image__r.Image_Source__c}}"/>
+            <img ng-click="showImageModal(item)" fallback-src="{{item.PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Thumb__c}}" ng-src="{{item.PricebookEntry.Product2.Image__r.Image_Thumb__c}}"/>
           </div>
 
           <div class="col-67">

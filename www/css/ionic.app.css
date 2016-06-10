@@ -19389,6 +19389,10 @@ ion-side-menu h1 img {
 .login form {
   margin-bottom: 10vh; }
 
+.login a {
+  color: #a7d3d9;
+  text-decoration: none; }
+
 .register-modal .btn-fb {
   color: #fff;
   background-color: #3b5998; }
@@ -19686,6 +19690,8 @@ ion-view ion-header-bar.bar-subheader {
 
 .product-new ion-nav-bar, .variant-edit ion-nav-bar {
   z-index: 5 !important; }
+  .product-new ion-nav-bar .nav-bar-title, .variant-edit ion-nav-bar .nav-bar-title {
+    font-size: 12px; }
 
 .product-gallery .row {
   -webkit-flex-wrap: wrap;

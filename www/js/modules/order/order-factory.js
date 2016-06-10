@@ -110,12 +110,14 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 								PricebookEntryId, \
 								PricebookEntry.Product2.Barcode__c, \
 								PricebookEntry.Product2.Image__r.Image_Source__c, \
+								PricebookEntry.Product2.Image__r.Image_Thumb__c, \
 								PricebookEntry.Product2.Name, \
 								PricebookEntry.Product2.Parent_Product__r.Family, \
 								PricebookEntry.Product2.Root_Product_Name__c, \
 								PricebookEntry.Product2.SKU__c, \
 								PricebookEntry.Product2.Parent_Product__c, \
 								PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c, \
+								PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Thumb__c, \
 								Order_Store__r.Store__c, \
 								Order_Store__r.Store__r.Name, \
 								Order_Store__c, \
@@ -150,7 +152,9 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 														SELECT Id, \
 															PricebookEntry.Product2.Name, \
 															PricebookEntry.Product2.Image__r.Image_Source__c, \
+															PricebookEntry.Product2.Image__r.Image_Thumb__c, \
 															PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c, \
+															PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Thumb__c, \
 															PricebookEntry.Product2.Root_Product_Name__c, \
 															PricebookEntryId, \
 															Status__c, \

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="44" id="com.dorrbell.mobile" ios-CFBundleVersion="0.3.02" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="45" id="com.dorrbell.mobile" ios-CFBundleVersion="0.3.03" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Dorrbell</name>
     <description>
       The On-Demand Fitting Room

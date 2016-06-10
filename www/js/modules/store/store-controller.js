@@ -48,19 +48,7 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
 
 angular.module('dorrbell').controller("StoreDetailController", function($scope, $state, $ionicModal, StoreFactory){
   $scope.getStore = function( noCache){
-    $scope.$watch(StoreFactory.getStoreById($state.params.storeId, noCache), function(newValue, oldValue) {
-      if (newValue){
-        $scope.store = newValue[0];
-        if($scope.store.Google_Store_Hours__c){
-          angular.forEach($scope.store.Google_Store_Hours__c.split(/\r\n|\r|\n/g), function(obj, index){
-            if(index == (new Date().getDay() - 1) || (index == 6 && new Date().getDay() == 0)){
-              $scope.store.currentHour = obj;
-            }
-          });
-        }
-      }
-      $scope.$broadcast('scroll.refreshComplete');
-    });
+    return StoreFactory.getStoreById($state.params.storeId, noCache);
   }
 
   $scope.goToUrl = function(url){
@@ -91,6 +79,18 @@ angular.module('dorrbell').controller("StoreDetailController", function($scope, 
   }
 
   $scope.$on('$ionicView.beforeEnter', function(){
-    $scope.getStore(false);
+    $scope.$watchCollection($scope.getStore(false), function(newValue, oldValue) {
+      if (newValue){
+        $scope.store = newValue[0];
+        if($scope.store.Google_Store_Hours__c){
+          angular.forEach($scope.store.Google_Store_Hours__c.split(/\r\n|\r|\n/g), function(obj, index){
+            if(index == (new Date().getDay() - 1) || (index == 6 && new Date().getDay() == 0)){
+              $scope.store.currentHour = obj;
+            }
+          });
+        }
+      }
+      $scope.$broadcast('scroll.refreshComplete');
+    });
   });
 })

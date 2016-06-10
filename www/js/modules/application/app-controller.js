@@ -66,7 +66,7 @@ angular.module('dorrbell').controller('AppCtrl', function($scope, HerokuService,
  *  LoginController
  *  @description: Handles login screen when not authenticated with Salesforce
  */
-angular.module('dorrbell').controller("LoginController", function($scope, $state, $q, HerokuService, force, ImageService, Log, $ionicModal, $ionicViewSwitcher, $rootScope, $ionicLoading, $cordovaOauth, $cordovaFacebook){
+angular.module('dorrbell').controller("LoginController", function($scope, $state, $q, HerokuService, force, ImageService, Log, $ionicModal, $localStorage, $ionicViewSwitcher, $rootScope, $ionicLoading, $ionicPopup, $cordovaOauth, $cordovaFacebook){
 
 
   $scope.login = function(){
@@ -155,9 +155,44 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
       $scope.modal.hide();
   }
 
+  $scope.selectDomain = function(){
+    $scope.defaultEndpoint = $scope.user.endpoint;
+    $ionicPopup.show({
+      template : '<input type="text" ng-model="user.endpoint"/>',
+      title : 'Enter The Domain',
+      scope : $scope,
+      buttons : [
+        {
+          text : 'Cancel',
+          type : 'button-small',
+          onTap : function(e){
+            $scope.user.endpoint = $scope.defaultEndpoint;
+          }
+        },
+        {
+          text : 'Default',
+          type: 'button-small',
+          onTap : function(e){
+            $scope.user.endpoint = 'https://dorrbell.herokuapp.com';
+            e.preventDefault();
+          }
+        },
+        {
+          text : '<b>Save</b>',
+          type : 'button-positive button-small'
+        }
+      ]
+    })
+  }
 
   $scope.$on('$ionicView.beforeEnter', function(){
-    $scope.user = {};
+    $localStorage.get('endpoint', 'https://dorrbell.herokuapp.com').then(function(v){
+      $scope.user = {
+        endpoint : v
+      };
+
+    })
+
     // Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function() {
       $scope.modal.remove();

@@ -12,7 +12,7 @@
           {{key}}
         </ion-item>
         <ion-item ng-repeat="product in value" class="item-thumbnail-left" ng-click="goToProduct(product)">
-          <img lazy-img="{{product.Image__r.Image_Source__c}}" fallback-src>
+          <img lazy-img="{{product.Image__r.Image_Thumb__c}}" fallback-src>
           <h2>
             {{product.Name}}
 

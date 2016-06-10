@@ -494,6 +494,10 @@ ion-side-menu{
 	  form{
 	    margin-bottom: 10vh;
 	  }
+    a{
+      color: $positive-lite;
+      text-decoration: none;
+    }
 	}
 
 	.register-modal{
@@ -876,6 +880,9 @@ ion-side-menu{
 	}
   ion-nav-bar{
     z-index: 5 !important;
+    .nav-bar-title{
+      font-size: $font-size-x-small;
+    }
   }
 }
 .product-gallery{

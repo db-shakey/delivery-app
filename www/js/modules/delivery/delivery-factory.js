@@ -47,7 +47,9 @@ angular.module('dorrbell').factory("DeliveryFactory", function(force, $rootScope
 								(SELECT Id, \
 									PricebookEntry.Product2.Name, \
 									PricebookEntry.Product2.Image__r.Image_Source__c, \
+									PricebookEntry.Product2.Image__r.Image_Thumb__c, \
 									PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Source__c, \
+									PricebookEntry.Product2.Parent_Product__r.Image__r.Image_Thumb__c, \
 									PricebookEntry.Product2.Root_Product_Name__c, \
 									PricebookEntryId, \
 									Status__c, \

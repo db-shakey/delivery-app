@@ -634,7 +634,7 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 							targetHeight: 1800
 					};
 					$cordovaCamera.getPicture(options).then(function(data) {
-						var loadingImage = {Image_Source__c : "data:image/png;base64," + data};
+						var loadingImage = {Image_Thumb__c : "data:image/png;base64," + data};
 						$scope.loading.images.push(loadingImage);
 
 
@@ -669,7 +669,7 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 
 									ImageService.convertUrlToBase64(results[0], function(data) {
 										$timeout(function(){
-											var loadingImage = {Image_Source__c : data};
+											var loadingImage = {Image_Thumb__c : data};
 											$scope.loading.images.push(loadingImage);
 
 											if(data.indexOf('base64,') >= 0)

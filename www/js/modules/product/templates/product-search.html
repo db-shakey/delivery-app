@@ -12,8 +12,8 @@
           {{(key == 'null') ? 'N/A' : key}}
         </ion-item>
         <ion-item ng-repeat="product in value" class="item-thumbnail-left" ng-click="goToProductDetails(product.Id)">
-          <img lazy-img="{{product.Image__r.Image_Source__c}}" ng-if="product.Image__r.Image_Source__c">
-          <img fallback-src ng-if="!product.Image__r.Image_Source__c">
+          <img lazy-img="{{product.Image__r.Image_Thumb__c}}" ng-if="product.Image__r.Image_Thumb__c">
+          <img fallback-src ng-if="!product.Image__r.Image_Thumb__c">
           <h2>
             {{product.Name}}
           </h2>

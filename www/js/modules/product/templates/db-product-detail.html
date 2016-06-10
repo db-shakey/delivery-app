@@ -12,7 +12,7 @@
         <div class="row">
 
           <div class="col col-33">
-            <img ng-src="{{product.Image__r.Image_Source__c}}" fallback-src ng-click="openImageModal()"></img>
+            <img ng-src="{{product.Image__r.Image_Thumb__c}}" fallback-src ng-click="openImageModal()"></img>
           </div>
 
           <div class="col col-67">
@@ -38,7 +38,7 @@
       <div class="animated fadeInUp">
         <ion-list can-swipe="product.Variants__r.records.length > 1" show-reorder="showReorder">
           <ion-item class="item-thumbnail-left" ng-repeat="variant in product.Variants__r.records" ui-sref="db.variantEdit({productId : variant.Id})">
-            <img ng-src="{{variant.Image__r.Image_Source__c}}" fallback-src></img>
+            <img ng-src="{{variant.Image__r.Image_Thumb__c}}" fallback-src></img>
             <h2>{{variant.Name}}</h2>
             <p>SKU: {{variant.SKU__c}}</p>
             <p>Barcode: {{variant.Barcode__c}}</p>

@@ -21,7 +21,7 @@
         <div class="item text-center" ng-if="images && images.length > 0" ng-cloak>
           <ion-slides options="options" slider="data.slider">
             <ion-slide-page ng-repeat="image in images">
-              <div lazy-img="{{image.Image_Source__c}}" class="thumb"></div>
+              <div lazy-img="{{image.Image_Thumb__c}}" class="thumb"></div>
             </ion-slide-page>
           </ion-slides>
         </div>
