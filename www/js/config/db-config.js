@@ -4,7 +4,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     .state('db', {
       url: '/db',
       abstract: true,
-      templateUrl: 'js/modules/application/templates/db-menu.html',
+      templateUrl: 'application/templates/db-menu.html',
       controller: 'AppCtrl',
       data : {
         requireLogin : true
@@ -20,7 +20,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/storeList',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/store/templates/store-list.html',
+          templateUrl : 'store/templates/store-list.html',
           controller : 'StoreListController'
         }
       },
@@ -44,7 +44,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/productlist/:storeId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/db-product-list.html',
+          templateUrl : 'product/templates/db-product-list.html',
           controller : 'ProductList',
           cache: false
         }
@@ -67,7 +67,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/newProduct/:storeId/:productId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/product-new.html',
+          templateUrl : 'product/templates/product-new.html',
           controller : 'NewProductController'
         }
       },
@@ -91,7 +91,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/productdetails/:productId/:deliveryId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/db-product-detail.html',
+          templateUrl : 'product/templates/db-product-detail.html',
           controller : 'DbProductDetailController'
         }
       },
@@ -113,7 +113,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/productgallery/:productId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/gallery.html',
+          templateUrl : 'product/templates/gallery.html',
           controller : 'GalleryController'
         }
       },
@@ -135,7 +135,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/variantEdit/:productId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/db-variant-edit.html',
+          templateUrl : 'product/templates/db-variant-edit.html',
           controller : 'VariantEditController'
         }
       },
@@ -158,7 +158,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/variantNew/:productId/:color',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/db-variant-new.html',
+          templateUrl : 'product/templates/db-variant-new.html',
           controller : 'VariantNewController'
         }
       },
@@ -180,7 +180,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/account',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/application/templates/account.html',
+          templateUrl : 'application/templates/account.html',
           controller : 'AccountController'
         }
       },
@@ -200,7 +200,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/password',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/application/templates/change-password.html',
+          templateUrl : 'application/templates/change-password.html',
           controller : 'ChangePasswordController'
         }
       },
@@ -220,7 +220,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/storeDetail/:storeId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/store/templates/store-detail.html',
+          templateUrl : 'store/templates/store-detail.html',
           controller : 'StoreDetailController'
         }
       },

@@ -19,7 +19,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/deliverylist',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/delivery/templates/delivery-list.html',
+          templateUrl : 'delivery/templates/delivery-list.html',
           controller : 'DeliveryListController'
         }
       },
@@ -61,7 +61,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/account',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/application/templates/account.html',
+          templateUrl : 'application/templates/account.html',
           controller : 'AccountController'
         }
       },
@@ -81,7 +81,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/password',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/application/templates/change-password.html',
+          templateUrl : 'application/templates/change-password.html',
           controller : 'ChangePasswordController'
         }
       },
@@ -101,7 +101,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/itemsearch/:deliveryId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/product-search.html',
+          templateUrl : 'product/templates/product-search.html',
           controller : 'ProductSearch',
           cache: false
         }
@@ -124,7 +124,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/productdetails/:productId/:deliveryId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/product/templates/product-detail.html',
+          templateUrl : 'product/templates/product-detail.html',
           controller : 'ProductDetail'
         }
       },

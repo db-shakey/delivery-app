@@ -596,7 +596,7 @@ angular.module('dorrbell').controller('DbProductDetailController', function($sco
   });
 });
 
-angular.module('dorrbell').controller('GalleryController', function($scope, $rootScope, $state, $cordovaCamera, $cordovaImagePicker, $timeout, $ionicActionSheet, $ionicPopup, $ionicLoading, ImageService, ProductFactory, Log){
+angular.module('dorrbell').controller('GalleryController', function($scope, $rootScope, $state, $cordovaCamera, $cordovaImagePicker, $timeout, $ionicActionSheet, $ionicPopup, $ionicLoading, HerokuService, ProductFactory, Log){
 
 	var reload = function(){
 		$scope.getProduct(true);
@@ -625,7 +625,7 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 			try{
 					var options = {
 							quality: 100,
-							destinationType: Camera.DestinationType.DATA_URL,
+							destinationType: Camera.DestinationType.FILE_URI,
 							sourceType: Camera.PictureSourceType.CAMERA,
 							allowEdit : false,
 							encodingType: Camera.EncodingType.PNG,
@@ -633,19 +633,22 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 							targetWidth: 1200,
 							targetHeight: 1800
 					};
-					$cordovaCamera.getPicture(options).then(function(data) {
-						var loadingImage = {Image_Thumb__c : "data:image/png;base64," + data};
+					$cordovaCamera.getPicture(options).then(function(imageURI) {
+						var loadingImage = {Image_Thumb__c : imageURI};
 						$scope.loading.images.push(loadingImage);
-
-
-						var image = {attachment : data};
-						if(!$scope.product.Images__r || $scope.product.Images__r.records.length == 0)
-							image.position = 1;
-
-						ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(function(){
+						HerokuService.upload(imageURI, '/api/addImage', {
+							fileKey : 'product',
+							fileName : $scope.product.Shopify_Id__c,
+							mimeType : 'image/png'
+						}).then(function(result){
 							$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
 							reload();
-						}, errorHandler);
+						}, function(err){
+							$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
+							Log.message(err, true, "Error");
+						}, function(progress){
+
+						});
 					}, function(){
 
 					});
@@ -662,34 +665,29 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 
 		try {
 			 $cordovaImagePicker.getPictures(options)
-					.then(function(results) {
+					.then(
+						function(results) {
 							if (results[0]) {
-									if(ionic.Platform.isIOS())
-										results[0] = results[0].substring(results[0].indexOf('/tmp/'));
+								var loadingImage = {Image_Thumb__c : results[0]};
+								$scope.loading.images.push(loadingImage);
+								HerokuService.upload(results[0], '/api/addImage', {
+									fileKey : 'product',
+									fileName : $scope.product.Shopify_Id__c,
+									mimeType : 'image/png'
+								}).then(function(result){
+									$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
+									reload();
+								}, function(err){
+									Log.message(err, true, "Error");
+								}, function(progress){
 
-									ImageService.convertUrlToBase64(results[0], function(data) {
-										$timeout(function(){
-											var loadingImage = {Image_Thumb__c : data};
-											$scope.loading.images.push(loadingImage);
-
-											if(data.indexOf('base64,') >= 0)
-												data = data.substring(data.indexOf('base64,') + 7);
-
-											var image = {attachment : data};
-											if(!$scope.product.Images__r || $scope.product.Images__r.records.length == 0)
-												image.position = 1;
-											ProductFactory.createImage(image, $scope.product.Shopify_Id__c).then(function(){
-												$scope.loading.images.splice($scope.loading.images.indexOf(loadingImage), 1);
-												reload();
-											}, errorHandler);
-										})
-									}, "image/jpeg", 1200, 1800);
-							}else{
-
+								});
 							}
-					}, function(error) {
-						Log.message("Error loading photo", true, "Error");
-					});
+						},
+						function(error) {
+							Log.message("Error loading photo", true, "Error");
+						}
+					);
 		} catch(err){
 			Log.message("Cannot access gallery", true, "Error");
 		}

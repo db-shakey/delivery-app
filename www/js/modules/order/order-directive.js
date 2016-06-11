@@ -1,7 +1,7 @@
 angular.module('dorrbell').directive("orderStatus", function(){
 	return {
 		restrict : 'EA',
-		templateUrl : "order-status.htm",
+		templateUrl : "modal/templates/order-status.html",
 		link : function($scope, element){
 			$scope.$watch('order.Status__c', function(newValue, oldValue){
 				if(newValue == 'Assigned' || newValue == 'Accepted'){
@@ -61,7 +61,7 @@ angular.module('dorrbell').directive("deliveryStatus", function(){
 angular.module('dorrbell').directive("itemStatus", function(){
 	return {
 		restrict : 'E',
-		templateUrl : 'delivery-item-status.htm',
+		templateUrl : 'modal/templates/delivery-item-status.html',
 		replace : true,
 		link : function($scope, element, attributes){
 			$scope.statusMap = {

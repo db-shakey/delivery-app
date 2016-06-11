@@ -4,7 +4,7 @@ _app.directive("outputField", function(MetadataFactory, $filter, $timeout, JSUti
 		scope : {
 			record : "="
 		},
-		templateUrl : "output-field.htm",
+		templateUrl : "modal/templates/output-field.html",
 		link : function($scope, element, attributes){
 			var fieldName = attributes.fieldName;
 			var objectName = attributes.objectName;

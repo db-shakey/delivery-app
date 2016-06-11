@@ -13,7 +13,7 @@
       <div ng-repeat="image in loading.images track by $index"
             lazy-img="{{image.Image_Source__c}}"
             class="col thumb new">
-        <i class="icon ion-ios-upload"></i>
+        <ion-spinner></ion-spinner>
       </div>
     </div>
     <div class="middle-box text-center p-m" ng-if="!product.Images__r.records || product.Images__r.records.length == 0">

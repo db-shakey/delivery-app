@@ -1,0 +1,14 @@
+<div ng-switch on="layout" ng-if="value && field">
+  <div ng-switch-default class="row">
+    <label class="col col-33 control-label">
+            {{field}}
+        </label>
+        <div class="col col-67 form-control-static text-left">
+            {{value}}
+        </div>
+  </div>
+  <div ng-switch-when="vertical">
+    <dt>{{field}}</dt>
+    <dd>{{value}}</dd>
+  </div>
+</div>

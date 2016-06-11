@@ -1,7 +1,7 @@
 angular.module('dorrbell').directive("itemStatus", function(){
 	return {
 		restrict : 'E',
-		templateUrl : 'delivery-item-status.htm',
+		templateUrl : 'modal/templates/delivery-item-status.html',
 		replace : true,
 		link : function($scope, element, attributes){
 			$scope.statusMap = {

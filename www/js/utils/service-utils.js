@@ -429,7 +429,7 @@ angular.module('dorrbell').service("RegistrationValidator", function(Log){
 	}
 })
 
-angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http, $localStorage, Log, $state, $rootScope, $q, $ionicLoading){
+angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http, $localStorage, Log, $state, $rootScope, $q, $ionicLoading, $cordovaFileTransfer){
 
 	var storage_id = "doorbell_auth";
 	var storage_user = "dorrbell_user";
@@ -501,6 +501,20 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 	this.revoke = function(){
 		$localStorage.deleteObject(storage_user);
 		$localStorage.deleteObject(storage_id);
+	}
+
+	this.upload = function(fileUrl, what, data){
+		var that = this;
+		return this.getToken().then(function(token){
+
+			data.headers = {
+				'x-access-token' : token,
+				'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw==',
+				'x-to-endpoint' : that.endpoint.http
+			}
+
+			return $cordovaFileTransfer.upload(that.endpoint.http + what, fileUrl, data);
+		});
 	}
 
 	this.get = function(what, callback, errorCallback){
@@ -578,6 +592,7 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 
 angular.module('dorrbell').service("ImageService", function(){
 	this.convertUrlToBase64 = function(url, callback, outputFormat, width, height){
+		/*
 		var img = new Image();
 	    img.crossOrigin = 'Anonymous';
 	    img.onload = function(){
@@ -591,5 +606,23 @@ angular.module('dorrbell').service("ImageService", function(){
 	        canvas = null;
 	    };
 	    img.src = url;
+			*/
+			window.resolveLocalFileSystemURL(
+				url,
+				function(fileEntry){
+					fileEntry.file(function(file){
+						var reader = new FileReader();
+              reader.onloadend = function(e) {
+                   var content = this.result;
+                   callback(content);
+              };
+              // The most important point, use the readAsDatURL Method from the file plugin
+              reader.readAsDataURL(file);
+					})
+				},
+				function(e){
+					console.log(e);
+				}
+			);
 	}
 })

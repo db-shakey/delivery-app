@@ -64,7 +64,7 @@ angular.module('dorrbell').controller("StoreDetailController", function($scope, 
   };
 
   $scope.openHours = function(){
-    $ionicModal.fromTemplateUrl('store-hours.html', {
+    $ionicModal.fromTemplateUrl('modal/templates/store-hours.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {

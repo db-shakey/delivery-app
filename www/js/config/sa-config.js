@@ -20,7 +20,7 @@ angular.module('dorrbell').config(function($stateProvider) {
 
     .state("login", {
       url : '/login',
-      templateUrl : 'js/modules/application/templates/login.html',
+      templateUrl : 'application/templates/login.html',
       controller : 'LoginController',
       data : {
         requireLogin : false
@@ -78,7 +78,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/order/:orderId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/order/templates/order-detail.html',
+          templateUrl : 'order/templates/order-detail.html',
           controller : 'OrderDetail',
           cache: false
         }
@@ -99,7 +99,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/orderproducts/:orderId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/order/templates/order-products.html',
+          templateUrl : 'order/templates/order-products.html',
           controller : 'OrderProductDetail'
         }
       },
@@ -119,7 +119,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url : '/deliverydetail/:deliveryId',
       views : {
         'menuContent' : {
-          templateUrl : 'js/modules/delivery/templates/sa-delivery-detail.html',
+          templateUrl : 'delivery/templates/sa-delivery-detail.html',
           controller : 'DeliveryDetail'
         }
       },
@@ -140,7 +140,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     url : '/returns/:orderId',
     views : {
       'menuContent' : {
-        templateUrl : 'js/modules/return/templates/returns.html',
+        templateUrl : 'return/templates/returns.html',
         controller : 'ReturnController'
       }
     },
@@ -161,7 +161,7 @@ angular.module('dorrbell').config(function($stateProvider) {
   url : '/productdetails/:productId/:deliveryId',
   views : {
     'menuContent' : {
-      templateUrl : 'js/modules/product/templates/product-detail.html',
+      templateUrl : 'product/templates/product-detail.html',
       controller : 'ProductDetail'
     }
   },
@@ -183,7 +183,7 @@ angular.module('dorrbell').config(function($stateProvider) {
   url : '/itemsearch/:deliveryId',
   views : {
     'menuContent' : {
-      templateUrl : 'js/modules/product/templates/product-search.html',
+      templateUrl : 'product/templates/product-search.html',
       controller : 'ProductSearch',
       cache: false
     }
@@ -206,7 +206,7 @@ angular.module('dorrbell').config(function($stateProvider) {
   url : '/account',
   views : {
     'menuContent' : {
-      templateUrl : 'js/modules/application/templates/account.html',
+      templateUrl : 'application/templates/account.html',
       controller : 'AccountController'
     }
   },
@@ -226,7 +226,7 @@ angular.module('dorrbell').config(function($stateProvider) {
   url : '/password',
   views : {
     'menuContent' : {
-      templateUrl : 'js/modules/application/templates/change-password.html',
+      templateUrl : 'application/templates/change-password.html',
       controller : 'ChangePasswordController'
     }
   },
@@ -245,7 +245,7 @@ angular.module('dorrbell').config(function($stateProvider) {
 
 .state("register", {
   url : '/register',
-  templateUrl : 'js/modules/application/templates/register.html',
+  templateUrl : 'application/templates/register.html',
   controller : 'RegisterController',
   params : {contact : null},
   data : {

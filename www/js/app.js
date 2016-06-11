@@ -10,12 +10,13 @@ var _app = angular.module('dorrbell', ['ionic', 'oc.lazyLoad', 'ngCordova', 'ngI
                                         'ngMap', 'ui.calendar', 'templates', 'jett.ionic.filter.bar',
                                         'ion-autocomplete', 'ngCordovaOauth', 'ionic-native-transitions',
                                         'ion-gallery', 'ngImgCrop']);
-angular.module('templates', []);
+
 
 if(ionic.Platform.isAndroid())
   ionic.Platform.isFullScreen=true;
 
 ionic.Platform.ready(function(){
+
 
     angular.module('dorrbell').run(function($ionicPlatform, $ocLazyLoad, $rootScope, $state, HerokuService, $ionicHistory) {
 
@@ -68,7 +69,6 @@ ionic.Platform.ready(function(){
           ,'lib/fullcalendar/dist/fullcalendar.min.css'
           ,'lib/swiper/dist/css/swiper.min.css'
           ,'lib/ionic-filter-bar/dist/ionic.filter.bar.css'
-          ,'js/utils/template-utils.html'
           ,'lib/ion-autocomplete/dist/ion-autocomplete.min.css'
         ]);
 

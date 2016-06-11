@@ -141,7 +141,7 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   }
 
   $scope.getStarted = function(){
-    $ionicModal.fromTemplateUrl('register-modal.htm', {
+    $ionicModal.fromTemplateUrl('modal/templates/register-modal.html', {
       scope : $scope,
       animation : 'slide-in-up'
     }).then(function(modal){

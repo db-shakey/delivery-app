@@ -920,9 +920,9 @@ div.thumb{
   background-color: $light;
   -webkit-flex: 1 1 25vw;
   flex: 1 1 25vw;
-
   &.new{
-    opacity: .2;
+    padding-top: 3rem;
+    text-align: center;
   }
 }
 /********

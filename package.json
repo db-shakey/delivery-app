@@ -38,7 +38,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-screen-orientation",
     "cordova-plugin-wkwebview",
-    "cordova-plugin-file"
+    "cordova-plugin-file",
+    "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": [
     "ios",

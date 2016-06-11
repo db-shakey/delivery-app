@@ -1,0 +1,33 @@
+<ion-modal-view class="register-modal">
+  <ion-header-bar class="bar-positive" align-title="center">
+    <h1 class="title">Get Started</h1>
+    <button class="button button-icon button-clear ion-android-close m-r-sm" ng-click="closeModal()"></button>
+  </ion-header-bar>
+  <ion-content class="p-sm">
+    <div class="middle-box text-center animated fadeInUp">
+      <h3>Use your social media account to get started</h3>
+      <div class="m-t-xl"></div>
+      <button type="button" class="button button-block btn-fb icon-left m-t-md" ng-click="facebookAuthenticate()">
+        <i class="icon ion-social-facebook m-r-sm"></i>
+        Facebook
+      </button>
+      <button type="button" class="button button-block btn-tw icon-left m-t-md" ng-click="twitterAuthentication()">
+        <i class="icon ion-social-twitter m-r-sm"></i>
+        Twitter
+      </button>
+      <hr class="m-t-xl m-b-md"/>
+
+      <p class="text-muted text-center m-b-lg">
+        <small>- Or enter your beta key -</small>
+      </p>
+      <label class="item item-input m-b-md">
+        <i class="ion ion-key placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="user.beta_key">
+      </label>
+      <button class="button button-positive button-block icon-right" ng-click="checkBeta()">
+        Next
+        <i class="icon ion-arrow-right-c"></i>
+      </button>
+    </div>
+  </ion-content>
+</ion-modal-view>

@@ -10,10 +10,12 @@ var minify = require('gulp-minify');
 var angularTemplateCache = require('gulp-angular-templatecache');
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
-  templates : ['./www/js/modules/application/**/templates/*.html']
+  sass: ['./scss/**/*.scss']
 };
-
+var config = {
+    srcTemplates:['./www/js/modules/**/**/templates/*.html'],
+    destPartials: './www/js/modules/'
+};
 gulp.task('default', ['sass']);
 
 gulp.task('sass', function(done) {
@@ -34,10 +36,9 @@ gulp.task('watch', function() {
 });
 
 gulp.task('templates', function(){
-  return gulp.src(paths.templates)
-            .pipe(angularTemplateCache())
-            .pipe(concat('templates.js'))
-            .pipe(gulp.dest('./www/lib/'));
+  return gulp.src(config.srcTemplates)
+    .pipe(angularTemplateCache('templates.js', { module:'dorrbell', standalone:true })
+    ).pipe(gulp.dest(config.destPartials));
 })
 
 gulp.task('install', ['git-check'], function() {
