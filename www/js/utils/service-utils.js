@@ -115,20 +115,6 @@ angular.module('dorrbell').service("Log", function($ionicPopup){
 });
 
 angular.module('dorrbell').service("ItemValidator", function($rootScope){
-	/*
-
-	this.canConfirmPrice = function(item, delivery){
-		return item.Status__c == 'Requested' && delivery.Status__c == 'Preparing Delivery';
-	}
-
-
-	this.canRemove = function(item, delivery){
-		return (item.Status__c == 'Ready For Check Out' || item.Status__c == 'Requested') && delivery.Status__c == 'Preparing Delivery';
-	}
-	this.showSubmenu = function(item, delivery){
-		return (this.canRemove(item, delivery) || this.canCheckout(item, delivery) || this.canUpdatePrice(item, delivery) || this.canCheckIn(item));
-	}
-	*/
 	this.canUpdatePrice = function(item, delivery){
 		return ((item.Status__c == 'Ready For Check Out'
 					|| item.Status__c == 'Requested')
@@ -136,7 +122,7 @@ angular.module('dorrbell').service("ItemValidator", function($rootScope){
 				&& $rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
 	}
 	this.canCheckout = function(item, delivery){
-		return (item.Status__c == 'Ready For Check Out'
+		return ((item.Status__c == 'Ready For Check Out' || item.Status__c == 'Requested')
 				&& (delivery.Status__c == 'Preparing Delivery')
 				&& (delivery.Order__r.Status__c == 'Pick Up In Progress')
 				&& $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact');
@@ -145,19 +131,22 @@ angular.module('dorrbell').service("ItemValidator", function($rootScope){
 		return (item.Status__c == 'Requested' && delivery.Status__c == 'Preparing Delivery');
 	}
 	this.canCheckIn = function(item){
-		return (item.Status__c == 'Returning' && $rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact');
+		return (item.Status__c == 'Returning' && ($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact' || $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact'));
 	}
 	this.canRemove = function(item, delivery){
 		return item.Status__c == 'Requested' && delivery.Status__c == 'Preparing Delivery';
 	}
 	this.saHasOptions = function(item, delivery){
-		return this.canCheckout(item, delivery);
+		return this.canCheckout(item, delivery) || this.canCheckIn(item);
 	}
 	this.retailerHasOptions = function(item, delivery){
 		return this.canRemove(item, delivery) || this.canUpdatePrice(item, delivery);
 	}
 	this.canAddItem = function(delivery){
-		return (delivery && delivery.Status__c == 'Preparing Delivery') && $rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact';
+		return (delivery && delivery.Status__c == 'Preparing Delivery') && ($rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact' || $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact');
+	},
+	this.canReturn = function(item, order){
+		return (item.Status__c == 'Checked Out' && order.Status__c == 'En Route to Customer') &&  $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact';
 	}
 });
 
@@ -165,12 +154,14 @@ angular.module('dorrbell').service("DeliveryValidator", function($rootScope, Del
 	this.buttons = [
 		{
 			condition : function(delivery){
-				return ((delivery.Status__c == 'Accepted By Retailer') || (delivery.Status__c == 'New')) && $rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact';
+				return (((delivery.Status__c == 'Accepted By Retailer' || delivery.Status__c == 'New') && $rootScope.currentUser.RecordType.DeveloperName == 'Retailer_Contact')
+								|| ($rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact' && delivery.Status__c == 'Accepted By Retailer'));
 			},
 			action : function(delivery){
 				var confirmPopup = $ionicPopup.confirm({
 			      title: 'Prepare Pickup',
-			      template: 'Do you want to start preparing this delivery?'
+			      template: 'Are you at ' + delivery.Store__r.Name + ' and starting to bag the items?',
+						okText : 'Yes'
 			    });
 			    confirmPopup.then(function(res) {
 			      if(res) {
@@ -188,7 +179,8 @@ angular.module('dorrbell').service("DeliveryValidator", function($rootScope, Del
 			action : function(delivery){
 				var confirmPopup = $ionicPopup.confirm({
 			      title: 'Delivery Checkout',
-			      template: 'Are you finished with this delivery and ready to check out?'
+			      template: 'Have you finished at ' + delivery.Store__r.Name + ' and ready to leave with the items?',
+						okText : 'Yes'
 			  });
 			  confirmPopup.then(function(res) {
 			    if(res) {
@@ -284,9 +276,20 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 				return (order.Status__c == 'Delivered To Customer' && $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact' && (order.Return_Shopping_Assistant__c == $rootScope.currentUser.Id))
 			},
 			action : function(order){
-				OrderFactory.startCollectingReturns(order.Id, function(){
-					Log.message('The customer has been notified you\'re en route to collect the returns', true, "En Route");
+				var confirmPopup = $ionicPopup.confirm({
+					title : "Start Returns",
+					template : "Are you ready to begin collecting the returns for this order? It will notify the customer you are en route.",
+					okText : 'Yes'
 				});
+				confirmPopup.then(function(res){
+					if(res){
+						$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
+						OrderFactory.startCollectingReturns(order.Id, function(){
+							$ionicLoading.hide();
+						});
+					}
+				});
+
 			},
 			icon : 'ion-android-car'
 		},
@@ -308,7 +311,7 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 				    cancelButtonLabel: 'CANCEL',
 				    cancelButtonColor: '#d4271a'
 				};
-				if($cordovaDatePicker && (typeof $cordovaDatePicker != "undefined") && $cordovaDatePicker.show){
+				try{
 					$cordovaDatePicker.show(options).then(function(date){
 						if(date){
 							order.Return_Collection_Time__c = date;
@@ -316,9 +319,8 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 								Log.message('', true, "Delivery Complete");
 							});
 						}
-
 				  });
-				}else{
+				}catch(e){
 					OrderFactory.completeDelivery(order.Id, new Date(new Date().getTime() + 3600000), function(){
 						Log.message('', true, "Delivery Complete");
 					});
@@ -328,14 +330,24 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 			icon : 'ion-checkmark'
 		},
 		{
-			label : 'Returns',
+			label : 'Returns Collected',
 			condition : function(order){
 				return (order.Status__c == 'En Route to Customer' && order.Marked_Delivered__c && $rootScope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact' && (order.Return_Shopping_Assistant__c == $rootScope.currentUser.Id))
 			},
 			action : function(order){
-				$state.go("app.returns", {orderId : order.Id});
+				var confirmPopup = $ionicPopup.confirm({
+					title : "Returns Collected",
+					template : "Have you finished collecting the returns from the customer and ready to return the items to the retailers?",
+					okText : 'Yes'
+				});
+				confirmPopup.then(function(res){
+					if(res){
+						$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
+				    OrderFactory.startReturns(order, function(){$ionicLoading.hide();});
+					}
+				});
 			},
-			icon : 'ion-ios-undo'
+			icon : 'ion-checkmark'
 		},
 		{
 			label : 'Complete Order',
@@ -349,8 +361,10 @@ angular.module('dorrbell').service("OrderValidator", function($rootScope, OrderF
 				});
 				confirmPopup.then(function(res){
 					if(res){
+						$ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
 						OrderFactory.completeOrder(order, function(){
 							Log.message("Order " + order.Name + " has been completed", true, "Order Complete");
+							$ionicLoading.hide();
 							$ionicHistory.goBack();
 						});
 					}
@@ -517,15 +531,15 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 		});
 	}
 
-	this.get = function(what, callback, errorCallback){
+	this.get = function(what, callback, errorCallback, customEndpoint){
 		var that = this;
-		if(!that.endpoint)
+		if(!that.endpoint && !customEndpoint)
 			errorCallback();
 		else{
 			this.getToken().then(function(token){
 				$http({
 					method : 'GET',
-					url : that.endpoint.http + what,
+					url : (customEndpoint) ? customEndpoint + what : that.endpoint.http + what,
 					headers : {
 						'x-access-token' : token,
 						'Authorization' : 'Basic Z14vbjcyayxOdUpnM0pfXw=='
@@ -549,15 +563,15 @@ angular.module('dorrbell').service("HerokuService", function($ionicPopup, $http,
 		}
 	}
 
-	this.post = function(what, data, callback, errorCallback, silent){
+	this.post = function(what, data, callback, errorCallback, silent, customEndpoint){
 		var that = this;
-		if(!that.endpoint)
+		if(!that.endpoint && !customEndpoint)
 			errorCallback();
 		else{
 			this.getToken().then(function(token){
 				$http({
 					method : 'POST',
-					url : that.endpoint.http + what,
+					url :  (customEndpoint) ? customEndpoint + what : that.endpoint.http + what,
 					data : data,
 					headers : {
 						'Content-Type' : 'application/json',

@@ -36,7 +36,7 @@
     <script>
             window.onerror = function(message, url, lineNumber) {
                 $.ajax({
-                    url : "https://shrouded-hollows-1707.herokuapp.com/api/error",
+                    url : "https://dorrbell.herokuapp.com/api/error",
                     type : "POST",
                     data : JSON.stringify({
                         Message__c : message,

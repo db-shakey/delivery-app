@@ -4,8 +4,10 @@
    </ion-nav-title>
 
 
-  <ion-content delegate-handle="mainScroll" ng-cloack>
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getOrders(true)"></ion-refresher>
-    <div ng-model="eventSources" ui-calendar="uiConfig.calendar" class="calendar padding-vertical" id="calendar"></div>
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getOrders(true)" data-tap-disabled="true"></ion-refresher>
+    <div>
+      <div ng-model="eventSources" ui-calendar="uiConfig.calendar" class="calendar padding-vertical" id="calendar" ng-if="eventSources && eventSources.length > 0"></div>
+    </div>
   </ion-content>
 </ion-view>

@@ -39,7 +39,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     .state('app', {
       url: '/app',
       abstract: true,
-      templateUrl: 'js/modules/application/templates/sa-menu.html',
+      templateUrl: 'application/templates/sa-menu.html',
       controller: 'AppCtrl',
       data : {
         requireLogin : true
@@ -55,7 +55,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url: '/orders',
       views: {
         'menuContent': {
-          templateUrl: 'js/modules/order/templates/order-list.html',
+          templateUrl: 'order/templates/order-list.html',
           controller : 'OrdersController'
         }
       },
@@ -109,6 +109,7 @@ angular.module('dorrbell').config(function($stateProvider) {
             serie : true,
             files : [ 'js/modules/order/order-directive.js'
             ,'js/modules/order/order-factory.js'
+            ,'js/modules/delivery/delivery-factory.js'
             ,'js/modules/order/order-controller.js']
           });
         }
@@ -247,7 +248,7 @@ angular.module('dorrbell').config(function($stateProvider) {
   url : '/register',
   templateUrl : 'application/templates/register.html',
   controller : 'RegisterController',
-  params : {contact : null},
+  params : {contact : null, endpoint : 'https://dorrbell.herokuapp.com'},
   data : {
     requireLogin : false
   },

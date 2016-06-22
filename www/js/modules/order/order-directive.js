@@ -3,31 +3,55 @@ angular.module('dorrbell').directive("orderStatus", function(){
 		restrict : 'EA',
 		templateUrl : "modal/templates/order-status.html",
 		link : function($scope, element){
+			// $scope.$watch('order.Status__c', function(newValue, oldValue){
+			// 	if(newValue == 'Assigned' || newValue == 'Accepted'){
+			// 		$scope.endTime =  moment($scope.order.In_Home_Try_On_Start__c).subtract(45, 'minutes').toDate().getTime();
+			// 		$scope.label = 'Start Pick Up In: ';
+			// 	}else if(newValue == 'Pick Up In Progress' || newValue == 'En Route to Customer'){
+			// 		$scope.endTime = moment($scope.order.In_Home_Try_On_Start__c).toDate().getTime();
+			// 		$scope.label = 'Deliver In: ';
+			// 	}else if(newValue == 'Delivered To Customer'){
+			// 		$scope.endTime = moment($scope.order.Return_Collection_Time__c).toDate().getTime();
+			// 		$scope.label = 'Collect Returns In: ';
+			// 	}else if(newValue == 'Retrieved From Customer'){
+			// 		$scope.endTime = moment($scope.order.Marked_Retrieved__c).add(40, 'minutes').toDate().getTime();
+			// 		$scope.label = 'Return Items In: ';
+			// 	}else{
+			// 		$scope.label = newValue;
+			// 	}
+			// });
+			//
+			//
+			// $scope.today = moment().diff(moment($scope.order.In_Home_Try_On_Start__c), 'hours');
+			// $scope.$on("timer-stopped", function(event, data){
+			// 	$scope.getOrder(true);
+			// 	$scope.today = moment().diff(moment($scope.order.In_Home_Try_On_Start__c), 'hours');
+			// });
+			// $scope.$broadcast('timer-start');
+
 			$scope.$watch('order.Status__c', function(newValue, oldValue){
-				if(newValue == 'Assigned' || newValue == 'Accepted'){
-					$scope.endTime =  moment($scope.order.In_Home_Try_On_Start__c).subtract(45, 'minutes').toDate().getTime();
-					$scope.label = 'Start Pick Up In: ';
-				}else if(newValue == 'Pick Up In Progress' || newValue == 'En Route to Customer'){
-					$scope.endTime = moment($scope.order.In_Home_Try_On_Start__c).toDate().getTime();
-					$scope.label = 'Deliver In: ';
-				}else if(newValue == 'Delivered To Customer'){
-					$scope.endTime = moment($scope.order.Return_Collection_Time__c).toDate().getTime();
-					$scope.label = 'Collect Returns In: ';
-				}else if(newValue == 'Retrieved From Customer'){
-					$scope.endTime = moment($scope.order.Marked_Retrieved__c).add(40, 'minutes').toDate().getTime();
-					$scope.label = 'Return Items In: ';
+				if($scope.order.Return_Shopping_Assistant__c){
+					if(newValue == 'Delivered To Customer' ){
+						$scope.step = 0
+					}else if(newValue == 'En Route to Customer'){
+						$scope.step = 1
+					}else if(newValue == 'Retrieved From Customer' || newValue == 'All Items Returned to All Retailers'){
+						$scope.step = 2
+					}else if(newValue == 'Completed'){
+						$scope.step = 3;
+					}
 				}else{
-					$scope.label = newValue;
+					if(newValue == 'Accepted'){
+						$scope.step = 0
+					}else if(newValue == 'Pick Up In Progress'){
+						$scope.step = 1
+					}else if(newValue == 'En Route to Customer'){
+						$scope.step = 2
+					}else if(newValue == 'Delivered To Customer'){
+						$scope.step = 3;
+					}
 				}
-			});
-
-
-			$scope.today = moment().diff(moment($scope.order.In_Home_Try_On_Start__c), 'hours');
-			$scope.$on("timer-stopped", function(event, data){
-				$scope.getOrder(true);
-				$scope.today = moment().diff(moment($scope.order.In_Home_Try_On_Start__c), 'hours');
-			});
-			$scope.$broadcast('timer-start');
+			})
 
 		}
 	}

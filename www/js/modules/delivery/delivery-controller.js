@@ -39,34 +39,46 @@ angular.module('dorrbell').controller('DeliveryDetail', function($scope, $state,
   }
 
   var verifyItem = function(item, callback){
-    var sheet = $ionicActionSheet.show({
-      buttons : [
-        {
-            text : '<i class="icon ion-ios-barcode"></i> Scan Barcode'
-        },
-        {
-            text : '<i class="icon ion-edit"></i> Manual Entry'
-        }
-      ],
-      buttonClicked : function(index){
-        sheet();
+    if(item.PricebookEntry.Product2.Barcode__c && item.PricebookEntry.Product2.Barcode__c.trim().length > 0){
+      var sheet = $ionicActionSheet.show({
+        buttons : [
+          {
+              text : '<i class="icon ion-ios-barcode"></i> Scan Barcode'
+          },
+          {
+              text : '<i class="icon ion-edit"></i> Manual Entry'
+          }
+        ],
+        buttonClicked : function(index){
+          sheet();
 
-        var afterEntry = function(barcodeData){
-          if(barcodeData == item.PricebookEntry.Product2.Barcode__c.toUpperCase()){
-              callback();
-          }else{
-            Log.message("The barcode " + barcodeData + " does not match the selected item.", true, "Invalid Barcode");
+          var afterEntry = function(barcodeData){
+            if(barcodeData == item.PricebookEntry.Product2.Barcode__c.toUpperCase()){
+                callback();
+            }else{
+              Log.message("The barcode " + barcodeData + " does not match the selected item.", true, "Invalid Barcode");
+            }
           }
 
-        }
+          if(index == 0)
+            scanItem(item, afterEntry)
+          else if(index == 1)
+            manualBarcode(item, afterEntry)
+        },
+        cssClass : "dorrbell_menu"
+      })
+    }else{
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'No Barcode',
+          template: 'This item has no barcode available. Please ensure you have the correct item before continuing.'
+        });
 
-        if(index == 0)
-          scanItem(item, afterEntry)
-        else if(index == 1)
-          manualBarcode(item, afterEntry)
-      },
-      cssClass : "dorrbell_menu"
-    })
+        confirmPopup.then(function(res) {
+          if(res) {
+            callback();
+          }
+        });
+    }
   }
 
   $scope.setPrice = function(item, callback){
@@ -81,9 +93,7 @@ angular.module('dorrbell').controller('DeliveryDetail', function($scope, $state,
           type : 'button-positive',
           onTap : function(e){
             p.close();
-            $ionicLoading.show({
-              template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
-            });
+            $ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
             callback();
           }
         }

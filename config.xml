@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="46" id="com.dorrbell.mobile" ios-CFBundleVersion="0.3.06" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="50" id="com.dorrbell.mobile" ios-CFBundleVersion="0.0.5" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Dorrbell</name>
     <description>
       The On-Demand Fitting Room
@@ -32,7 +32,7 @@
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="CrosswalkAnimatable" value="true" />
-    <preference name="deployment-target" value="9.0" />
+    <preference name="deployment-target" value="8.0" />
     <preference name="Orientation" value="default" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <feature name="StatusBar">

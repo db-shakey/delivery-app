@@ -10,13 +10,14 @@ var minify = require('gulp-minify');
 var angularTemplateCache = require('gulp-angular-templatecache');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./scss/**/*.scss'],
+  html : ["www/**/*.html","!www/lib/**/*.html"]
 };
 var config = {
     srcTemplates:['./www/js/modules/**/**/templates/*.html'],
     destPartials: './www/js/modules/'
 };
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'templates']);
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -33,11 +34,12 @@ gulp.task('sass', function(done) {
 
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.html, ['templates']);
 });
 
 gulp.task('templates', function(){
   return gulp.src(config.srcTemplates)
-    .pipe(angularTemplateCache('templates.js', { module:'dorrbell', standalone:true })
+    .pipe(angularTemplateCache('templates.js', { module:'dorrbell'})
     ).pipe(gulp.dest(config.destPartials));
 })
 

@@ -6,7 +6,9 @@
     <button class="button button-icon button-clear ion-ios-search-strong m-r-sm" ng-click="showFilterBar()" ng-if="productList && productList.length > 0"></button>
   </ion-nav-buttons>
 
-  <ion-content class="product-list" lazyImgContainer >
+  <ion-content class="product-list" ng-cloak>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="search(searchText, limit)"></ion-refresher>
+
     <ion-list ng-repeat="(key, value) in productList | groupBy: 'Family'" class="m-b-xl" ng-if="productList && productList.length > 0">
         <ion-item class="item-divider">
           {{(key == 'null') ? 'N/A' : key}}
@@ -31,11 +33,8 @@
       <ion-spinner></ion-spinner>
       <h3 class="font-bold">Loading Products</h3>
     </div>
-    <ion-infinite-scroll on-infinite="search(searchText, limit + 10)" distance="1%" ng-if="hasMore"></ion-infinite-scroll>
+
+    <ion-infinite-scroll on-infinite="infinite(searchText, limit + 10)" distance="5%" ng-if="productList && productList.length > 0 && hasMore"></ion-infinite-scroll>
   </ion-content>
-  <nav mfb-menu position="br" effect="zoomin"
-     active-icon="ion-close-round" resting-icon="ion-plus-round"
-     toggling-method="click">
-  <button mfb-button icon="ion-qr-scanner" label="Scan Barcode" ng-click="scanBarcode()"></button>
 </nav>
 </ion-view>

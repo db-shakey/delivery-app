@@ -19025,6 +19025,167 @@ img-crop {
     background-color: rgba(0, 0, 0, 0.75);
     position: absolute; }
 
+/* Copyright 2013-2015 etc Chris Tabor. See https://github.com/christabor/css-progress-wizard/blob/master/LICENSE for details. */
+.flexer, .progress-indicator {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; }
+
+.no-flexer, .progress-indicator.stacked {
+  display: block; }
+
+.no-flexer-element {
+  -ms-flex: 0;
+  -webkit-flex: 0;
+  -moz-flex: 0;
+  flex: 0; }
+
+.flexer-element, .progress-indicator > li {
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  flex: 1; }
+
+.progress-indicator {
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  height: 3rem;
+  padding: .2rem 0 0 0;
+  font-size: 80%;
+  text-transform: uppercase;
+  margin-bottom: 1em; }
+  .progress-indicator > li {
+    list-style: none;
+    text-align: center;
+    width: auto;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    text-overflow: ellipsis;
+    color: #646464;
+    display: block; }
+    .progress-indicator > li:hover {
+      color: #181818; }
+  .progress-indicator > li .bubble {
+    border-radius: 1000px;
+    width: 20px;
+    height: 20px;
+    background-color: #646464;
+    display: block;
+    margin: 0 auto 0.5em auto;
+    border-bottom: 1px solid #313131; }
+  .progress-indicator > li .bubble:before,
+  .progress-indicator > li .bubble:after {
+    display: block;
+    position: absolute;
+    top: 9px;
+    height: 3px;
+    content: '';
+    background-color: #646464;
+    width: 100%; }
+  .progress-indicator li.current:not(:last-child) .bubble:after {
+    background-color: #646464 !important;
+    width: 40%; }
+  .progress-indicator li.current .bubble:before {
+    background-color: #14a1bf !important;
+    width: 50%; }
+  .progress-indicator > li .bubble:before {
+    left: 0; }
+  .progress-indicator > li .bubble:after {
+    right: 0; }
+  .progress-indicator > li:first-child .bubble:before,
+  .progress-indicator > li:first-child .bubble:after {
+    width: 50%;
+    margin-left: 50%; }
+  .progress-indicator > li:last-child .bubble:before,
+  .progress-indicator > li:last-child .bubble:after {
+    width: 50%;
+    margin-right: 50%; }
+  .progress-indicator > li.completed {
+    color: black;
+    font-weight: bolder; }
+    .progress-indicator > li.completed .bubble {
+      background-color: #14a1bf;
+      color: #14a1bf;
+      border-color: #052c35; }
+      .progress-indicator > li.completed .bubble:before, .progress-indicator > li.completed .bubble:after {
+        background-color: #14a1bf;
+        border-color: #052c35; }
+  .progress-indicator > li.active {
+    color: #337AB7; }
+    .progress-indicator > li.active .bubble {
+      background-color: #337AB7;
+      color: #337AB7;
+      border-color: #122a3f; }
+      .progress-indicator > li.active .bubble:before, .progress-indicator > li.active .bubble:after {
+        background-color: #337AB7;
+        border-color: #122a3f; }
+  .progress-indicator > li a:hover .bubble {
+    background-color: #5671d0;
+    color: #5671d0;
+    border-color: #1f306e; }
+    .progress-indicator > li a:hover .bubble:before, .progress-indicator > li a:hover .bubble:after {
+      background-color: #5671d0;
+      border-color: #1f306e; }
+  .progress-indicator > li.danger .bubble {
+    background-color: #d3140f;
+    color: #d3140f;
+    border-color: #440605; }
+    .progress-indicator > li.danger .bubble:before, .progress-indicator > li.danger .bubble:after {
+      background-color: #d3140f;
+      border-color: #440605; }
+  .progress-indicator > li.warning .bubble {
+    background-color: #edb10a;
+    color: #edb10a;
+    border-color: #5a4304; }
+    .progress-indicator > li.warning .bubble:before, .progress-indicator > li.warning .bubble:after {
+      background-color: #edb10a;
+      border-color: #5a4304; }
+  .progress-indicator > li.info .bubble {
+    background-color: #5b32d6;
+    color: #5b32d6;
+    border-color: #25135d; }
+    .progress-indicator > li.info .bubble:before, .progress-indicator > li.info .bubble:after {
+      background-color: #5b32d6;
+      border-color: #25135d; }
+  .progress-indicator.stacked > li {
+    text-indent: -10px;
+    text-align: center;
+    display: block; }
+  .progress-indicator.stacked > li .bubble:before,
+  .progress-indicator.stacked > li .bubble:after {
+    left: 50%;
+    margin-left: -1.5px;
+    width: 3px;
+    height: 100%; }
+  .progress-indicator.stacked .stacked-text {
+    position: relative;
+    z-index: 10;
+    top: 0;
+    margin-left: 60% !important;
+    width: 45% !important;
+    display: inline-block;
+    text-align: left;
+    line-height: 1.2em; }
+  .progress-indicator.stacked > li a {
+    border: none; }
+  .progress-indicator.stacked.nocenter > li .bubble {
+    margin-left: 0;
+    margin-right: 0; }
+  .progress-indicator.stacked.nocenter > li .bubble:before,
+  .progress-indicator.stacked.nocenter > li .bubble:after {
+    left: 10px; }
+  .progress-indicator.stacked.nocenter .stacked-text {
+    width: auto !important;
+    display: block;
+    margin-left: 40px !important; }
+
+@media handheld, screen and (max-width: 400px) {
+  .progress-indicator {
+    font-size: 60%; } }
+
 * {
   -webkit-text-size-adjust: 100%; }
 
@@ -19033,7 +19194,6 @@ img-crop {
   right: 49px !important; }
 
 .platform-ios ul[mfb-menu].higher {
-  bottom: 10vh;
   margin: 0;
   right: 1.2rem; }
 
@@ -19513,6 +19673,9 @@ ion-side-menu h1 img {
   display: block;
   font-size: 12px;
   margin-top: .5em; }
+
+.order-details .progress-indicator {
+  width: 100%; }
 
 /********
  * Product Details

@@ -57,6 +57,7 @@ $item-thumbnail-width: 60px;
 @import "www/lib/inspinia/style";
 @import "www/lib/ionic-filter-bar/scss/ionic.filter.bar";
 @import "www/lib/ng-img-crop-full-extended/source/scss/ng-img-crop";
+@import "www/extras/styles/progress";
 
 //font-bootstraping fix
 * {-webkit-text-size-adjust:100%;}
@@ -70,7 +71,6 @@ $item-thumbnail-width: 60px;
   }
   ul[mfb-menu]{
     &.higher{
-      bottom: 10vh;
       margin: 0;
       right: 1.2rem;
     }
@@ -650,7 +650,9 @@ ion-side-menu{
 			 margin-top: .5em;
 		 }
 	 }
-
+   .progress-indicator{
+     width: 100%;
+   }
  }
 
 /********

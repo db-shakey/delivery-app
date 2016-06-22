@@ -4,7 +4,13 @@
   <ion-nav-title>
       Order #{{order.Name}}
   </ion-nav-title>
-
+  <ion-header-bar class="bar-subheader bar-stable">
+    <h1 class="title">
+      <span>
+        <b>Order Total:</b> {{order.TotalAmount | currency}}
+      </span>
+    </h1>
+  </ion-header-bar>
   <ion-content has-bouncing="false" ng-cloak>
 
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getOrder(true)"></ion-refresher>
@@ -31,7 +37,10 @@
           </div>
         </div>
 
-        <item-status delivery="delivery" item="item"></item-status>
+        <div class="item item-actions" ng-if="v.canReturn(item, order)">
+          <button class="button icon-right ion-qr-scanner button-positive padding-horizontal button-full button-small" ng-click="returnItem(item)">Add to Returns</button>
+        </div>
+        <item-status delivery="delivery" item="item" ng-if="!v.canReturn(item, order)"></item-status>
       </div>
       <div class="m-t-xl">&nbsp;</div>
   </ion-content>

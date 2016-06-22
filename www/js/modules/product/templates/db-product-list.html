@@ -5,7 +5,7 @@
   <ion-nav-buttons side="right">
     <button class="button button-icon button-clear ion-ios-search-strong m-r-sm" ng-click="showFilterBar()" ng-if="productList && productList.length > 0"></button>
   </ion-nav-buttons>
-  <ion-content>
+  <ion-content ng-cloak>
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="searchProducts(searchString, limit)"></ion-refresher>
     <ion-list ng-repeat="(key, value) in productList | groupBy: 'Family'" class="m-b-xl" ng-if="productList && productList.length > 0">
         <ion-item class="item-divider">
@@ -31,7 +31,7 @@
       <ion-spinner></ion-spinner>
       <h3 class="font-bold">Loading Products</h3>
     </div>
-    <ion-infinite-scroll on-infinite="searchProducts(searchText, limit + 10)" distance="1%" ng-if="hasMore"></ion-infinite-scroll>
+    <ion-infinite-scroll on-infinite="infinite(searchText, limit + 10)" distance="10%" ng-if="productList && productList.length > 0 && hasMore"></ion-infinite-scroll>
   </ion-content>
 
   <nav mfb-menu position="br" effect="zoomin"

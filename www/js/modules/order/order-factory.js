@@ -8,6 +8,7 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 			endDate.setDate(beginDate.getDate() + 1);
 			endDate.setHours(0,0,0,0);
 
+
 			var query = "SELECT Id, \
 								Name, \
 								Status__c, \
@@ -26,6 +27,7 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 								AND In_Home_Try_On_Start__c > " + beginDate.toISOString() + " AND In_Home_Try_On_Start__c < " + endDate.toISOString() + ") \
 								OR (Return_Shopping_Assistant__c = '" + $rootScope.currentUser.Id + "' AND Return_Collection_Time__c > " + beginDate.toISOString() + " AND Return_Collection_Time__c < " + endDate.toISOString() + ") \
 							ORDER BY In_Home_Try_On_Start__c ASC";
+
 			$localCache.getRecords(query, noCache);
 			return function(){
 				return $localCache.fromCache(query);
@@ -148,6 +150,8 @@ _app.factory("OrderFactory", function(force, RecordTypeFactory, $filter, $localC
 		getProductsByOrderId : function(orderId, noCache){
 			var query = "SELECT Id, \
 													Name, \
+													Status__c, \
+													TotalAmount, \
 													( \
 														SELECT Id, \
 															PricebookEntry.Product2.Name, \

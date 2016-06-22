@@ -15,7 +15,9 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 				if($scope.canLoad)
 					$scope.search('');
 			},
-			initialFilterText : $scope.searchText
+			initialFilterText : $scope.searchText,
+			scan : $scope.scanBarcode,
+			favoritesEnabled : true
     });
   };
 
@@ -25,14 +27,22 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 		SearchFactory.searchItems(text, $scope.store, $scope.limit, function(data){
 			$scope.productList = data.records;
 			$scope.hasMore = data.hasMore;
+			if($scope.onInfinite)
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+
+
 			$ionicLoading.hide();
-			$scope.$broadcast('scroll.infiniteScrollComplete');
-			$timeout(function(){
-				$rootScope.$emit('lazyImg:refresh');
-			}, 100);
+			$scope.onInfinite = false;
+			$scope.$broadcast('scroll.refreshComplete');
+			$timeout(function(){$rootScope.$emit('lazyImg:refresh');});
 		}, function(){
 			$ionicLoading.hide();
 		});
+	}
+
+	$scope.infinite = function(text, limit){
+		$scope.onInfinite = true;
+		$scope.search(text, limit);
 	}
 
 	$scope.goToProductDetails = function(productId){
@@ -75,19 +85,24 @@ angular.module('dorrbell').controller("ProductSearch", function($scope, $timeout
 		if(!$scope.deliveryId)
 			$ionicHistory.clearHistory();
 
+		var doSearch = function(){
+			if(!$scope.productList)
+				$scope.search(' ', 20);
+		}
+
 		if($scope.deliveryId){
 			$scope.$watch(DeliveryFactory.getDeliveryById($scope.deliveryId), function(delivery){
 				if(delivery){
 					$scope.delivery = delivery[0];
 					$scope.store = delivery[0].Store__c;
-					$scope.search(' ', 20);
+					doSearch();
 				}
 			});
 		}else if($scope.currentUser.RecordType.DeveloperName == 'Shopping_Assistant_Contact'){
-			$scope.search(' ', 20);
+			doSearch();
 		}else{
 			$scope.store = $scope.currentUser.Store__c;
-			$scope.search(' ', 20);
+			doSearch();
 		}
   });
 
@@ -209,7 +224,7 @@ angular.module('dorrbell').controller("ProductDetail", function($scope, $state, 
 
 });
 
-angular.module('dorrbell').controller("ProductList", function($scope, $state, $ionicFilterBar, $ionicLoading, $cordovaBarcodeScanner, SearchFactory){
+angular.module('dorrbell').controller("ProductList", function($scope, $rootScope, $state, $ionicFilterBar, $ionicLoading, $cordovaBarcodeScanner, $timeout, SearchFactory){
 	$scope.storeId = $state.params.storeId;
 
 	$scope.searchProducts = function(searchText, limit){
@@ -220,7 +235,19 @@ angular.module('dorrbell').controller("ProductList", function($scope, $state, $i
 			$scope.hasMore = result.hasMore;
 			$ionicLoading.hide();
 			$scope.$broadcast('scroll.refreshComplete');
+
+			if($scope.onInfinite)
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+
+
+			$scope.onInfinite = false;
+			$timeout(function(){$rootScope.$emit('lazyImg:refresh');});
 		});
+	}
+
+	$scope.infinite = function(searchText, limit){
+		$scope.onInfinite = true;
+		$scope.searchProducts(searchText, limit);
 	}
 
 	$scope.scanBarcode = function(){
@@ -732,7 +759,6 @@ angular.module('dorrbell').controller('GalleryController', function($scope, $roo
 		$scope.$watchCollection($scope.getProduct(true), function(newValue, oldValue){
 			if(newValue){
 				$scope.product = newValue[0];
-				$rootScope.$emit('lazyImg:refresh');
 			}
 		});
 

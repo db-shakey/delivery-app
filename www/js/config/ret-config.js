@@ -4,7 +4,7 @@ angular.module('dorrbell').config(function($stateProvider) {
     .state('ret', {
       url: '/ret',
       abstract: true,
-      templateUrl: 'js/modules/application/templates/ret-menu.html',
+      templateUrl: 'application/templates/ret-menu.html',
       controller: 'AppCtrl',
       data : {
         requireLogin : true
@@ -42,7 +42,7 @@ angular.module('dorrbell').config(function($stateProvider) {
       url: '/deliverydetail/:deliveryId',
       views: {
         'menuContent': {
-          templateUrl: 'js/modules/delivery/templates/ret-delivery-detail.html',
+          templateUrl: 'delivery/templates/ret-delivery-detail.html',
           controller : 'DeliveryDetail'
         }
       },

@@ -1,17 +1,10 @@
 angular.module('dorrbell').controller("BaseController", function($scope, $rootScope, $state, $ionicHistory, $ionicLoading, HerokuService, MetadataFactory){
+  if(navigator.splashscreen) {
+    navigator.splashscreen.hide();
+  }
 
   $scope.$on('$ionicView.beforeEnter', function(){
-    if(navigator.splashscreen) {
-      navigator.splashscreen.hide();
-    }
     HerokuService.refreshToken(function(){
-      //Cache Metadata
-      /*
-      MetadataFactory.describe("Order");
-      MetadataFactory.describe("Store__c");
-      MetadataFactory.describe("Order_Store__c");
-      MetadataFactory.describe("OrderItem");
-      */
       $ionicHistory.nextViewOptions({
         disableBack: true,
         historyRoot: true
@@ -104,7 +97,6 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
               $ionicLoading.hide();
               $state.go("home");
           }, function(err) {
-              console.log('errored');
               $ionicLoading.hide();
               $state.go("login");
           });
@@ -133,11 +125,11 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
     $ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
     HerokuService.get('/api/beta/' + $scope.user.beta_key, function(res){
       $ionicLoading.hide();
-      $state.go("register", {contact : res});
+      $state.go("register", {contact : res, endpoint : $scope.user.endpoint});
     }, function(err){
       $ionicLoading.hide();
-      Log.message(err.data.message, true, 'Invalid Key');
-    })
+      Log.message((err && err.data) ? err.data.message : 'You have entered an invalid key.', true, 'Invalid Key');
+    }, $scope.user.endpoint);
   }
 
   $scope.getStarted = function(){
@@ -158,7 +150,10 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   $scope.selectDomain = function(){
     $scope.defaultEndpoint = $scope.user.endpoint;
     $ionicPopup.show({
-      template : '<input type="text" ng-model="user.endpoint"/>',
+      template : '<ion-list>\
+                    <ion-radio ng-model="user.endpoint" ng-value="\'https://dorrbell.herokuapp.com\'">Live</ion-radio>\
+                    <ion-radio ng-model="user.endpoint" ng-value="\'https://dorrbell-test.herokuapp.com\'">Test</ion-radio>\
+                  </ion-list>',
       title : 'Enter The Domain',
       scope : $scope,
       buttons : [
@@ -167,14 +162,6 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
           type : 'button-small',
           onTap : function(e){
             $scope.user.endpoint = $scope.defaultEndpoint;
-          }
-        },
-        {
-          text : 'Default',
-          type: 'button-small',
-          onTap : function(e){
-            $scope.user.endpoint = 'https://dorrbell.herokuapp.com';
-            e.preventDefault();
           }
         },
         {
@@ -200,20 +187,25 @@ angular.module('dorrbell').controller("LoginController", function($scope, $state
   });
 });
 
-angular.module('dorrbell').controller("RegisterController", function($scope, $state, RegistrationValidator, force, Log) {
+angular.module('dorrbell').controller("RegisterController", function($scope, $state, $ionicLoading, RegistrationValidator, HerokuService, Log) {
     $scope.contact = $state.params.contact;
     $scope.contact.Password__c = null;
+
     $scope.submit = function() {
+        $scope.contact.Username__c = $scope.contact.Email;
         if($scope.contact.Password__c != $scope.contact.password_confirm){
           Log.message("Your passwords do not match.", true, "Password Mismatch");
         }else if (RegistrationValidator.validateContact($scope.contactForm)) {
+            $ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
             delete $scope.contact.password_confirm;
-            force.post('/api/register/' + $scope.contact.Id, $scope.contact, null, null,
+            HerokuService.post('/api/register/' + $scope.contact.Id, $scope.contact,
                 function(res) {
-                    if (res.sucess == true) {
+                    $ionicLoading.hide();
+                    if (res.success == true) {
                         HerokuService.login({
                             username: $scope.contact.Email,
-                            password: $scope.contact.Password__c
+                            password: $scope.contact.Password__c,
+                            endpoint : $state.params.endpoint
                         }, function(res) {
                             $state.go("home");
                         }, function(err) {
@@ -221,8 +213,9 @@ angular.module('dorrbell').controller("RegisterController", function($scope, $st
                         });
                     }
                 }, function(err) {
+                    $ionicLoading.hide();
                     Log.message(err.data.message, true, 'An Error Occurred');
-                }
+                }, false, $state.params.endpoint
             )
         }
     }
@@ -341,9 +334,7 @@ angular.module('dorrbell').controller("ChangePasswordController", function($scop
             if($scope.password.newPassword != $scope.password.confirm){
                 Log.message("Your passwords do not match", true, "Invalid Password");
             }else{
-              $ionicLoading.show({
-                  template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'
-              });
+              $ionicLoading.show({template: '<ion-spinner icon="crescent" class="spinner-light"></ion-spinner>'});
                 force.post(
                     "/api/changePassword",
                     {

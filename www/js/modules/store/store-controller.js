@@ -8,9 +8,17 @@ angular.module('dorrbell').controller('StoreListController', function($scope, St
       $scope.hasMore = results.hasMore;
       $scope.storeList = results.records;
       $scope.$broadcast('scroll.refreshComplete');
-      $scope.$broadcast('scroll.infiniteScrollComplete');
+      if($scope.onInfinite)
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+        
+      $scope.onInfinite = false;
       $ionicLoading.hide();
     });
+  }
+
+  $scope.infinite = function(str, lim){
+    $scope.onInfinite = true;
+    $scope.searchStores(str, lim);
   }
 
   $scope.showFilterBar = function () {
@@ -80,7 +88,7 @@ angular.module('dorrbell').controller("StoreDetailController", function($scope, 
 
   $scope.$on('$ionicView.beforeEnter', function(){
     $scope.$watchCollection($scope.getStore(false), function(newValue, oldValue) {
-      if (newValue){
+      if (newValue && newValue.length > 0){
         $scope.store = newValue[0];
         if($scope.store.Google_Store_Hours__c){
           angular.forEach($scope.store.Google_Store_Hours__c.split(/\r\n|\r|\n/g), function(obj, index){

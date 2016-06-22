@@ -71,13 +71,6 @@ ionic.Platform.ready(function(){
           ,'lib/ionic-filter-bar/dist/ionic.filter.bar.css'
           ,'lib/ion-autocomplete/dist/ion-autocomplete.min.css'
         ]);
-
-        /**
-         * Load the directive templates
-         */
-        $ocLazyLoad.load([
-          'js/utils/template-utils.html'
-        ]);
     });
 
     _app.config(function($ocLazyLoadProvider){

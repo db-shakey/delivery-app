@@ -42,6 +42,6 @@
         <i class="icon ion-android-cancel"></i>
         <h3 class="font-bold">No stores to display.</h3>
       </div>
-      <ion-infinite-scroll on-infinite="searchStores(searchString, currentLimit + 10)" ng-if="storeList && hasMore" distance="1%"></ion-infinite-scroll>
+      <ion-infinite-scroll on-infinite="infinite(searchString, currentLimit + 10)" ng-if="storeList && hasMore" distance="1%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>

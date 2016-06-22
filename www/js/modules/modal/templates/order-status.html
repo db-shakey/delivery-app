@@ -1,4 +1,37 @@
-<h1 class='title' ng-if="endTime">
-  <b>{{label}} </b>
-  <timer end-time="endTime" ng-if="endTime">{{hours}}h {{minutes}}m</timer>
-</h1>
+<ul class="progress-indicator" ng-if="order.Return_Shopping_Assistant__c == null">
+    <li ng-class="(step == 0) ? 'completed current' : ((step > 0) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Accepted
+    </li>
+    <li ng-class="(step == 1) ? 'completed current' : ((step > 1) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Gathering
+    </li>
+    <li ng-class="(step == 2) ? 'completed current' : ((step > 2) ? 'completed' : '')">
+        <span class="bubble"></span>
+        En Route
+    </li>
+    <li ng-class="(step == 3) ? 'completed current' : ((step > 3) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Delivered
+    </li>
+</ul>
+
+<ul class="progress-indicator" ng-if="order.Return_Shopping_Assistant__c != null">
+    <li ng-class="(step == 0) ? 'completed current' : ((step > 0) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Accepted
+    </li>
+    <li ng-class="(step == 1) ? 'completed current' : ((step > 1) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Gathering
+    </li>
+    <li ng-class="(step == 2) ? 'completed current' : ((step > 2) ? 'completed' : '')">
+        <span class="bubble"></span>
+        En Route
+    </li>
+    <li ng-class="(step == 3) ? 'completed current' : ((step > 3) ? 'completed' : '')">
+        <span class="bubble"></span>
+        Complete
+    </li>
+</ul>

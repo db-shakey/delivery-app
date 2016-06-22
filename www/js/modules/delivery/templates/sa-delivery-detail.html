@@ -47,6 +47,7 @@
 
         <div class="item item-actions" ng-if="v.saHasOptions(item, delivery)">
           <button class="button icon-right ion-qr-scanner button-positive padding-horizontal button-full button-small" ng-if="v.canCheckout(item, delivery)" ng-click="checkoutItem(item)">Check Out&nbsp;</button>
+          <button class="button icon-right ion-qr-scanner button-positive padding-horizontal button-full button-small" ng-if="v.canCheckIn(item)" ng-click="checkInItem(item)">Check In</button>
         </div>
         <item-status delivery="delivery" item="item" ng-if="!v.saHasOptions(item, delivery)"></item-status>
         <!--

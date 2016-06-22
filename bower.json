@@ -21,7 +21,8 @@
     "ionic-native-transitions": "shprink/ionic-native-transitions#master",
     "ionic-wizard": "^2.0.1",
     "ng-img-crop": "ngImgCrop#^0.3.2",
-    "ion-gallery": "^0.1.14"
+    "ion-gallery": "^0.1.14",
+    "fullcalendar": "^2.8.0"
   },
   "dependencies": {
     "robotodraft": "^1.1.0"

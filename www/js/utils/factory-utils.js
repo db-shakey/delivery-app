@@ -66,7 +66,11 @@ angular.module('dorrbell').factory("$localCache", function($rootScope, JSUtils, 
 			return cache[query];
 		},
 		clearCache : function(){
-			delete cache;
+			this.cache = {};
+			this.socket = null;
+		},
+		print : function(){
+			console.log(cache);
 		}
 	}
 })
