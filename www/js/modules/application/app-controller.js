@@ -1,7 +1,5 @@
 angular.module('dorrbell').controller("BaseController", function($scope, $rootScope, $state, $ionicHistory, $ionicLoading, HerokuService, MetadataFactory){
-  if(navigator.splashscreen) {
-    navigator.splashscreen.hide();
-  }
+  
 
   $scope.$on('$ionicView.beforeEnter', function(){
     HerokuService.refreshToken(function(){

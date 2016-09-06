@@ -16,6 +16,11 @@ if(ionic.Platform.isAndroid())
   ionic.Platform.isFullScreen=true;
 
 ionic.Platform.ready(function(){
+    setTimeout(function(){
+      if(navigator.splashscreen) {
+        navigator.splashscreen.hide();
+      }
+    }, 100);
 
 
     angular.module('dorrbell').run(function($ionicPlatform, $ocLazyLoad, $rootScope, $state, HerokuService, $ionicHistory) {

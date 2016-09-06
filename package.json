@@ -35,11 +35,13 @@
       "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugins.git#master:local-webserver",
       "id": "cordova-plugin-facebook4"
     },
-    "cordova-plugin-splashscreen",
     "cordova-plugin-screen-orientation",
     "cordova-plugin-wkwebview",
     "cordova-plugin-file",
-    "cordova-plugin-file-transfer"
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-splashscreen@4.0.0",
+    "cordova-plugin-splashscreen@latest",
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios",

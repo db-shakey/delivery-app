@@ -76,6 +76,9 @@ $item-thumbnail-width: 60px;
     }
   }
   .variant-edit, .product-new{
+    ul[mfb-menu].higher{
+      bottom: 10vh;
+    }
     ion-header-bar{
       height: 40px !important;
       box-shadow: none !important;

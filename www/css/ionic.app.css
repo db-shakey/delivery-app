@@ -19197,6 +19197,9 @@ img-crop {
   margin: 0;
   right: 1.2rem; }
 
+.platform-ios .variant-edit ul[mfb-menu].higher, .platform-ios .product-new ul[mfb-menu].higher {
+  bottom: 10vh; }
+
 .platform-ios .variant-edit ion-header-bar, .platform-ios .product-new ion-header-bar {
   height: 40px !important;
   box-shadow: none !important; }

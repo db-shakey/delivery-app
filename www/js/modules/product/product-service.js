@@ -71,17 +71,17 @@ angular.module('dorrbell').service('ProductService', function(){
   this.descriptionToHtml = function(info){
     var html = "";
     if(info.description)
-      html += '<b>Description:</b><span id="description" style="margin-right:1rem;">' + info.description + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Description:</b><span id="description" style="margin-right:1rem;">' + info.description + '</span><br/>';
     if(info.fit)
-      html += '<b>Fit:</b><span id="fit" style="margin-right:1rem;">' + info.fit + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Fit:</b><span id="fit" style="margin-right:1rem;">' + info.fit + '</span><br/>';
     if(info.materials)
-      html += '<b>Materials:</b><span id="materials" style="margin-right:1rem;">' + info.materials + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Materials:</b><span id="materials" style="margin-right:1rem;">' + info.materials + '</span><br/>';
     if(info.condition)
-      html += '<b>Condition:</b><span id="condition" style="margin-right:1rem;">' + info.condition + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Condition:</b><span id="condition" style="margin-right:1rem;">' + info.condition + '</span><br/>';
     if(info.notes)
-      html += '<b>Notes:</b><span id="notes" style="margin-right:1rem;">' + info.notes + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Notes:</b><span id="notes" style="margin-right:1rem;">' + info.notes + '</span><br/>';
     if(info.care)
-      html += '<b>Care:</b><span id="care" style="margin-right:1rem;">' + info.care + '</span><br/>';
+      html += '<b style="display:inline-block;min-width:6rem;">Care:</b><span id="care" style="margin-right:1rem;">' + info.care + '</span><br/>';
 
     return html;
   }
